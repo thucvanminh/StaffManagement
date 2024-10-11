@@ -6,5 +6,6 @@ public class Test1 {
         System.out.println("Thuchoilong");
         System.out.println("hieu");
         System.out.println(123);
+        System.out.println(456);
     }
 }
