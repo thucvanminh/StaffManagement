@@ -1,0 +1,22 @@
+Sign in / Log out (Nhân viên sẽ được cấp tài khoản nên không có sign up)
+
+Lịch làm việc (Nhân Viên)
+
+Trang Tính Lương (phân quyền cho tài khoản của kế toán)
+
+Phần feedback dành cho nhân viên
+
+
+Danh sách nv
+
+Thanh tìm kiếm. Để admin search tên nv
+
+Profile của nhân viên (Nv có thể sửa chữa thông tin của mình)
+
+Admin có thể thông báo cho nv. Thông báo nghỉ lễ - họp - lương - thuế
+
+
+
+
+
+
