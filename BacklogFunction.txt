@@ -1,5 +1,10 @@
 Sign in / Log out (Nhân viên sẽ được cấp tài khoản nên không có sign up)
 
+
+<Admin>
+
+</Admin>
+
 Lịch làm việc (Nhân Viên)
 
 Trang Tính Lương (phân quyền cho tài khoản của kế toán)
