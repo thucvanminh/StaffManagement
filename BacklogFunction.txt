@@ -24,4 +24,35 @@ Admin có thể thông báo cho nv. Thông báo nghỉ lễ - họp - lương - 
 
 
 
+// Cập Nhật //
+
+Chức năng cho Quản trị viên:
+- Quản lý Nhân viên: theo dõi hợp đồng, lưu trữ giấy tờ tùy thân
+- Quản lý Nghỉ phép và Đi làm: ngày lễ Việt Nam, quản lý nghỉ Tết
+- Quản lý Lương và Bảo hiểm xã hội: BHXH, BHYT, BHTN, tính lương làm thêm
+- Đánh giá Hiệu suất: theo chuẩn văn hóa làm việc Việt Nam
+- Báo cáo Tuân thủ: báo cáo bảo hiểm xã hội, báo cáo lao động
+- Quản lý Tài liệu: biểu mẫu chính phủ, hợp đồng
+
+
+
+Chức năng cho Nhân viên:
+- Yêu cầu Nghỉ phép: theo dõi ngày nghỉ Tết, lễ
+- Truy cập Bảng lương: phân tích lương, thuế, bảo hiểm
+- Quản lý Hồ sơ: cập nhật giấy tờ, thông tin người phụ thuộc
+- Đi làm: điểm danh, quản lý làm thêm
+- Giao tiếp Nội bộ: thông báo công ty cho các lễ hội địa phương
+- Đào tạo và Chứng nhận: tải lên chứng chỉ để tuân thủ
+
+
+Chức năng phải có:
+- Tinh chỉnh ngôn ngữ
+- Quét vân tay/mặt chấm công nhân viên
+- Tích hợp phần mềm kế toán như MISA/FAST
+
+Chức năng nâng cao:
+- Tạo phòng chat ngay trên web
+- Chức năng tạo phòng họp online
+
+
 
