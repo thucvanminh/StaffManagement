@@ -1,0 +1,6 @@
+report:
+tìm hiểu tiếp cận: khảo sát -> viết rõ chức năng
+thiết kế usecase -> cần chỉnh sửa
+sơ đồ tuần tự, từng role thể hiện chức năng (thiếu)
+thiết kế cơ sở dữ liệu
+thiết kế giao diện ng dùng

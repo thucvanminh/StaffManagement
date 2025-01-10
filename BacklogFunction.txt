@@ -27,21 +27,25 @@ Admin có thể thông báo cho nv. Thông báo nghỉ lễ - họp - lương - 
 // Cập Nhật //
 
 Chức năng cho Quản trị viên:
+
 - Quản lí tuyển dụng
-- Quản lí điều chuyển
-- Quản lý Nhân viên: theo dõi hợp đồng, lưu trữ giấy tờ tùy thân
-- Quản lý Nghỉ phép và Đi làm: ngày lễ Việt Nam, quản lý nghỉ Tết
-- Quản lý tăng ca
-- Quản lý công tác
+- Quản lí điều chuyển, chức vụ
 - Quản lý thử việc
 - Quản lý intern
 - Quản lý thôi việc
+
+- Quản lý Nhân viên: theo dõi hợp đồng, lưu trữ giấy tờ tùy thân
+
+- Quản lý Nghỉ phép và Đi làm: ngày lễ Việt Nam, quản lý nghỉ Tết           x
+- Quản lý tăng ca                                                           x
+- Quản lý công tác                                                      
+
 - Quản lý thiết bị lao động
 - Quản lý phòng ban
 - Quản lý user
 - Quản lý phân quyền
-- Quản lý thời gian biểu
-- Thay đổi chức vụ, điều chuyển
+- Quản lý thời gian biểu                                                     x
+
 - Quản lý danh mục
 - 
 - Quản lý Lương và Bảo hiểm xã hội: BHXH, BHYT, BHTN, tính lương làm thêm
@@ -53,12 +57,12 @@ Chức năng cho Quản trị viên:
 
 
 Chức năng cho Nhân viên:
-- Yêu cầu Nghỉ phép: theo dõi ngày nghỉ Tết, lễ
-- Truy cập Bảng lương: phân tích lương, thuế, bảo hiểm
-- Quản lý Hồ sơ: cập nhật giấy tờ, thông tin người phụ thuộc
-- Đi làm: điểm danh, quản lý làm thêm
-- Giao tiếp Nội bộ: thông báo công ty cho các lễ hội địa phương
-- Đào tạo và Chứng nhận: tải lên chứng chỉ để tuân thủ
+- Yêu cầu Nghỉ phép: theo dõi ngày nghỉ Tết, lễ                         x
+- Truy cập Bảng lương: phân tích lương, thuế, bảo hiểm                  bỏ
+- Quản lý Hồ sơ: cập nhật giấy tờ, thông tin người phụ thuộc            x 
+- Đi làm: điểm danh, quản lý làm thêm                                   x
+- Giao tiếp Nội bộ: thông báo công ty cho các lễ hội địa phương         x
+- Đào tạo và Chứng nhận: tải lên chứng chỉ để tuân thủ                  x
 - 
 
 
