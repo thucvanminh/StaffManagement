@@ -1,0 +1,128 @@
+.employee-panel-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.sidebar-logo {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu .menu-item {
+    padding: 15px 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #ccc;
+}
+
+.sidebar-menu .menu-item:hover,
+.sidebar-menu .menu-item.active {
+    background-color: #444;
+    color: #fff;
+}
+
+.sidebar-menu .logout {
+    color: #ff4876;
+    margin-top: auto;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background: #fff;
+    overflow-y: auto;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+}
+
+.profile-section span {
+    margin-right: 10px;
+}
+
+.profile-avatar {
+    border-radius: 50%;
+}
+
+.dashboard {
+    display: flex;
+    gap: 20px;
+}
+
+.notices,
+.calendar {
+    flex: 1;
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.notices h2,
+.calendar h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.notices-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notices-list li {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.notices-list li span {
+    font-weight: bold;
+}
+
+.calendar-widget {
+    text-align: center;
+}
+
+.calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.calendar-table th,
+.calendar-table td {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+}
+
+.calendar-table td {
+    height: 40px;
+}
