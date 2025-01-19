@@ -1,0 +1,191 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Thucs\\GithubFiles\\StaffManagement\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\views\\error.jade||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Project\\backend\\views\\error.jade||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\views\\index.jade||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Project\\backend\\views\\index.jade||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\views\\layout.jade||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Project\\backend\\views\\layout.jade||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\routes\\users.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Project\\backend\\routes\\users.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\routes\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Project\\backend\\routes\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\app.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Project\\backend\\app.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\package-lock.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Project\\backend\\package-lock.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\package.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Project\\backend\\package.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\frontend\\src\\app\\page.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Project\\frontend\\src\\app\\page.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\frontend\\src\\app\\forgotpassword\\page.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Project\\frontend\\src\\app\\forgotpassword\\page.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "users.js",
+              "DocumentMoniker": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\routes\\users.js",
+              "RelativeDocumentMoniker": "Project\\backend\\routes\\users.js",
+              "ToolTip": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\routes\\users.js",
+              "RelativeToolTip": "Project\\backend\\routes\\users.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-01-19T04:28:13.7Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "index.js",
+              "DocumentMoniker": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\routes\\index.js",
+              "RelativeDocumentMoniker": "Project\\backend\\routes\\index.js",
+              "ToolTip": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\routes\\index.js",
+              "RelativeToolTip": "Project\\backend\\routes\\index.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-01-19T04:28:05.993Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "layout.jade",
+              "DocumentMoniker": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\views\\layout.jade",
+              "RelativeDocumentMoniker": "Project\\backend\\views\\layout.jade",
+              "ToolTip": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\views\\layout.jade",
+              "RelativeToolTip": "Project\\backend\\views\\layout.jade",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003491|",
+              "WhenOpened": "2025-01-19T04:28:00.978Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "index.jade",
+              "DocumentMoniker": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\views\\index.jade",
+              "RelativeDocumentMoniker": "Project\\backend\\views\\index.jade",
+              "ToolTip": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\views\\index.jade",
+              "RelativeToolTip": "Project\\backend\\views\\index.jade",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003491|",
+              "WhenOpened": "2025-01-19T04:27:58.478Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "error.jade",
+              "DocumentMoniker": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\views\\error.jade",
+              "RelativeDocumentMoniker": "Project\\backend\\views\\error.jade",
+              "ToolTip": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\views\\error.jade",
+              "RelativeToolTip": "Project\\backend\\views\\error.jade",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003491|",
+              "WhenOpened": "2025-01-19T04:27:57.337Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "app.js",
+              "DocumentMoniker": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\app.js",
+              "RelativeDocumentMoniker": "Project\\backend\\app.js",
+              "ToolTip": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\app.js",
+              "RelativeToolTip": "Project\\backend\\app.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-01-19T04:19:33.669Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "package-lock.json",
+              "DocumentMoniker": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\package-lock.json",
+              "RelativeDocumentMoniker": "Project\\backend\\package-lock.json",
+              "ToolTip": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\package-lock.json",
+              "RelativeToolTip": "Project\\backend\\package-lock.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIwAAAB1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-01-18T23:19:27.239Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "package.json",
+              "DocumentMoniker": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\package.json",
+              "RelativeDocumentMoniker": "Project\\backend\\package.json",
+              "ToolTip": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\backend\\package.json",
+              "RelativeToolTip": "Project\\backend\\package.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-01-18T23:19:24.931Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "page.tsx",
+              "DocumentMoniker": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\frontend\\src\\app\\page.tsx",
+              "RelativeDocumentMoniker": "Project\\frontend\\src\\app\\page.tsx",
+              "ToolTip": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\frontend\\src\\app\\page.tsx",
+              "RelativeToolTip": "Project\\frontend\\src\\app\\page.tsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-01-18T23:02:02.98Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "page.tsx",
+              "DocumentMoniker": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\frontend\\src\\app\\forgotpassword\\page.tsx",
+              "RelativeDocumentMoniker": "Project\\frontend\\src\\app\\forgotpassword\\page.tsx",
+              "ToolTip": "C:\\Thucs\\GithubFiles\\StaffManagement\\Project\\frontend\\src\\app\\forgotpassword\\page.tsx",
+              "RelativeToolTip": "Project\\frontend\\src\\app\\forgotpassword\\page.tsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-01-18T23:01:53.745Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

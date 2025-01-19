@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\frontend",
+    "\\frontend\\src",
+    "\\frontend\\src\\app",
+    "\\frontend\\src\\app\\components",
+    "\\frontend\\src\\app\\components\\assets",
+    "\\frontend\\src\\app\\employeepanel",
+    "\\frontend\\src\\app\\forgotpassword",
+    "\\frontend\\src\\app\\login",
+    "\\frontend\\src\\app\\signup"
+  ],
+  "SelectedNode": "\\frontend\\src\\app\\components\\assets",
+  "PreviewInSolutionExplorer": false
+}

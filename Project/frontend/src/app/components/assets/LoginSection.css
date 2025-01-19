@@ -39,10 +39,10 @@ input {
 
 .form-options {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     font-size: 12px;
 }
+
 
 .login-button {
     background: #ff4876;

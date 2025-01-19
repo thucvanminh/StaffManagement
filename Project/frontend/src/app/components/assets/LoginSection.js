@@ -14,10 +14,8 @@ export default function LoginSection() {
                         <input type="password" placeholder="Password" />
                     </label>
                     <div className="form-options">
-                        <label>
-                            <input type="checkbox" /> 
-                            <label>Keep me signed in</label>
-                        </label>
+                        <input type="checkbox" id="keepSignedIn" style={{ width: '10%' }} />
+                        <label htmlFor="keepSignedIn">Keep me signed in</label>
                     </div>
                     <button type="submit" className="login-button">Login</button>
                 </form>
