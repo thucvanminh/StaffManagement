@@ -1,9 +1,11 @@
-require('dotenv').config();
+// backend/config/database.js
+
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-    host: process.env.DB_HOST,
-    dialect: 'mysql'
+// Khởi tạo sequelize với thông tin kết nối database của bạn
+const sequelize = new Sequelize('database_name', 'username', 'password', {
+  host: 'localhost',
+  dialect: 'mysql',
 });
 
 module.exports = sequelize;

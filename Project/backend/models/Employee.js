@@ -1,5 +1,7 @@
+// backend/models/Employee.js
+
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = require('../config/database'); // Đảm bảo rằng bạn import sequelize đúng cách
 
 const Employee = sequelize.define('Employee', {
   employeeID: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },

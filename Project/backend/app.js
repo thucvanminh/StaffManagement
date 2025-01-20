@@ -1,91 +1,11 @@
-// var createError = require('http-errors');
-// var express = require('express');
-// var path = require('path');
-// var cookieParser = require('cookie-parser');
-// var logger = require('morgan');
-
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
-
-// var app = express();
-
-// // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
-
-// app.use(logger('dev'));
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
-// app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
-
-// // catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   next(createError(404));
-// });
-
-// // error handler
-// app.use(function(err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-//   // render the error page
-//   res.status(err.status || 500);
-//   res.render('error');
-// });
-
-// module.exports = app;
-
-// // // // // // // //
-
-
-// const express = require('express');
-// const sequelize = require('./config/database');
-
-// const app = express();
-
-// sequelize.authenticate()
-//   .then(() => {
-//     console.log('Connection has been established successfully.');
-//     return sequelize.sync(); // Sync all defined models to the DB
-//   })
-//   .catch(err => {
-//     console.error('Unable to connect to the database:', err);
-//   });
-
-// app.listen(3000, () => {
-//   console.log('Server is running on port 3000');
-// });
-// module.exports = app;
-
-
 const express = require('express');
-const bodyParser = require('body-parser');
-const sequelize = require('./config/database');
-const employeeRoutes = require('./routes/employeeRoutes');
-const cors = require('cors');
-
 const app = express();
+const employeeRoutes = require('./routes/employee');
 
-// Middleware để parse body của request
-app.use(bodyParser.json());
-app.use(cors()); // Nếu bạn cần cho phép CORS
+app.use(express.json());
 
-// Sử dụng các route
-app.use('/api', employeeRoutes);
+app.use('/api/employees', employeeRoutes);
 
-// Kết nối với cơ sở dữ liệu và khởi động server
-sequelize.authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-    return sequelize.sync(); // Sync tất cả models
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
-
-module.exports = app; // Xuất app để sử dụng trong www
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
