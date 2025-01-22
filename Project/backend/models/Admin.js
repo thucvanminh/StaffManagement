@@ -1,5 +1,4 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
 
 const Admin = sequelize.define('Admin', {
   adminID: { type: DataTypes.INTEGER, primaryKey: true }
@@ -9,4 +8,4 @@ const Admin = sequelize.define('Admin', {
   timestamps: false
 });
 
-module.exports = Admin;
+

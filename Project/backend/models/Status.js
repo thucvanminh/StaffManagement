@@ -1,5 +1,4 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const { Sequelize, DataTypes } = require('sequelize');
 
 const Status = sequelize.define('Status', {
   statusID: { type: DataTypes.INTEGER, primaryKey: true },
@@ -9,4 +8,3 @@ const Status = sequelize.define('Status', {
   timestamps: false
 });
 
-module.exports = Status;

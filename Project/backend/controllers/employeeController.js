@@ -1,3 +1,5 @@
+// backend/controllers/employeeController.js
+
 const Employee = require('../models/Employee');
 
 // Lấy danh sách tất cả nhân viên
