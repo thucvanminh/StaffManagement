@@ -30,6 +30,7 @@ const cors = require('cors');
 const sequelize = require('./config/database'); // Kết nối database
 const Employee = require('./models/Employee'); // Model Employee
 
+
 const app = express();
 const port = 5000;
 
