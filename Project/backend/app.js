@@ -1,11 +1,24 @@
 const express = require('express');
-const app = express();
-const employeeRoutes = require('./routes/employee');
+const cors = require('cors');
+const sequelize = require('./config/database'); // Kết nối database
+const Employee = require('./models/Employee'); // Model Employee
 
+const app = express();
+const port = 5000;
+
+app.use(cors());
 app.use(express.json());
 
-app.use('/api/employees', employeeRoutes);
+app.get('/', (req, res) => {
+  res.send('Welcome to the Staff Management API!');
+});
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+app.get('/employees', async (req, res) => {
+  try {
+    const employees = await Employee.findAll();
+    res.json(employees); // Trả về danh sách nhân viên ở dạng JSON
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
 });

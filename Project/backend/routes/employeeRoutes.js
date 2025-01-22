@@ -1,5 +1,6 @@
+// backend/routes/employeeRoutes.js
 const express = require('express');
-const { Employee } = require('../models');
+const { Employee } = require('../models/Employee');
 
 const router = express.Router();
 
