@@ -1,11 +1,18 @@
 // backend/controllers/employeeController.js
 
 const Employee = require('../models/Employee');
+const Department = require('../models/Department');
 
 // Lấy danh sách tất cả nhân viên
 exports.getAllEmployees = async (req, res) => {
   try {
-    const employees = await Employee.findAll();
+    const employees = await Employee.findAll({
+      include: {
+        model: Department,
+        as: 'departmentIDQuerry',
+        attributes: ['departmentID', 'departmentName'], // Dùng mảng
+      }
+    });
     res.status(200).json(employees);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -45,14 +52,5 @@ exports.deleteEmployee = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-const express = require('express');
-const router = express.Router();
-const employeeController = require('../controllers/employeeController');
 
-router.get('/', employeeController.getAllEmployees);
-router.post('/', employeeController.addEmployee);
-router.put('/:id', employeeController.updateEmployee);
-router.delete('/:id', employeeController.deleteEmployee);
-
-module.exports = router;
 

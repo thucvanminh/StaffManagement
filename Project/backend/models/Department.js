@@ -2,6 +2,7 @@
 
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
+const Employee = require('./Employee');
 
 const Department = sequelize.define('Department', {
   departmentID: {
@@ -20,3 +21,5 @@ const Department = sequelize.define('Department', {
   tableName: 'department',
   timestamps: false
 });
+
+module.exports = Department;

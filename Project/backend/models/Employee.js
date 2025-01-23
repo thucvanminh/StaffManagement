@@ -3,6 +3,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Import chính xác
 
+
 const Employee = sequelize.define('Employee', {
   employeeID: {
     type: DataTypes.INTEGER,
@@ -19,9 +20,9 @@ const Employee = sequelize.define('Employee', {
   gender: DataTypes.STRING,
   departmentID: {
     type: DataTypes.INTEGER,
-    references:{
-      model : 'Department',
-      key : 'departmentID'
+    references: {
+      model: 'Department',
+      key: 'departmentID'
     }
   },
   headOfDepartmentID: {
@@ -33,14 +34,16 @@ const Employee = sequelize.define('Employee', {
   },
   roleID: {
     type: DataTypes.INTEGER,
-    references : {
-      model : 'roles',
-      key : 'roleID'
+    references: {
+      model: 'roles',
+      key: 'roleID'
     }
   }
 }, {
   tableName: 'employee',
   timestamps: false
 });
+
+
 
 module.exports = Employee;

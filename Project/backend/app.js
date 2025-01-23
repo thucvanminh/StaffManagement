@@ -1,24 +1,19 @@
+// backend/app.js
 const express = require('express');
 const cors = require('cors');
-const sequelize = require('./config/database'); // Kết nối database
-const Employee = require('./models/Employee'); // Model Employee
+const employeeRoutes = require('./routes/employeeRoutes'); // Import routes
 
 const app = express();
-const port = 5000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
+// Routes
+app.use('/employees', employeeRoutes);
+
 app.get('/', (req, res) => {
-  res.send('Welcome to the Staff Management API!');
+  res.send('Welcome to the Staff Management!');
 });
 
-app.get('/employees', async (req, res) => {
-  try {
-    const employees = await Employee.findAll();
-    res.json(employees); // Trả về danh sách nhân viên ở dạng JSON
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+module.exports = app; // Xuất đối tượng app để server.js sử dụng

@@ -1,16 +1,26 @@
-// backend/models/association.js
-
+// // backend/models/association.js
 const Employee = require('./Employee');
 const Department = require('./Department');
-const Role = require('./Role');
+const Roles = require('./Roles');
+Employee.belongsTo(Department, {
+    foreignKey: "departmentID",
+    targetKey: "departmentID",
+    as: 'departmentIDQuerry'
+  });
+  Employee.belongsTo(Roles, {
+    foreignKey: 'roleID',
+    targetKey: 'roleID',
+    as: 'roleIDQuerry'
+  });
+  Employee.belongsTo(Department, {
+    foreignKey: 'headOfDepartmentID',
+    targetKey: 'HeadOfDepartmentID',
+    as: 'headOfDepartmentIDQuerry'
+  });
 
-Employee.belongsTo(Department, { foreignKey: 'departmentID', as: 'department' });
-Employee.belongsTo(Role, { foreignKey: 'roleID', as: 'role' });
-Employee.hasOne(Department, { foreignKey: 'headOfDepartmentID', as: 'department' });
-
-
-Department.hasMany(Employee, { foreignKey: 'departmentID' });
-Department.belongsTo(Employee, { foreignKey: 'headOfDepartmentID', as: 'headOfDepartment' });
-Role.hasMany(Employee, { foreignKey: 'roleID' });
-
-module.exports = { Employee, Department, Role };
+  Department.belongsTo(Employee, {
+    foreignKey: 'HeadOfDepartmentID',
+    targetKey: 'employeeID',
+    as: 'HeadOfDepartmentIDQuerry'
+  });
+  

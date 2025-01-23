@@ -1,33 +1,21 @@
-// // backend/server.js
-
-const express = require('express');
-const cors = require('cors');
+// backend/server.js
+const app = require('./app'); // Import cấu hình từ app.js
 const sequelize = require('./config/database'); // Kết nối database
-const Employee = require('./models/Employee'); // Model Employee
+require('./models/association'); // Thiết lập associations trước khi chạy ứng dụng
 
-
-const app = express();
 const port = 5000;
 
-app.use(cors());
-app.use(express.json());
-
-app.get('/', (req, res) => {
-  res.send('Welcome to the Staff Management API!');
-});
-
-app.get('/employees', async (req, res) => {
-  try {
-      const employees = await Employee.findAll();
-      res.json(employees); // Trả về danh sách nhân viên ở dạng JSON
-  } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
-  }
-});
-// Khởi động server
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+// Kiểm tra kết nối database và khởi động server
+sequelize.authenticate()
+  .then(() => {
+    console.log('Kết nối cơ sở dữ liệu thành công!');
+    app.listen(port, () => {
+      console.log(`Server đang chạy tại http://localhost:${port}`);
+    });
+  })
+  .catch(err => {
+    console.error('Không thể kết nối cơ sở dữ liệu:', err);
+    process.exit(1); // Thoát chương trình nếu không kết nối được database
+  });
 
 
