@@ -25,5 +25,9 @@ app.get('/employees', async (req, res) => {
       res.status(500).send('Internal Server Error');
   }
 });
+// Khởi động server
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
 
 
