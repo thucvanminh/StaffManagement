@@ -8,7 +8,7 @@ const Roles = sequelize.define('Role', {
   },
   roleName: DataTypes.STRING
 }, {
-  tableName: 'role',
+  tableName: 'roles',
   timestamps: false
 });
 

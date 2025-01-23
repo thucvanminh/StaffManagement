@@ -11,8 +11,8 @@ const Employee = sequelize.define('Employee', {
     autoIncrement: true
   },
   fullName: DataTypes.STRING,
-  dateOfBirth: DataTypes.DATE,
-  hireDay: DataTypes.DATE,
+  dateOfBirth: DataTypes.DATEONLY,
+  hireDay: DataTypes.DATEONLY,
   email: DataTypes.STRING,
   phone: DataTypes.STRING,
   address: DataTypes.STRING,

@@ -2,18 +2,51 @@
 
 const Employee = require('../models/Employee');
 const Department = require('../models/Department');
+const Roles = require('../models/Roles');
 
 // Lấy danh sách tất cả nhân viên
 exports.getAllEmployees = async (req, res) => {
   try {
     const employees = await Employee.findAll({
-      include: {
+      include: [{
         model: Department,
         as: 'departmentIDQuerry',
-        attributes: ['departmentID', 'departmentName'], // Dùng mảng
-      }
+        attributes: ['departmentName'], // Dùng mảng
+      },
+      {
+        model : Roles,
+        as : 'roleIDQuerry',
+        attributes: ['roleName']
+      }]
     });
     res.status(200).json(employees);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Lấy nhân viên theo ID
+exports.getEmployeeByID = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const employeeByID = await Employee.findOne({
+      where: { employeeID: id },
+      include: [{
+        model: Department,
+        as: 'departmentIDQuerry',
+        attributes: ['departmentName'], // Dùng mảng
+      },
+      {
+        model : Roles,
+        as : 'roleIDQuerry',
+        attributes: ['roleName']
+      }]
+    });
+    if (!employeeByID) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+    res.status(200).json(employeeByID);
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -52,5 +85,3 @@ exports.deleteEmployee = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
