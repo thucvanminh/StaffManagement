@@ -19,9 +19,9 @@ exports.getAllDepartments = async (req, res) => {
     }
 };
 
-exports.getAllDepartmentsByID = async (req, res) => {
+exports.getDepartmentsByID = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id } = req.params;  // lấy một đối tượng {id : 'example'} trong URL
         const departmentID = await Department.findOne({
             where: { departmentID: id },
             include: [{
@@ -50,9 +50,9 @@ exports.addDepartment = async (req, res) => {
 
 exports.updateDepartment = async (req, res) => {
     try {
-        const { inputId } = req.params;
+        const departmentID = req.params.id;
         const updateDepartment = await Department.update(req.body, {
-            where: { departmentID: inputId }
+            where: { departmentID }
         });
         res.status(200).json(updateDepartment);
     } catch (error) {
@@ -63,8 +63,8 @@ exports.updateDepartment = async (req, res) => {
 
 exports.deleteDepartment = async (req, res) => {
     try {
-        const { id } = req.params;
-        await Department.destroy({ where: { departmentID: id } });
+        const departmentID = req.params.id;
+        await Department.destroy({ where: { departmentID } });
         res.status(204).send();
     } catch (error) {
         res.status(500).json({ error: error.message });
