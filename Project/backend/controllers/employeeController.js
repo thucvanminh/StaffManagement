@@ -29,12 +29,13 @@ exports.getAllEmployees = async (req, res) => {
 exports.getEmployeeByID = async (req, res) => {
   try {
     const employeeID = req.params.id;
+
     const employeeByID = await Employee.findOne({
       where: { employeeID },
       include: [{
         model: Department,
         as: 'departmentIDQuerry',
-        attributes: ['departmentName'], // Dùng mảng
+        attributes: ['departmentName'],
       },
       {
         model: Roles,
@@ -78,7 +79,7 @@ exports.updateEmployee = async (req, res) => {
 // Xóa nhân viên
 exports.deleteEmployee = async (req, res) => {
   try {
-    const employeeID = req.param.id;
+    const employeeID = req.params.id;
     await Employee.destroy({ where: { employeeID } });
     res.status(204).send();
   } catch (error) {
@@ -91,15 +92,24 @@ exports.deleteEmployee = async (req, res) => {
 
 exports.queryEmployee = async (req, res) => {
   try {
-    const departmentID = req.query.departmentID ? Number(req.query.departmentID) : null;
-    const roleID = req.query.roleID ? Number(req.query.roleID) : null;
+    const inputDepartmentID = req.query.departmentID ? Number(req.query.departmentID) : null;
+    const inputRoleID = req.query.roleID ? Number(req.query.roleID) : null;
+    const inputCity = req.query.city ? req.query.city : null;
+    const intputBirthday = req.body.birthday ? req.query.birthday : null;
+
 
     const queryCondition = {};
-    if (departmentID) {
-      queryCondition.departmentID = departmentID;
+    if (inputDepartmentID) {
+      queryCondition.departmentID = inputDepartmentID;
     }
-    if (roleID) {
-      queryCondition.roleID = roleID;
+    if (inputRoleID) {
+      queryCondition.roleID = inputRoleID;
+    }
+    if (inputCity) {
+      queryCondition.city = inputCity;
+    }
+    if (intputBirthday) {
+      queryCondition.birthday = intputBirthday;
     }
     if (Object.keys(queryCondition).length == 0) {
       return res.status(404).json({ message: 'No employees found for the provided parameters' });
