@@ -2,7 +2,7 @@
 
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
-const Employee = require('./Employee');
+// const Employee = require('./Employee');
 
 const Department = sequelize.define('Department', {
   departmentID: {
@@ -13,14 +13,14 @@ const Department = sequelize.define('Department', {
   HeadOfDepartmentID: {
     type: DataTypes.INTEGER,
     references: {
-      model: 'Employee', //sequelize trỏ thẳng đến dữ liệu trong db
+      model: 'Employees', //sequelize trỏ thẳng đến dữ liệu trong db
       key: 'employeeID',  // Khóa chính của Employee
     },
     allowNull: true
     
   }
 }, {
-  tableName: 'department',
+  tableName: 'departments',
   timestamps: false
 });
 
