@@ -2,7 +2,7 @@
 
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
-// const Employee = require('./Employee');
+
 
 const Department = sequelize.define('Department', {
   departmentID: {
