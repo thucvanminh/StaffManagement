@@ -1,3 +1,5 @@
+/* frontend/src/app/componeents/assets/EmployeePanel.js */
+
 import Link from 'next/link';
 import './EmployeePanel.css';
 

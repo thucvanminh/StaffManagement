@@ -1,3 +1,5 @@
+/* frontend/src/app/employeepanel/page.tsx */
+
 import EmployeePanel from '../components/assets/EmployeePanel';
 
 export default function EmployeePanelPage() {
