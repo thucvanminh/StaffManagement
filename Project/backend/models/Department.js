@@ -17,6 +17,7 @@ const Department = sequelize.define('Department', {
       key: 'employeeID',  // Khóa chính của Employee
     },
     allowNull: true
+    
   }
 }, {
   tableName: 'department',
