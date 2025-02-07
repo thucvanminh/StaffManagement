@@ -15,7 +15,7 @@ Employee.belongsTo(Roles, {
 Employee.belongsTo(Department, {
   foreignKey: 'headOfDepartmentID',
   targetKey: 'HeadOfDepartmentID',
-  as: 'headOfDepartmentIDQuerry'
+  as: 'headOfDepartmentIDQuerry'  
 });
 
 Department.belongsTo(Employee, {
