@@ -6,7 +6,11 @@ require('./models/association'); // Thiết lập associations trước khi ch�
 const port = 5000;
 
 // Kiểm tra kết nối database và khởi động server
-sequelize.authenticate()
+sequelize.sync() // Nếu cần force sync, dùng { force: true } hoặc { alter: true }
+  .then(() => {
+    console.log('Cơ sở dữ liệu đã được đồng bộ!');
+    return sequelize.authenticate();
+  })
   .then(() => {
     console.log('Kết nối cơ sở dữ liệu thành công!');
     app.listen(port, () => {

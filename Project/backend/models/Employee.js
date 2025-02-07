@@ -13,7 +13,14 @@ const Employee = sequelize.define('Employee', {
   fullName: DataTypes.STRING,
   dateOfBirth: DataTypes.DATEONLY,
   hireDay: DataTypes.DATEONLY,
-  email: DataTypes.STRING,
+  email: {
+      type: DataTypes.STRING,
+      allowNull : false,
+      unique : true,
+      validate : {
+        isEmail: true,
+      }
+  },
   phone: DataTypes.STRING,
   address: DataTypes.STRING,
   city: DataTypes.STRING,
@@ -21,14 +28,14 @@ const Employee = sequelize.define('Employee', {
   departmentID: {
     type: DataTypes.INTEGER,
     references: {
-      model: 'Department',
+      model: 'Department',   //sequelize trỏ thẳng đến dữ liệu trong db
       key: 'departmentID'
     }
   },
   headOfDepartmentID: {
     type: DataTypes.INTEGER,
     references: {
-      model: 'Department',
+      model: 'Department',   //sequelize trỏ thẳng đến dữ liệu trong db
       key: 'HeadOfDepartmentID'
     }
   },

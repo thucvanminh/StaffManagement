@@ -9,7 +9,7 @@ exports.getAllDepartments = async (req, res) => {
         const departments = await Department.findAll({
             include: [{
                 model: Employee,
-                as: 'HeadOfDepartmentIDQuerry',
+                as: 'DepartmentHead',
                 attributes: ['fullName'], // Dùng mảng
             }]
         });
@@ -19,7 +19,7 @@ exports.getAllDepartments = async (req, res) => {
     }
 };
 
-exports.getDepartmentsByID = async (req, res) => {
+exports.getDepartmentByID = async (req, res) => {
     try {
         const { id } = req.params;  // lấy một đối tượng {id : 'example'} trong URL
         const departmentID = await Department.findOne({

@@ -1,8 +1,9 @@
 // backend/controllers/employeeController.js
-
 const Employee = require('../models/Employee');
 const Department = require('../models/Department');
 const Roles = require('../models/Roles');
+const { validationResult } = require('express-validator'); // bắt lỗi từ req trả về
+const { validateEmployee, validateQueryEmployee } = require('./validations/employeeValidation');
 
 // Lấy danh sách tất cả nhân viên
 exports.getAllEmployees = async (req, res) => {
@@ -54,27 +55,67 @@ exports.getEmployeeByID = async (req, res) => {
 };
 
 // Thêm nhân viên mới
-exports.addEmployee = async (req, res) => {
-  try {
-    const newEmployee = await Employee.create(req.body);
-    res.status(201).json(newEmployee);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+exports.addEmployee = [ // Sử dụng một mảng middleware
+  // Định nghĩa các quy tắc validation
+  validateEmployee,
+
+  // Xử lý request
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const newEmployee = await Employee.create(req.body);
+      res.status(201).json(newEmployee);
+
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
-};
+];
 
 // Sửa thông tin nhân viên
-exports.updateEmployee = async (req, res) => {
-  try {
-    const employeeID = req.params.id;
-    const updatedEmployee = await Employee.update(req.body, {
-      where: { employeeID }
-    });
-    res.status(200).json(updatedEmployee);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+exports.updateEmployee = [ // Sử dụng một mảng middleware
+  // Định nghĩa các quy tắc validation
+  validateEmployee,
+
+  // Xử lý request
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const employeeID = req.params.id;
+      const [updatedRows] = await Employee.update(req.body, {
+        where: { employeeID }
+      });
+
+      if (updatedRows === 0) {
+        return res.status(404).json({ message: 'Employee not found' });
+      }
+
+      const updatedEmployee = await Employee.findByPk(employeeID, {
+        include: [{
+          model: Department,
+          as: 'departmentIDQuerry',
+          attributes: ['departmentName'],
+        },
+        {
+          model: Roles,
+          as: 'roleIDQuerry',
+          attributes: ['roleName']
+        }]
+      });
+      res.status(200).json(updatedEmployee);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
-};
+];
 
 // Xóa nhân viên
 exports.deleteEmployee = async (req, res) => {
@@ -87,40 +128,47 @@ exports.deleteEmployee = async (req, res) => {
   }
 };
 
+// Truy vấn nhân viên
+exports.queryEmployee = [ // Sử dụng một mảng middleware cho validation query parameters
+  // Định nghĩa các quy tắc validation cho query parameters (optional() cho phép không bắt buộc)
+  validateQueryEmployee,
 
-
-
-exports.queryEmployee = async (req, res) => {
-  try {
-    const inputDepartmentID = req.query.departmentID ? Number(req.query.departmentID) : null;
-    const inputRoleID = req.query.roleID ? Number(req.query.roleID) : null;
-    const inputCity = req.query.city ? req.query.city : null;
-    const intputBirthday = req.body.birthday ? req.query.birthday : null;
-
-
-    const queryCondition = {};
-    if (inputDepartmentID) {
-      queryCondition.departmentID = inputDepartmentID;
-    }
-    if (inputRoleID) {
-      queryCondition.roleID = inputRoleID;
-    }
-    if (inputCity) {
-      queryCondition.city = inputCity;
-    }
-    if (intputBirthday) {
-      queryCondition.birthday = intputBirthday;
-    }
-    if (Object.keys(queryCondition).length == 0) {
-      return res.status(404).json({ message: 'No employees found for the provided parameters' });
+  // Xử lý request
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
 
+    try {
+      const inputDepartmentID = req.query.departmentID ? Number(req.query.departmentID) : null;
+      const inputRoleID = req.query.roleID ? Number(req.query.roleID) : null;
+      const inputCity = req.query.city ? req.query.city : null;
+      const inputBirthday = req.query.birthday ? req.query.birthday : null;
 
-    const employees = await Employee.findAll({ where: queryCondition });
+      const queryCondition = {};
+      if (inputDepartmentID) {
+        queryCondition.departmentID = inputDepartmentID;
+      }
+      if (inputRoleID) {
+        queryCondition.roleID = inputRoleID;
+      }
 
+      if (inputCity) {
+        queryCondition.city = inputCity;
+      }
+      if (inputBirthday) {
+        queryCondition.birthday = inputBirthday;
+      }
+      if (Object.keys(queryCondition).length == 0) {
+        return res.status(404).json({ message: 'No employees found for the provided parameters' });
+      }
 
-    res.status(200).json(employees);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+      const employees = await Employee.findAll({ where: queryCondition });
+
+      res.status(200).json(employees);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
-};
+];

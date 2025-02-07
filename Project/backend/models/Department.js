@@ -13,9 +13,10 @@ const Department = sequelize.define('Department', {
   HeadOfDepartmentID: {
     type: DataTypes.INTEGER,
     references: {
-      model: 'Employee', // Tên bảng Employee
-      key: 'employeeID'  // Khóa chính của Employee
-    }
+      model: 'Employee', //sequelize trỏ thẳng đến dữ liệu trong db
+      key: 'employeeID',  // Khóa chính của Employee
+    },
+    allowNull: true
   }
 }, {
   tableName: 'department',
