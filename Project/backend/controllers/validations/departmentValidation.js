@@ -9,7 +9,7 @@ const validateDepartment = [
         .isInt().withMessage('Department ID must be a number'),
     body('departmentName').notEmpty()
         .withMessage('Department Name cannot be null'),
-    body('HeadOfDepartmentID').isInt()
+    body('HeadOfDepartmentID').optional({ nullable: true }).isInt()
         .withMessage('ID must be number type')
 ];
 
