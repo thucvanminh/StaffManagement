@@ -10,5 +10,15 @@ const validateDepartment = [
     body('departmentName').notEmpty()
         .withMessage('Department Name cannot be null'),
     body('HeadOfDepartmentID').isInt()
-        .withMessage('ID must be number type'),
+        .withMessage('ID must be number type')
 ];
+
+const validateQueryDepartment = [
+    query('departmentID').isEmpty()
+        .withMessage('Department ID cannot be null'),
+]
+
+module.exports = [
+    validateDepartment,
+    validateQueryDepartment
+]

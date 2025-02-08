@@ -1,3 +1,5 @@
+/* frontend/src/app/componeents/assets/SignUpSection.js */
+
 import Link from 'next/link';
 import './SignUpSection.css';
 

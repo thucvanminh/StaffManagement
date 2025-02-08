@@ -1,3 +1,5 @@
+/* frontend/src/app/componeents/assets/ForgotPassword.js */
+
 import Link from 'next/link';
 import './ForgotPassword.css';
 

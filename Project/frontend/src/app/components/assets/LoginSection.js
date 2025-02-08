@@ -1,3 +1,5 @@
+/* frontend/src/app/componeents/assets/LoginSection.js */
+
 import Link from 'next/link';
 import './LoginSection.css';
 

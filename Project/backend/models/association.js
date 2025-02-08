@@ -2,6 +2,7 @@
 const Employee = require('./Employee');
 const Department = require('./Department');
 const Roles = require('./Roles');
+const Account = require('./Account');
 Employee.belongsTo(Department, {
   foreignKey: "departmentID",
   targetKey: "departmentID",
@@ -15,7 +16,7 @@ Employee.belongsTo(Roles, {
 Employee.belongsTo(Department, {
   foreignKey: 'headOfDepartmentID',
   targetKey: 'HeadOfDepartmentID',
-  as: 'headOfDepartmentIDQuerry'  
+  as: 'headOfDepartmentIDQuerry'
 });
 
 Department.belongsTo(Employee, {
@@ -23,4 +24,14 @@ Department.belongsTo(Employee, {
   targetKey: 'employeeID',
   as: 'DepartmentHead',
   onDelete: 'SET NULL'
+});
+Account.belongsTo(Employee, {
+  foreignKey: 'employeeID',
+  targetKey: 'employeeID',
+  as: 'employee'
+});
+
+Employee.hasOne(Account, {
+  foreignKey: 'employeeID',
+  as: 'account'
 });
