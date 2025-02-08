@@ -23,7 +23,7 @@ const Account = sequelize.define('Account', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Employee',
+      model: 'Employees',
       key: 'employeeID'
     }
   }
