@@ -130,7 +130,6 @@ exports.deleteEmployee = async (req, res) => {
 
 // Truy vấn nhân viên
 exports.queryEmployee = [ // Sử dụng một mảng middleware cho validation query parameters
-  // Định nghĩa các quy tắc validation cho query parameters (optional() cho phép không bắt buộc)
   validateQueryEmployee,
 
   // Xử lý request

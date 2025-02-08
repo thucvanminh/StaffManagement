@@ -18,7 +18,7 @@ const validateQueryDepartment = [
         .withMessage('Department ID cannot be null'),
 ]
 
-module.exports = [
+module.exports = {
     validateDepartment,
     validateQueryDepartment
-]
+}
