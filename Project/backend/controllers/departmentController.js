@@ -2,6 +2,9 @@
 
 const Employee = require('../models/Employee');
 const Department = require('../models/Department');
+const { validateDepartment,
+    validateQueryDepartment } = require('./validations/departmentValidation');
+const { validationResult } = require('express-validator');
 
 // Lấy danh sách tất cả nhân viên
 exports.getAllDepartments = async (req, res) => {
@@ -26,8 +29,8 @@ exports.getDepartmentByID = async (req, res) => {
             where: { departmentID: id },
             include: [{
                 model: Employee,
-                as: 'HeadOfDepartmentID',
-                attributes: ['employeeName'], // Dùng mảng
+                as: 'DepartmentHead', // alias
+                attributes: ['fullName'], // Dùng mảng
             }]
         });
         if (!departmentID) {
@@ -39,14 +42,20 @@ exports.getDepartmentByID = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-exports.addDepartment = async (req, res) => {
-    try {
-        const newDepartment = await Department.create(req.body);
-        res.status(201).json(newDepartment);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-}
+exports.addDepartment = [
+    validateDepartment,
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        try {
+            const newDepartment = await Department.create(req.body);
+            res.status(201).json(newDepartment);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }];
 
 exports.updateDepartment = async (req, res) => {
     try {
