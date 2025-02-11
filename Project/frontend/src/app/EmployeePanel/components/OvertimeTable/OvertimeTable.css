@@ -1,0 +1,11 @@
+.overtimeTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.overtimeTable th,
+.overtimeTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}

@@ -1,14 +1,5 @@
-/* frontend/src/app/page.tsx */
+import { redirect } from 'next/navigation';
 
-import Link from 'next/link';
-import LoginSection from './components/assets/LoginSection';
-import EmployeePanel from './components/assets/EmployeePanel';
-
-export default function HomePage() {
-  return (
-    <div>
-      <LoginSection />
-      {/* <EmployeePanel/> */}
-    </div>
-  );
+export default function Home() {
+  redirect('/EmployeePanel'); // Chuyển hướng đến trang EmployeePanel
 }

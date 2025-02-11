@@ -1,0 +1,16 @@
+.notice {
+    margin: 20px 0;
+}
+
+.notice h2 {
+    margin: 0;
+}
+
+.notice ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.notice ul li {
+    margin: 10px 0;
+}

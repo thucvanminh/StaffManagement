@@ -1,6 +1,6 @@
 /* frontend/src/app/signup/page.tsx */
 
-import SignUpSection from '../components/assets/SignUpSection';
+import SignUpSection from '../components/SignUpSection/SignUpSection';
 
 export default function SignUpPage() {
     return (

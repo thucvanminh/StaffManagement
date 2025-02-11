@@ -1,0 +1,19 @@
+.calendar {
+    margin: 20px 0;
+}
+
+.calendar h2 {
+    margin: 0;
+}
+
+.calendar table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.calendar th,
+.calendar td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
