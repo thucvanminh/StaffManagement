@@ -1,21 +1,24 @@
-// backend/middlewares/authorizeRole.js
+
+
+
+// backend/middlewares/authorizeRoles.js
 /**
- * Middleware kiểm tra phân quyền dựa trên role.
- * @param {number|string} requiredRole - RoleID hoặc role name yêu cầu để truy cập route.
+ * Middleware xác thực user có thuộc các role được chỉ định.
+ * @param {number[]} allowedRoles - Danh sách các roleID được phép truy cập.
  */
-function authorizeRole(requiredRole) {
+function authorizeRoles(allowedRoles) {
     return (req, res, next) => {
         if (!req.user) {
             return res.status(401).json({ message: 'User not authenticated' });
         }
-        
-        // Kiểm tra nếu role của user không khớp với requiredRole
-        if (req.user.role !== requiredRole) {
+
+        // Kiểm tra `roleID` của user có thuộc danh sách `allowedRoles`
+        if (!allowedRoles.includes(req.user.role)) {
             return res.status(403).json({ message: 'Access denied: Insufficient permissions' });
         }
-        
-        next();
+
+        next(); // Chuyển điều hướng đến controller nếu hợp lệ
     };
 }
 
-module.exports = authorizeRole;
+module.exports = authorizeRoles;

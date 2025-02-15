@@ -1,33 +1,10 @@
-// require('dotenv').config();
-// const jwt = require('jsonwebtoken');
 
-// const SECRET_KEY = process.env.JWT_SECRET || 'fallbackSecretKey';
-
-// // Hàm tạo token: Nhận thông tin user (bao gồm roleID) làm payload
-// function generateToken(user) {
-//     // Ví dụ payload chứa id và role (roleID)
-//     const payload = {
-//         userId: user.id,
-//         role: user.role  // Ví dụ: 'admin', 'user', v.v.
-//     };
-//     // Tạo token với thời gian hiệu lực (1h ở đây)
-//     return jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
-// }
-
-// // Hàm xác minh token: Nếu hợp lệ trả về payload, nếu không trả về lỗi/null
-// function verifyToken(token) {
-//     try {
-//         return jwt.verify(token, SECRET_KEY);
-//     } catch (error) {
-//         return null;
-//     }
-// }
-
-// module.exports = { generateToken, verifyToken };
 
 // backend/config/jwt.js
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const account = require('../models/Account');
+const employee = require('../models/Employee');
 
 const SECRET_KEY = process.env.JWT_SECRET || 'fallbackSecretKey';
 
@@ -40,8 +17,9 @@ const SECRET_KEY = process.env.JWT_SECRET || 'fallbackSecretKey';
  */
 function generateToken(user) {
     const payload = {
-        userId: user.id,   // Lấy từ account.employee.employeeID
-        role: user.role    // Lấy từ account.employee.roleID
+        userId: account.employee.employeeID,
+        role: account.employee.roleID
+        // Lấy từ account.employee.roleID
     };
     return jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
 }
