@@ -11,7 +11,7 @@ exports.getAllEmployees = async (req, res) => {
     const employees = await Employee.findAll({
       include: [{
         model: Department,
-        as: 'departmentIDQuerry',
+        as: 'department',
         attributes: ['departmentName'], // Dùng mảng
       },
       {
@@ -35,7 +35,7 @@ exports.getEmployeeByID = async (req, res) => {
       where: { employeeID },
       include: [{
         model: Department,
-        as: 'departmentIDQuerry',
+        as: 'department',
         attributes: ['departmentName'],
       },
       {
@@ -101,7 +101,7 @@ exports.updateEmployee = [ // Sử dụng một mảng middleware
       const updatedEmployee = await Employee.findByPk(employeeID, {
         include: [{
           model: Department,
-          as: 'departmentIDQuerry',
+          as: 'department',
           attributes: ['departmentName'],
         },
         {
@@ -121,7 +121,12 @@ exports.updateEmployee = [ // Sử dụng một mảng middleware
 exports.deleteEmployee = async (req, res) => {
   try {
     const employeeID = req.params.id;
-    await Employee.destroy({ where: { employeeID } });
+    const employee = await Employee.findByPk(employeeID);
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+    await employee.destroy();
+    // await Employee.destroy({ where: { employeeID } });
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -73,7 +73,12 @@ exports.updateDepartment = async (req, res) => {
 exports.deleteDepartment = async (req, res) => {
     try {
         const departmentID = req.params.id;
-        await Department.destroy({ where: { departmentID } });
+        const department = await Department.findByPk(departmentID);
+        if (!department) {
+            return res.status(404).json({ message: 'Department not found' });
+        }
+        await department.destroy();
+        // await Department.destroy({ where: { departmentID } });
         res.status(204).send();
     } catch (error) {
         res.status(500).json({ error: error.message });

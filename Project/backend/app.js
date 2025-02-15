@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const employeeRoutes = require('./routes/employeeRoutes'); // Import routes
 const departmentRoutes = require('./routes/departmentRoutes');
+const authRoutes = require('./routes/authRoutes');
 const testFunction = require('./routes/testFunction');
 
 const app = express();
@@ -16,6 +17,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to the Staff Management!');
 });
 
+app.use('/auth', authRoutes);
 app.use('/employees', employeeRoutes);
 app.use('/departments', departmentRoutes);
 app.use('/test', testFunction);

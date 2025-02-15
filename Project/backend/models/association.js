@@ -6,7 +6,7 @@ const Account = require('./Account');
 Employee.belongsTo(Department, {
   foreignKey: "departmentID",
   targetKey: "departmentID",
-  as: 'departmentIDQuerry'
+  as: 'department'
 });
 Employee.belongsTo(Roles, {
   foreignKey: 'roleID',
