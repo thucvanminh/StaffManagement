@@ -1,8 +1,7 @@
-'use client'
 /* frontend/src/app/componeents/assets/LoginSection.js */
 
 import Link from 'next/link';
-import './LoginSection.css';
+import  './LoginSection.css';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -25,7 +24,7 @@ export default function LoginSection() {
             console.log('Login success!');
         } catch (err) {
             console.log('Login failed:');
-            setError(err.message); // Hiển thị lỗi nếu thất bại
+            // setError(err.message); // Hiển thị lỗi nếu thất bại
         }
     };
 
