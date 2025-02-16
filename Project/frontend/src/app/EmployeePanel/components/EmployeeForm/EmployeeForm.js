@@ -1,4 +1,6 @@
-import styles from './EmployeeForm.css';
+import React from 'react';
+
+import styles from './EmployeeForm.module.css';
 
 export default function EmployeeForm() {
     return (

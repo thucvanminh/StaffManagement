@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './ActivityFeed.css';
+import styles from './ActivityFeed.module.css';
 
 export default function ActivityFeed() {
     return (

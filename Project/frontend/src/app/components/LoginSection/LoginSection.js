@@ -5,7 +5,7 @@ import Link from 'next/link';
 import './LoginSection.css';
 
 import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import {login} from '../../services/authService'
 
 export default function LoginSection() {

@@ -1,4 +1,6 @@
-import styles from './OvertimeTable.css';
+import React from 'react';
+
+import styles from './OvertimeTable.module.css';
 
 export default function OvertimeTable() {
     return (

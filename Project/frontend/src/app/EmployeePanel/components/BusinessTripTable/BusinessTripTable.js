@@ -1,4 +1,5 @@
-import styles from './BusinessTripTable.css';
+import React from 'react';
+import styles from './BusinessTripTable.module.css';
 
 export default function BusinessTripTable() {
     return (

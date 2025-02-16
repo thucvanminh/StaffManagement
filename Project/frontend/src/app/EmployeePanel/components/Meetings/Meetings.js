@@ -1,4 +1,6 @@
-import styles from './Meetings.css';
+import React from 'react';
+
+import styles from './Meetings.module.css';
 
 export default function Meetings() {
     return (
