@@ -13,7 +13,7 @@ async function createAccount(username, plainPassword, employeeID) {
 
 async function run() {
     try {
-        await createAccount('ptt_thuan', '123456', 200);
+        await createAccount('admin', 'admin', 1);
         console.log("Accounts created successfully.");
     } catch (error) {
         console.error("Error creating accounts:", error);

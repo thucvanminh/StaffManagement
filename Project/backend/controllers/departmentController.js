@@ -18,7 +18,8 @@ exports.getAllDepartments = async (req, res) => {
         });
         res.status(200).json(departments);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Cannot connect to the database:' });
+
     }
 };
 
@@ -39,7 +40,8 @@ exports.getDepartmentByID = async (req, res) => {
         res.status(200).json(departmentID);
 
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Cannot connect to the database:' });
+
     }
 };
 exports.addDepartment = [
@@ -53,7 +55,7 @@ exports.addDepartment = [
             const newDepartment = await Department.create(req.body);
             res.status(201).json(newDepartment);
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ error: 'Cannot connect to the database:' });
         }
     }];
 
@@ -65,7 +67,7 @@ exports.updateDepartment = async (req, res) => {
         });
         res.status(200).json(updateDepartment);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Cannot connect to the database:' });
     }
 }
 
@@ -81,7 +83,7 @@ exports.deleteDepartment = async (req, res) => {
         // await Department.destroy({ where: { departmentID } });
         res.status(204).send();
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Cannot connect to the database:' });
     }
 
 

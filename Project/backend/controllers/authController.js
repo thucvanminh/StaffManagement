@@ -31,14 +31,11 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: 'User name or password is not correct' });
         }
 
-        // Tạo đối tượng user lấy từ thông tin employee
-        const user = {
-            id: account.employee.employeeID, // Lấy employeeID từ Employee
-            role: account.employee.roleID      // Lấy roleID từ Employee (hoặc nếu bạn lưu role dưới dạng chuỗi, thay thế bằng account.employee.role)
-        };
-
-        // Tạo JWT token dựa trên thông tin user
-        const token = generateToken(user);
+        // Tạo token với thông tin của employee
+        const token = generateToken({
+            employeeID: account.employee.employeeID,
+            roleID: account.employee.roleID
+        });
 
         // Trả về token cho client
         return res.json({ token });

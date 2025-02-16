@@ -8,17 +8,17 @@ const port = 5000;
 // Kiểm tra kết nối database và khởi động server
 sequelize.sync() // Nếu cần force sync, dùng { force: true } hoặc { alter: true }
   .then(() => {
-    console.log('Cơ sở dữ liệu đã được đồng bộ!');
+    console.log('Database has been synchronized!');
     return sequelize.authenticate();
   })
   .then(() => {
-    console.log('Kết nối cơ sở dữ liệu thành công!');
+    console.log('Database connection successful!');
     app.listen(port, () => {
       console.log(`Server đang chạy tại http://localhost:${port}`);
     });
   })
   .catch(err => {
-    console.error('Không thể kết nối cơ sở dữ liệu:', err);
+    console.error('Cannot connect to the database:', err);
     process.exit(1); // Thoát chương trình nếu không kết nối được database
   });
 

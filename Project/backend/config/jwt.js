@@ -17,8 +17,8 @@ const SECRET_KEY = process.env.JWT_SECRET || 'fallbackSecretKey';
  */
 function generateToken(user) {
     const payload = {
-        userId: account.employee.employeeID,
-        role: account.employee.roleID
+        userId: user.employeeID,
+        role: user.roleID
         // Lấy từ account.employee.roleID
     };
     return jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });

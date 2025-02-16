@@ -1,6 +1,6 @@
 import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
-import styles from './EmployeePanel.module.css';
+import styles from './EmployeePanel.css';
 
 export default function EmployeePanelLayout({ children }) {
     return (

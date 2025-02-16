@@ -10,12 +10,12 @@ const authorizeRole = require('../middlewares/authorizeRole'); // kiểm tra quy
 //router.get('/', authMiddleware, employeeController.getAllEmployees);
 
 // Route thêm nhân viên: chỉ cho phép admin (roleID === 1)
-router.post('/', authMiddleware, authorizeRole(1), employeeController.addEmployee);
-router.get('/', authMiddleware, authorizeRole(1), employeeController.getAllEmployees);
+router.post('/', authMiddleware, authorizeRole([1,2]), employeeController.addEmployee);
+router.get('/', authMiddleware, authorizeRole([1,2]), employeeController.getAllEmployees);
 router.get('/query', authMiddleware, authorizeRole([1,2]), employeeController.queryEmployee);
-router.get('/:id', authMiddleware, authorizeRole(1), employeeController.getEmployeeByID);
-router.put('/:id', authMiddleware, authorizeRole(1), employeeController.updateEmployee);
-router.delete('/:id', authMiddleware, authorizeRole(1), employeeController.deleteEmployee);
+router.get('/:id', authMiddleware, authorizeRole([1,2]), employeeController.getEmployeeByID);
+router.put('/:id', authMiddleware, authorizeRole([1,2]), employeeController.updateEmployee);
+router.delete('/:id', authMiddleware, authorizeRole([1,2]), employeeController.deleteEmployee);
 
 
 
