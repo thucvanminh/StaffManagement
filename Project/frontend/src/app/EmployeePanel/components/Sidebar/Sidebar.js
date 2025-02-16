@@ -9,10 +9,8 @@ export default function Sidebar() {
                 <li><Link href="/EmployeePanel/overview">Overview</Link></li>
                 <li><Link href="/EmployeePanel/activity-feed">Activity Feed</Link></li>
                 <li><Link href="/EmployeePanel/business-trip">Business Trip</Link></li>
-                <li><Link href="/EmployeePanel/calendar">Calendar</Link></li>
                 <li><Link href="/EmployeePanel/employee-form">Employee Form</Link></li>
                 <li><Link href="/EmployeePanel/meetings">Meetings</Link></li>
-                <li><Link href="/EmployeePanel/notice">Notice</Link></li>
                 <li><Link href="/EmployeePanel/overtime">Overtime</Link></li>
             </ul>
         </aside>
