@@ -1,6 +1,8 @@
 // backend/app.js
 const express = require('express');
 const cors = require('cors');
+
+
 const employeeRoutes = require('./routes/employeeRoutes'); // Import routes
 const departmentRoutes = require('./routes/departmentRoutes');
 const authRoutes = require('./routes/authRoutes');

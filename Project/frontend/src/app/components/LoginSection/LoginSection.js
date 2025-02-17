@@ -1,3 +1,4 @@
+'use client'
 /* frontend/src/app/componeents/assets/LoginSection.js */
 
 import Link from 'next/link';
@@ -20,11 +21,11 @@ export default function LoginSection() {
         try {
             const data = await login(username, password); // Gọi API bằng service
             localStorage.setItem('token', data.token); // Lưu token sau khi login thành công
-            router.push('/EmployeePanel'); // Chuyển hướng đến EmployeePanel
+            router.push('/EmployeePanel/overview'); // Chuyển hướng đến EmployeePanel
             console.log('Login success!');
         } catch (err) {
             console.log('Login failed:');
-            // setError(err.message); // Hiển thị lỗi nếu thất bại
+            // setError(err.message); // Hiển thị lỗi nếu thất bại`
         }
     };
 
