@@ -1,0 +1,40 @@
+/* src/app/components/sections/employee/overview/index.css */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  #root, #__next {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .ant-layout {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .ant-layout-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100%;
+  }
+  
+  .ant-layout-content > div {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100%;
+    text-align: center;
+    background: transparent; /* Loại bỏ background nếu không cần */
+    border-radius: 0 !important; /* Loại bỏ border-radius nếu không cần */
+  }
+  
+  h1 {
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+  }

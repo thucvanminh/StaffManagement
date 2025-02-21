@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import {
   AppstoreOutlined,
   BarChartOutlined,
@@ -10,7 +11,9 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
+
 const { Header, Content, Footer, Sider } = Layout;
+
 const siderStyle = {
   overflow: 'auto',
   height: '100vh',
@@ -21,29 +24,28 @@ const siderStyle = {
   scrollbarWidth: 'thin',
   scrollbarGutter: 'stable',
 };
+
 const items = [
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  AppstoreOutlined,
-  TeamOutlined,
-  ShopOutlined,
-].map((icon, index) => ({
-  key: String(index + 1),
-  icon: React.createElement(icon),
-  label: `nav ${index + 1}`,
-}));
-const App = () => {
+  { key: '1', icon: <AppstoreOutlined />, label: <Link href="/employee/overview">Overview</Link> },
+  { key: '2', icon: <FieldTimeOutlined />, label: <Link href="/employee/overtime">Overtime</Link> },
+  { key: '3', icon: <UploadOutlined />, label: <Link href="/employee/business-trip">Business Trip</Link> },
+  { key: '4', icon: <BarChartOutlined />, label: <Link href="/employee/leave">Leave</Link> },
+  { key: '5', icon: <CloudOutlined />, label: <Link href="/employee/resign">Resign</Link> },
+  { key: '6', icon: <AppstoreOutlined />, label: <Link href="/employee/setting">Setting</Link> },
+  { key: '7', icon: <TeamOutlined />, label: <Link href="/employee/report">Report</Link> },
+  { key: '8', icon: <ShopOutlined />, label: <Link href="/employee/recruit">Recruit</Link> },
+];
+
+const EmployeeLayout = ({ children }) => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
   return (
     <Layout hasSider>
       <Sider style={siderStyle}>
         <div className="demo-logo-vertical" />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} items={items} />
       </Sider>
       <Layout>
         <Header
@@ -66,21 +68,7 @@ const App = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-            <p>long content</p>
-            {
-              // indicates very long content
-              Array.from(
-                {
-                  length: 100,
-                },
-                (_, index) => (
-                  <React.Fragment key={index}>
-                    {index % 20 === 0 && index ? 'more' : '...'}
-                    <br />
-                  </React.Fragment>
-                ),
-              )
-            }
+            {children}
           </div>
         </Content>
         <Footer
@@ -94,4 +82,5 @@ const App = () => {
     </Layout>
   );
 };
-export default App;
+
+export default EmployeeLayout;
