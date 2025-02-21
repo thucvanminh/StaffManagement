@@ -10,6 +10,8 @@ const testFunction = require('./routes/testFunction');
 const accountRoutes = require('./routes/accountRoutes'); // Import route account
 
 
+
+
 const app = express();
 
 // Middleware
@@ -25,6 +27,7 @@ app.use('/auth', authRoutes);
 app.use('/employees', employeeRoutes);
 app.use('/departments', departmentRoutes);
 app.use('/test', testFunction);
+
 
 
 
