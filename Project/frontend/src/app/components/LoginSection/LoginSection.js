@@ -1,3 +1,4 @@
+'use client'
 /* frontend/src/app/componeents/assets/LoginSection.js */
 
 import Link from 'next/link';

@@ -23,3 +23,30 @@ export async function login(username, password) {
     // Trả về JSON chứa dữ liệu phản hồi thành công (ví dụ: token)
     return await response.json();
 }
+
+/**
+ * Lấy thông tin Employee dựa trên token
+ * @returns {Promise<object>} - Dữ liệu thông tin Employee từ backend
+ */
+export async function fetchEmployeeInfo() {
+    const token = localStorage.getItem('token'); // Lấy token từ localStorage
+
+    if (!token) {
+        throw new Error('No token found. Please login first.');
+    }
+
+    const response = await fetch(`${BASE_URL}/employee/info`, {
+        method: 'GET', // Kiểu request GET
+        headers: {
+            'Authorization': `Bearer ${token}`, // Gửi token trong header Authorization
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch employee info.');
+    }
+
+    return await response.json();
+}

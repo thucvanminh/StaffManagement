@@ -1,11 +1,15 @@
 // backend/app.js
 const express = require('express');
 const cors = require('cors');
+
+
 const employeeRoutes = require('./routes/employeeRoutes'); // Import routes
 const departmentRoutes = require('./routes/departmentRoutes');
 const authRoutes = require('./routes/authRoutes');
 const testFunction = require('./routes/testFunction');
 const accountRoutes = require('./routes/accountRoutes'); // Import route account
+
+
 
 
 const app = express();
@@ -23,6 +27,7 @@ app.use('/auth', authRoutes);
 app.use('/employees', employeeRoutes);
 app.use('/departments', departmentRoutes);
 app.use('/test', testFunction);
+
 
 
 

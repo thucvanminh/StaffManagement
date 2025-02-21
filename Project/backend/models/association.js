@@ -13,10 +13,11 @@ Employee.belongsTo(Roles, {
   targetKey: 'roleID',
   as: 'role'
 });
-Employee.belongsTo(Department, {
+// Trưởng phòng (headOfDepartmentID) cũng là một nhân viên
+Employee.belongsTo(Employee, {
   foreignKey: 'headOfDepartmentID',
-  targetKey: 'HeadOfDepartmentID',
-  as: 'headOfDepartmentIDQuerry'
+  targetKey: 'employeeID',
+  as: 'headOfDepartment'
 });
 
 Department.belongsTo(Employee, {

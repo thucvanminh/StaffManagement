@@ -21,7 +21,7 @@ function generateToken(user) {
         role: user.roleID
         // Lấy từ account.employee.roleID
     };
-    return jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+    return jwt.sign(payload, SECRET_KEY, { expiresIn: '24h' });
 }
 
 /**
