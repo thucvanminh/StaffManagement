@@ -1,6 +1,5 @@
 import React from 'react';
-import EmployeeLayout from '../EmployeeLayout';
-
+import EmployeeLayout from './EmployeeLayout';
 const EmployeeOvertime = () => {
   return (
     <EmployeeLayout>
