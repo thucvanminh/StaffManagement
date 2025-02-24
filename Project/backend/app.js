@@ -22,6 +22,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('Welcome to the Staff Management!');
 });
+
 app.use('/accounts', accountRoutes);
 app.use('/auth', authRoutes);
 app.use('/employees', employeeRoutes);
