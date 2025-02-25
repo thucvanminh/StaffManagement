@@ -4,6 +4,9 @@ const bcrypt = require('bcrypt');  // Sử dụng để so sánh mật khẩu đ
 const Account = require('../models/Account');
 const Employee = require('../models/Employee'); // Import để dùng cho include
 
+
+
+
 exports.login = async (req, res) => {
     try {
         const {username, password} = req.body;
