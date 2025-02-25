@@ -1,11 +1,13 @@
 // src/controllers/AccountController.js
-const AccountService = require('../services/AccountService');
+const Account = require('../models/Account');
 const { validationResult } = require('express-validator');
+const bcrypt = require('bcrypt');
+const SALT_ROUNDS = 10;
 
 class AccountController {
     async getAllAccounts(req, res) {
         try {
-            const accounts = await AccountService.getAllAccounts();
+            const accounts = await Account.findAll();
             res.status(200).json(accounts);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -14,7 +16,8 @@ class AccountController {
 
     async getAccountById(req, res) {
         try {
-            const account = await AccountService.getAccountById(req.params.id);
+            const account = await Account.findOne({ where: { accountID: req.params.id } });
+            if (!account) throw new Error('Account not found');
             res.status(200).json(account);
         } catch (error) {
             res.status(404).json({ message: error.message });
@@ -23,7 +26,8 @@ class AccountController {
 
     async getAccountByUsername(req, res) {
         try {
-            const account = await AccountService.getAccountByUsername(req.params.username);
+            const account = await Account.findOne({ where: { username: req.params.username } });
+            if (!account) throw new Error('Account not found');
             res.status(200).json(account);
         } catch (error) {
             res.status(404).json({ message: error.message });
@@ -36,7 +40,11 @@ class AccountController {
             return res.status(400).json({ errors: errors.array() });
 
         try {
-            const newAccount = await AccountService.createAccount(req.body);
+            let data = req.body;
+            if (data.password) {
+                data.password = await bcrypt.hash(data.password, SALT_ROUNDS);
+            }
+            const newAccount = await Account.create(data);
             res.status(201).json(newAccount);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -49,7 +57,9 @@ class AccountController {
             return res.status(400).json({ errors: errors.array() });
 
         try {
-            const updatedAccount = await AccountService.updateAccount(req.params.id, req.body);
+            const [updated] = await Account.update(req.body, { where: { accountID: req.params.id } });
+            if (updated === 0) throw new Error('Account not found');
+            const updatedAccount = await Account.findOne({ where: { accountID: req.params.id } });
             res.status(200).json(updatedAccount);
         } catch (error) {
             res.status(404).json({ message: error.message });
@@ -58,7 +68,9 @@ class AccountController {
 
     async deleteAccount(req, res) {
         try {
-            await AccountService.deleteAccount(req.params.id);
+            const account = await Account.findOne({ where: { accountID: req.params.id } });
+            if (!account) throw new Error('Account not found');
+            await account.destroy();
             res.status(204).send();
         } catch (error) {
             res.status(404).json({ message: error.message });

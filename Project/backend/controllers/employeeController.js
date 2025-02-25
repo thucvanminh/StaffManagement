@@ -1,11 +1,19 @@
 // src/controllers/EmployeeController.js
-const EmployeeService = require('../services/EmployeeService');
+const Employee = require('../models/Employee');
+const Department = require('../models/Department');
+const Roles = require('../models/Roles');
 const { validationResult } = require('express-validator');
 
 class EmployeeController {
     async getAllEmployees(req, res) {
         try {
-            const employees = await EmployeeService.getAllEmployees();
+            const employees = await Employee.findAll({
+                include: [
+                    { model: Department, as: 'department', attributes: ['departmentID', 'departmentName'] },
+                    { model: Roles, as: 'role', attributes: ['roleID', 'roleName'] },
+                    { model: Employee, as: 'headOfDepartment', attributes: ['employeeID', 'fullName'] }
+                ]
+            });
             res.status(200).json(employees);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -14,7 +22,15 @@ class EmployeeController {
 
     async getEmployeeById(req, res) {
         try {
-            const employee = await EmployeeService.getEmployeeById(req.params.id);
+            const employee = await Employee.findOne({
+                where: { employeeID: req.params.id },
+                include: [
+                    { model: Department, as: 'department', attributes: ['departmentID', 'departmentName'] },
+                    { model: Roles, as: 'role', attributes: ['roleID', 'roleName'] },
+                    { model: Employee, as: 'headOfDepartment', attributes: ['employeeID', 'fullName'] }
+                ]
+            });
+            if (!employee) throw new Error('Employee not found');
             res.status(200).json(employee);
         } catch (error) {
             res.status(404).json({ message: error.message });
@@ -27,7 +43,7 @@ class EmployeeController {
             return res.status(400).json({ errors: errors.array() });
 
         try {
-            const newEmployee = await EmployeeService.createEmployee(req.body);
+            const newEmployee = await Employee.create(req.body);
             res.status(201).json(newEmployee);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -40,7 +56,9 @@ class EmployeeController {
             return res.status(400).json({ errors: errors.array() });
 
         try {
-            const updatedEmployee = await EmployeeService.updateEmployee(req.params.id, req.body);
+            const [updated] = await Employee.update(req.body, { where: { employeeID: req.params.id } });
+            if (updated === 0) throw new Error('Employee not found');
+            const updatedEmployee = await Employee.findOne({ where: { employeeID: req.params.id } });
             res.status(200).json(updatedEmployee);
         } catch (error) {
             res.status(404).json({ message: error.message });
@@ -49,7 +67,9 @@ class EmployeeController {
 
     async deleteEmployee(req, res) {
         try {
-            await EmployeeService.deleteEmployee(req.params.id);
+            const employee = await Employee.findOne({ where: { employeeID: req.params.id } });
+            if (!employee) throw new Error('Employee not found');
+            await employee.destroy();
             res.status(204).send();
         } catch (error) {
             res.status(404).json({ message: error.message });
@@ -62,7 +82,7 @@ class EmployeeController {
             return res.status(400).json({ errors: errors.array() });
 
         try {
-            const employees = await EmployeeService.queryEmployees(req.query);
+            const employees = await Employee.findAll({ where: req.query });
             res.status(200).json(employees);
         } catch (error) {
             res.status(500).json({ error: error.message });
