@@ -10,10 +10,13 @@ const CalendarMenu = () => {
   const onPanelChange = (value, mode) => {
     console.log(value.format('YYYY-MM-DD'), mode);
   };
+  // src/app/components/CalendarMenu.js (hoặc vị trí tương ứng)
   const wrapperStyle = {
     width: 300,
     border: `1px solid ${token.colorBorderSecondary}`,
     borderRadius: token.borderRadiusLG,
+    margin: 0,
+    padding: 0,
   };
   return (
     <div style={wrapperStyle}>
@@ -53,7 +56,7 @@ const CalendarMenu = () => {
                 padding: 8,
               }}
             >
-              <Typography.Title level={4}>Custom header</Typography.Title>
+              <Typography.Title level={4}>Personal Calendar</Typography.Title>
               <Row gutter={8}>
                 <Col>
                   <Radio.Group
