@@ -2,8 +2,16 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { AppstoreOutlined, BarChartOutlined, CloudOutlined, ShopOutlined, TeamOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
+import {
+  AppstoreOutlined,
+  CalendarOutlined,
+  UsergroupAddOutlined,
+  ClockCircleOutlined,
+  CarOutlined,
+  SettingOutlined,
+  CloseCircleOutlined,
+  FormOutlined,
+} from '@ant-design/icons'; import { Layout, Menu, theme } from 'antd';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -19,13 +27,13 @@ const siderStyle = {
 };
 
 const items = [
-  { key: '1', icon: <UserOutlined />, label: <Link href="/employee/overview">Overview</Link> },
-  { key: '2', icon: <VideoCameraOutlined />, label: <Link href="/employee/overtime">Overtime</Link> },
-  { key: '3', icon: <UploadOutlined />, label: <Link href="/employee/business-trip">Business Trip</Link> },
-  { key: '4', icon: <BarChartOutlined />, label: <Link href="/employee/leave">Leave</Link> },
-  { key: '5', icon: <CloudOutlined />, label: <Link href="/employee/resign">Resign</Link> },
-  { key: '6', icon: <TeamOutlined />, label: <Link href="/employee/report">Report</Link> },
-  { key: '7', icon: <AppstoreOutlined />, label: <Link href="/employee/setting">Setting</Link> },
+  { key: '1', icon: <AppstoreOutlined />, label: <Link href="/employee/overview">Overview</Link> },
+  { key: '2', icon: <ClockCircleOutlined />, label: <Link href="/employee/overtime">Overtime</Link> },
+  { key: '3', icon: <CarOutlined />, label: <Link href="/employee/business-trip">Business Trip</Link> },
+  { key: '4', icon: <CalendarOutlined />, label: <Link href="/employee/leave">Leave</Link> },
+  { key: '5', icon: <CloseCircleOutlined />, label: <Link href="/employee/resign">Resign</Link> },
+  { key: '6', icon: <FormOutlined />, label: <Link href="/employee/report">Report</Link> },
+  { key: '7', icon: <SettingOutlined />, label: <Link href="/employee/setting">Setting</Link> },
 ];
 
 const EmployeeLayout = ({ children }) => {
@@ -45,7 +53,7 @@ const EmployeeLayout = ({ children }) => {
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
+          Thuc&Hieu Design ©{new Date().getFullYear()}
         </Footer>
       </Layout>
     </Layout>
