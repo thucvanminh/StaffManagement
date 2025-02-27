@@ -1,9 +1,9 @@
 import React from 'react';
 import { Col, Divider, Row} from 'antd';
-import CalendarMenu from './CalendarMenu';
-import NoticeList from './NoticeList';
-import ActivityFeed from './ActivityFeed';
-import TaskTimeline from './TaskTimeline';
+import CalendarMenu from '../../components/CalendarMenu';
+import NoticeList from '../../components//NoticeList';
+import ActivityFeed from '../../components//ActivityFeed';
+import TaskTimeline from '../../components//TaskTimeline';
 
 const App = () => (
     <>

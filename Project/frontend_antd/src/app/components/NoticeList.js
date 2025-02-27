@@ -1,7 +1,7 @@
 // src/app/components/NoticeList.js (hoặc vị trí tương ứng)
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Avatar, List, message, Typography } from 'antd';
+import { List, message, Typography } from 'antd';
 import VirtualList from 'rc-virtual-list';
 
 const fakeDataUrl = 'https://randomuser.me/api/?results=20&inc=name,gender,email,nat,picture&noinfo';

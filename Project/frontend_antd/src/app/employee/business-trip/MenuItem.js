@@ -1,10 +1,9 @@
 import React from 'react';
-import { Col, Divider, Row} from 'antd';
-import CalendarMenu from './CalendarMenu';
-import NoticeList from './NoticeList';
-import ActivityFeed from './ActivityFeed';
-import TaskTimeline from './TaskTimeline';
-
+import { Col, Divider, Row } from 'antd';
+import CalendarMenu from '../../components/CalendarMenu';
+import ActivityFeed from '../../components/ActivityFeed';
+import TaskTimeline from '../../components/TaskTimeline';
+import OvertimeTable from '../../components/OvertimeTable';
 const App = () => (
     <>
         <Divider orientation="left"></Divider>
@@ -15,7 +14,7 @@ const App = () => (
             <Col span={3} order={2}>
             </Col>
             <Col span={14} order={1}>
-                <NoticeList />
+                <ActivityFeed />
             </Col>
 
         </Row>
@@ -27,7 +26,7 @@ const App = () => (
             <Col span={3} order={2}>
             </Col>
             <Col span={14} order={1}>
-                <ActivityFeed/>
+                <OvertimeTable />
             </Col>
 
         </Row>

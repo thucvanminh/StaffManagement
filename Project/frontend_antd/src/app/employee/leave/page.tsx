@@ -1,19 +1,13 @@
 // src/app/components/sections/employee/overview/page.tsx
 'use client';
-
-import CalendarMenu from '../../components/CalendarMenu';
-import NoticeList from '../../components/NoticeList';
-import './Leave.css'; // Nhập CSS để định dạng layout
+import MenuItem from './MenuItem';
 
 export default function LeavePage() {
   return (
-    <div style={{ margin: 0, padding: 0, height: '100%' }}>
+    <div>
       <div className="contentWrapper">
-        <div className="noticeContent">
-          <NoticeList />
-        </div>
-        <div className="calendarContent">
-          <CalendarMenu />
+        <div className='MenuContent'>
+          <MenuItem />
         </div>
       </div>
     </div>
