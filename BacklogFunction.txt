@@ -83,3 +83,29 @@ Tuyển dụng -> Có tt tuyển dụng
 
 sơ đồ usecase - sơ đồ hoạt động: cách từng role hoạt động
 xác định actors usca
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chuyển .js thành .tsx, bổ sung chức năng , dung ipm thay vì dữ liệu tĩnh

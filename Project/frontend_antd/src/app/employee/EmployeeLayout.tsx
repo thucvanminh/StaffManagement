@@ -32,8 +32,9 @@ const items = [
   { key: '3', icon: <CarOutlined />, label: <Link href="/employee/business-trip">Business Trip</Link> },
   { key: '4', icon: <CalendarOutlined />, label: <Link href="/employee/leave">Leave</Link> },
   { key: '5', icon: <CloseCircleOutlined />, label: <Link href="/employee/resign">Resign</Link> },
-  { key: '6', icon: <FormOutlined />, label: <Link href="/employee/report">Report</Link> },
-  { key: '7', icon: <SettingOutlined />, label: <Link href="/employee/setting">Setting</Link> },
+  { key: '6', icon: <UsergroupAddOutlined />, label: <Link href="/employee/recruit">Recruit</Link> },
+  { key: '7', icon: <FormOutlined />, label: <Link href="/employee/report">Report</Link> },
+  { key: '8', icon: <SettingOutlined />, label: <Link href="/employee/setting">Setting</Link> },
 ];
 
 const EmployeeLayout = ({ children }) => {

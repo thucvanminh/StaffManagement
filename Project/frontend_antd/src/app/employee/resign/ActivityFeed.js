@@ -1,0 +1,75 @@
+import React from 'react';
+import { Space, Table, Tag } from 'antd';
+const columns = [
+    {
+        title: 'Activity Feed',
+        dataIndex: 'name',
+        key: 'name',
+        render: (text) => <a>{text}</a>,
+    },
+    {
+        title: '',
+        key: 'tags',
+        dataIndex: 'tags',
+        render: (_, { tags }) => (
+            <>
+            <a>Applied for the job </a>
+                {tags.map((tag) => {
+                    let color = tag.length > 5 ? 'geekblue' : 'green';
+                    if (tag === 'loser') {
+                        color = 'volcano';
+                    }
+                    return (
+                        <Tag color={color} key={tag}>
+                            {tag.toUpperCase()}
+                        </Tag>
+                    );
+                })}
+            </>
+        ),
+    },
+    {
+        title: '',
+        key: 'action',
+        render: (_, record) => (
+            <Space size="middle">
+                <a>Approve</a>
+                <a>Deny</a>
+            </Space>
+        ),
+    },
+];
+const data = [
+    {
+        key: '1',
+        name: 'Anh Hieu',
+        tags: ['ui designer', 'frontend'],
+    },
+    {
+        key: '2',
+        name: 'Khanh Binh',
+        tags: ['loser'],
+    },
+    {
+        key: '3',
+        name: 'Minh Thuc',
+        tags: ['backend', 'ui designer'],
+    },
+    {
+        key: '3',
+        name: 'Gia Kiet',
+        tags: ['freshman', 'ui designer'],
+    },
+    {
+        key: '3',
+        name: 'Thanh Long',
+        tags: ['fullstack'],
+    },
+    {
+        key: '3',
+        name: 'Khanh Minh',
+        tags: ['fullstack'],
+    },
+];
+const ActivityFeed = () => <Table columns={columns} dataSource={data} />;
+export default ActivityFeed;
