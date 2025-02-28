@@ -1,10 +1,10 @@
 import React from 'react';
 import { Col, Divider, Row} from 'antd';
-import CalendarMenu from './CalendarMenu';
-import NoticeList from './NoticeList';
+import CalendarMenu from '../../components/CalendarMenu';
+import NoticeList from '../../components//NoticeList';
 import ActivityFeed from './ActivityFeed';
-import TaskTimeline from './TaskTimeline';
-
+import TaskTimeline from '../../components//TaskTimeline';
+import ResignList from './ResignList'
 const App = () => (
     <>
         <Divider orientation="left"></Divider>
@@ -21,13 +21,8 @@ const App = () => (
         </Row>
         <Divider orientation="left"></Divider>
         <Row>
-            <Col span={7} order={3}>
-                <TaskTimeline />
-            </Col>
-            <Col span={3} order={2}>
-            </Col>
-            <Col span={14} order={1}>
-                <ActivityFeed/>
+            <Col span={24} order={3}>
+                <ResignList />
             </Col>
 
         </Row>

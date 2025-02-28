@@ -1,8 +1,16 @@
-// src/app/components/sections/employee/business-trip/page.tsx
+// src/app/components/sections/employee/overview/page.tsx
+'use client';
+import MenuItem from './MenuItem';
+
+
 export default function BusinessTripPage() {
   return (
-    <div style={{ margin: 0, padding: 0, height: '100%' }}> {/* Đảm bảo không có khoảng trắng */}
-      <h1>Employee BusinessTrip Page</h1>
+    <div>
+      <div className="contentWrapper">
+        <div className='MenuContent'>
+          <MenuItem />
+        </div>
+      </div>
     </div>
   );
 }
