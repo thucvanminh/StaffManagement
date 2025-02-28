@@ -24,7 +24,7 @@ Department.belongsTo(Employee, {
   foreignKey: 'HeadOfDepartmentID',
   targetKey: 'employeeID',
   as: 'DepartmentHead',
-  onDelete: 'SET NULL'
+onDelete: 'SET NULL'
 });
 Account.belongsTo(Employee, {
   foreignKey: 'employeeID',

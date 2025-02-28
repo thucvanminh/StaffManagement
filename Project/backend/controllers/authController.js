@@ -10,7 +10,6 @@ const Employee = require('../models/Employee'); // Import để dùng cho includ
 exports.login = async (req, res) => {
     try {
         const {username, password} = req.body;
-
         // Tìm tài khoản theo username và include thông tin Employee qua alias 'employee'
         const account = await Account.findOne({
             where: {username},
@@ -48,9 +47,18 @@ exports.login = async (req, res) => {
 
 exports.getInfor = async (req, res) => {
     try {
+        if (!req.user || !req.user.employeeID) {
+            return res.status(401).json({ message: 'User not authenticated or invalid token' });
+        }
+
         const employee = await Employee.findOne({
-            where: { employeeID: req.user.employeeID },
-            attributes: ['fullName', 'dateOfBirth']
+            where: { employeeID: req.user.employeeID }, // Truy cập trực tiếp employeeID từ req.user
+            include: [{
+                model: Account,
+                as: 'account',
+                attributes: {exclude: "password"}
+            }]
+
         });
 
         if (!employee) {

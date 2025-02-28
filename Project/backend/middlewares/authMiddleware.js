@@ -11,7 +11,7 @@ function authenticateToken(req, res, next) {
     
     const decoded = verifyToken(token);
     if (!decoded) {
-        return res.status(403).json({ message: 'Token is invalid or expired' });
+    return res.status(403).json({ message: 'Token is invalid or expired' });
     }
     
     req.user = decoded; // Gán payload token vào req.user
