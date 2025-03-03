@@ -14,9 +14,25 @@ TransferRequest.init({
         type: DataTypes.INTEGER,
         allowNull: false
     },
+    employeeID: { // Thêm trường mới cho nhân viên được chuyển
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'employees',
+            key: 'employeeID'
+        }
+    },
+    targetDepartmentHeadID: { // Thêm trường mới cho trưởng phòng đích
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'employees',
+            key: 'employeeID'
+        }
+    },
     requestType: {
         type: DataTypes.STRING,
-        allowNull: false  // Ví dụ: 'transfer-out' hoặc 'recruitment'
+        allowNull: false
     },
     description: {
         type: DataTypes.STRING,

@@ -8,7 +8,8 @@ const departmentRoutes = require('./routes/departmentRoutes');
 const authRoutes = require('./routes/authRoutes');
 const testFunction = require('./routes/testFunction');
 const accountRoutes = require('./routes/accountRoutes'); // Import route account
-
+const businessTripRoutes = require('./routes/businessTripRoutes');
+const statusRoutes = require('./routes/statusRoutes');
 
 
 
@@ -27,6 +28,8 @@ app.use('/accounts', accountRoutes);
 app.use('/auth', authRoutes);
 app.use('/employees', employeeRoutes);
 app.use('/departments', departmentRoutes);
+app.use('/status', statusRoutes);
+app.use('/business-trips', businessTripRoutes);
 app.use('/test', testFunction);
 
 

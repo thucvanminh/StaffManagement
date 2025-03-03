@@ -2,7 +2,6 @@
 
 const {Model, DataTypes} = require('sequelize');
 const sequelize = require('../config/database'); // Import kết nối
-// Giả sử bạn có các model khác như Department, Role
 
 class Employee extends Model {
     getDisplayName() {
