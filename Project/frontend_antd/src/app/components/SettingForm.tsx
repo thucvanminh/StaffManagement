@@ -12,9 +12,7 @@ import {
     Radio,
     Rate,
     Select,
-    Slider,
-    Switch,
-    TreeSelect,
+    Space,
     Upload,
 } from 'antd';
 const { RangePicker } = DatePicker;
@@ -25,7 +23,7 @@ const normFile = (e) => {
     }
     return e?.fileList;
 };
-const SettingForm = () => {
+const SettingForm: React.FC = () => {
     const [componentDisabled] = useState(false);
     return (
         <>
@@ -49,7 +47,7 @@ const SettingForm = () => {
                     <Input />
                 </Form.Item>
                 <Form.Item label="DOB">
-                    <DatePicker />
+                    <DatePicker style ={{ width: '100%' }}/>
                 </Form.Item>
                 <Form.Item label="Gender">
                     <Select>
@@ -62,9 +60,6 @@ const SettingForm = () => {
                     <TextArea rows={2} />
                 </Form.Item>
                 <Form.Item label="Phone">
-                    <Input />
-                </Form.Item>
-                <Form.Item label="Email">
                     <Input />
                 </Form.Item>
                 <Form.Item label="Avatar" valuePropName="fileList" getValueFromEvent={normFile}>
