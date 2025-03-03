@@ -3,6 +3,7 @@
 import React from 'react';
 import { ConfigProvider } from 'antd';
 import { usePathname } from 'next/navigation';
+import HRLayout from './hr/HRLayout';
 import EmployeeLayout from './employee/EmployeeLayout';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -20,6 +21,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           {pathname.startsWith('/employee') ? (
             <EmployeeLayout>{children}</EmployeeLayout>
+          ) : pathname.startsWith('/hr') ? (
+            <HRLayout>{children}</HRLayout>
           ) : (
             <>{children}</>
           )}

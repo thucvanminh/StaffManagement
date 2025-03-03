@@ -2,24 +2,24 @@ import React from 'react';
 import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { Avatar, List, Space } from 'antd';
 
-const data = Array.from({
-  length: 16,
-}).map((_, i) => ({
+const data = Array.from({ length: 23 }).map((_, i) => ({
   href: 'https://ant.design',
   title: `CV ${i}`,
   avatar: `https://api.dicebear.com/7.x/miniavs/svg?seed=${i}`,
   description:
     'Frontend, Backend, Fullstack.',
   content:
-    'Im looking for a job as a developer. I have experience in frontend, backend and fullstack development. I have worked with React, Angular, Node, Express, MongoDB, MySQL, and more.',
+    'Im a fullstack developer. I can provide clean code and pixel perfect design.',
 }));
-// const IconText = ({  }) => (
-//   <Space>
-//     {React.createElement(icon)}
-//     {text}
-//   </Space>
-// );
-const RecruitProfiles = () => (
+
+const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
+  <Space>
+    {React.createElement(icon)}
+    {text}
+  </Space>
+);
+
+const RecruitProfiles: React.FC = () => (
   <List
     itemLayout="vertical"
     size="large"
@@ -27,7 +27,7 @@ const RecruitProfiles = () => (
       onChange: (page) => {
         console.log(page);
       },
-      pageSize: 4,
+      pageSize: 3,
     }}
     dataSource={data}
     footer={
@@ -38,16 +38,13 @@ const RecruitProfiles = () => (
       <List.Item
         key={item.title}
         actions={[
-          // <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
-          // <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-          <StarOutlined />,
-          <LikeOutlined />,
-          <MessageOutlined />,
-          // <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+          <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
+          <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
+          <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
         ]}
         extra={
           <img
-            width={250}
+            width={272}
             alt="logo"
             src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
           />
@@ -63,4 +60,5 @@ const RecruitProfiles = () => (
     )}
   />
 );
+
 export default RecruitProfiles;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { SmileOutlined } from '@ant-design/icons';
 import { Timeline } from 'antd';
-const TaskTimeline = () => (
+const TaskTimeline: React.FC = () => (
     <Timeline
         items={[
             {
