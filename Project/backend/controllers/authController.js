@@ -58,7 +58,6 @@ exports.getInfor = async (req, res) => {
                 as: 'account',
                 attributes: {exclude: "password"}
             }]
-
         });
 
         if (!employee) {

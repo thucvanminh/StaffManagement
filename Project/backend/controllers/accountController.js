@@ -1,36 +1,39 @@
 // src/controllers/AccountController.js
 const Account = require('../models/Account');
-const { validationResult } = require('express-validator');
+const {validationResult} = require('express-validator');
 const bcrypt = require('bcrypt');
 const SALT_ROUNDS = 10;
 
 class AccountController {
     async getAllAccounts(req, res) {
         try {
-            const accounts = await Account.findAll();
+            const accounts = await Account.findAll({attributes: {exclude: ['password']}});
             res.status(200).json(accounts);
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({error: error.message});
         }
     }
 
     async getAccountById(req, res) {
         try {
-            const account = await Account.findOne({ where: { accountID: req.params.id } });
+            const account = await Account.findOne({
+                where: {employeeID: req.params.id},
+                attributes: {exclude: ['password']}
+            });
             if (!account) throw new Error('Account not found');
             res.status(200).json(account);
         } catch (error) {
-            res.status(404).json({ message: error.message });
+            res.status(404).json({message: error.message});
         }
     }
 
     async getAccountByUsername(req, res) {
         try {
-            const account = await Account.findOne({ where: { username: req.params.username } });
+            const account = await Account.findOne({where: {username: req.params.username}});
             if (!account) throw new Error('Account not found');
             res.status(200).json(account);
         } catch (error) {
-            res.status(404).json({ message: error.message });
+            res.status(404).json({message: error.message});
         }
     }
 
@@ -45,7 +48,9 @@ class AccountController {
                 data.password = await bcrypt.hash(data.password, SALT_ROUNDS);
             }
             const newAccount = await Account.create(data);
-            res.status(201).json(newAccount);
+            // Loại bỏ password trước khi trả về
+            const responseData = { ...newAccount.get(), password: undefined };
+            res.status(201).json(responseData);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -54,10 +59,10 @@ class AccountController {
     async updateAccount(req, res) {
         const errors = validationResult(req);
         if (!errors.isEmpty())
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({errors: errors.array()});
 
         try {
-            const account = await Account.findOne({ where: { accountID: req.params.id } });
+            const account = await Account.findOne({where: {accountID: req.params.id}});
             if (!account) throw new Error('Account not found');
 
             let data = req.body;
@@ -66,24 +71,24 @@ class AccountController {
                 data.password = await bcrypt.hash(data.password, SALT_ROUNDS);
             }
 
-            const [updated] = await Account.update(data, { where: { accountID: req.params.id } });
+            const [updated] = await Account.update(data, {where: {accountID: req.params.id}});
             if (updated === 0) throw new Error('Account not found');
 
-            const updatedAccount = await Account.findOne({ where: { accountID: req.params.id } });
+            const updatedAccount = await Account.findOne({where: {accountID: req.params.id}});
             res.status(200).json(updatedAccount);
         } catch (error) {
-            res.status(404).json({ message: error.message });
+            res.status(404).json({message: error.message});
         }
     }
 
     async deleteAccount(req, res) {
         try {
-            const account = await Account.findOne({ where: { accountID: req.params.id } });
+            const account = await Account.findOne({where: {accountID: req.params.id}});
             if (!account) throw new Error('Account not found');
             await account.destroy();
             res.status(204).send();
         } catch (error) {
-            res.status(404).json({ message: error.message });
+            res.status(404).json({message: error.message});
         }
     }
 }

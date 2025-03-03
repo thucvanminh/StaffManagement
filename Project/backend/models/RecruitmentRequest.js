@@ -14,6 +14,10 @@ RecruitmentRequest.init({
         type: DataTypes.STRING,
         allowNull: false
     },
+    applicantEmail: { // Thêm trường mới
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     position: {
         type: DataTypes.STRING,
         allowNull: false

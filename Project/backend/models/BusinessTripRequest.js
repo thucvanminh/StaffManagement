@@ -13,7 +13,7 @@ BusinessTripRequest.init({
     employeeID: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references : {
+        references: {
             model: 'employees',
             key: 'employeeID'
         }
@@ -42,10 +42,18 @@ BusinessTripRequest.init({
             key: 'statusID'
         }
     },
+    approvedByDept: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'employees',
+            key: 'employeeID'
+        }
+    },
     approvedBy: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        references : {
+        references: {
             model: 'employees',
             key: 'employeeID'
         }

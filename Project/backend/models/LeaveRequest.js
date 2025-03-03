@@ -34,9 +34,21 @@ LeaveRequest.init({
             key: 'statusID'
         }
     },
-    approvedBy: {
+    approvedByDept: { // Thêm trường mới cho trưởng phòng
         type: DataTypes.INTEGER,
-        allowNull: true
+        allowNull: true,
+        references: {
+            model: 'employees',
+            key: 'employeeID'
+        }
+    },
+    approvedBy: { // Dành cho HR, thêm references
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'employees',
+            key: 'employeeID'
+        }
     }
 }, {
     sequelize,

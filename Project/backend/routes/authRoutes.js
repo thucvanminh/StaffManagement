@@ -1,3 +1,6 @@
+// backend/routes/authRoutes.js
+
+
 const rateLimit = require("express-rate-limit");
 const accountValidation = require('../controllers/validations/accountValidation');
 const authMiddleware = require('../middlewares/authMiddleware');

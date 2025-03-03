@@ -1,4 +1,4 @@
-// src/routes/departmentRoutes.js
+// backend/routes/departmentRoutes.js
 const express = require('express');
 const router = express.Router();
 const departmentController = require('../controllers/DepartmentController');

@@ -8,23 +8,23 @@ ResignRequest.init({
     resignRequestID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true
     },
     employeeID: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
             model: 'employees',
-            key: 'employeeID',
+            key: 'employeeID'
         }
     },
     resignDate: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
+        allowNull: false
     },
     reason: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
     },
     statusID: {
         type: DataTypes.INTEGER,
@@ -34,10 +34,18 @@ ResignRequest.init({
             key: 'statusID'
         }
     },
-    approvedBy: {
+    approvedByDept: { // Thêm trường mới cho trưởng phòng
         type: DataTypes.INTEGER,
         allowNull: true,
-        references : {
+        references: {
+            model: 'employees',
+            key: 'employeeID'
+        }
+    },
+    approvedBy: { // Dành cho HR
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
             model: 'employees',
             key: 'employeeID'
         }
@@ -46,7 +54,7 @@ ResignRequest.init({
     sequelize,
     modelName: 'ResignRequest',
     tableName: 'resign_requests',
-    timestamps: true,
+    timestamps: true
 });
 
 module.exports = ResignRequest;
