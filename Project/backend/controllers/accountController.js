@@ -57,8 +57,18 @@ class AccountController {
             return res.status(400).json({ errors: errors.array() });
 
         try {
-            const [updated] = await Account.update(req.body, { where: { accountID: req.params.id } });
+            const account = await Account.findOne({ where: { accountID: req.params.id } });
+            if (!account) throw new Error('Account not found');
+
+            let data = req.body;
+            if (data.password) {
+                // Hash mật khẩu mới nếu có thay đổi
+                data.password = await bcrypt.hash(data.password, SALT_ROUNDS);
+            }
+
+            const [updated] = await Account.update(data, { where: { accountID: req.params.id } });
             if (updated === 0) throw new Error('Account not found');
+
             const updatedAccount = await Account.findOne({ where: { accountID: req.params.id } });
             res.status(200).json(updatedAccount);
         } catch (error) {

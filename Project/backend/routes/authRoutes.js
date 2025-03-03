@@ -1,4 +1,3 @@
-// backend/routes/authRoutes.js
 const rateLimit = require("express-rate-limit");
 const accountValidation = require('../controllers/validations/accountValidation');
 const authMiddleware = require('../middlewares/authMiddleware');
@@ -9,12 +8,11 @@ const loginLimiter = rateLimit({
     message: "You've tried too many times, Try again after 5 minutes",
 });
 
-
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 
-
 router.post('/login', loginLimiter, accountValidation.validateAccount, authController.login);
-router.post('/me', authController.getInfor);
+router.post('/me', authMiddleware, authController.getInfor);
+
 module.exports = router;

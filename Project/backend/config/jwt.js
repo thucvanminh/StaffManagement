@@ -1,25 +1,20 @@
-
-
 // backend/config/jwt.js
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const account = require('../models/Account');
-const employee = require('../models/Employee');
 
 const SECRET_KEY = process.env.JWT_SECRET || 'fallbackSecretKey';
 
 /**
  * Tạo JWT token từ thông tin người dùng.
  * @param {Object} user - Đối tượng chứa thông tin cần thiết (lấy từ Employee) gồm:
- *                        - id: employeeID
- *                        - role: roleID
- * @returns {string} JWT token có thời gian hiệu lực 1 giờ
+ *                        - employeeID: ID của nhân viên
+ *                        - roleID: Role của nhân viên
+ * @returns {string} JWT token có thời gian hiệu lực 24 giờ
  */
 function generateToken(user) {
     const payload = {
-        userId: user.employeeID,
-        role: user.roleID
-        // Lấy từ account.employee.roleID
+        employeeID: user.employeeID, // Sử dụng employeeID thay vì userId
+        roleID: user.roleID         // Giữ tên roleID để khớp với model
     };
     return jwt.sign(payload, SECRET_KEY, { expiresIn: '24h' });
 }
@@ -38,4 +33,3 @@ function verifyToken(token) {
 }
 
 module.exports = { generateToken, verifyToken };
-

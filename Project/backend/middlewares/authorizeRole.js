@@ -13,7 +13,7 @@ function authorizeRoles(allowedRoles) {
         }
 
         // Kiểm tra `roleID` của user có thuộc danh sách `allowedRoles`
-        if (!allowedRoles.includes(req.user.role)) {
+        if (!allowedRoles.includes(req.user.roleID)) {
             return res.status(403).json({ message: 'Access denied: Insufficient permissions' });
         }
 

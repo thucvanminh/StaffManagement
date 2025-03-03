@@ -46,7 +46,7 @@ const validateEmployee = [
     body('city')
         .isLength({max: 100}).withMessage('City name cannot be longer than 100 characters'),
     body('gender')
-        .isIn(['Nam', 'Nữ', 'Khác']).withMessage('gender is not valid'),
+        .isIn(['Male', 'Female', 'Khác']).withMessage('gender is not valid'),
     body('departmentID')
         .isInt().withMessage('DepartmentID must be positive integer'),
     body('roleID')
