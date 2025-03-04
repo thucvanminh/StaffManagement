@@ -2,11 +2,11 @@
 /* frontend/src/app/login/LoginSection.js */
 
 import Link from 'next/link';
-
 import {useState} from 'react';
 import {useRouter} from 'next/navigation';
 import styles from './LoginSection.css';
 
+import {jwtDecode} from 'jwt-decode';
 const loginAPI = require('../services/api');
 export default function LoginSection() {
 
@@ -19,9 +19,19 @@ export default function LoginSection() {
         e.preventDefault();
 
         try {
-            const data = await loginAPI.login(username, password); // Gọi API bằng service
-            localStorage.setItem('token', data.token); // Lưu token sau khi login thành công
-            router.push('/employee/overview'); // Chuyển hướng đến EmployeePanel
+            const data = await loginAPI.login(username, password);
+            const token = data.token;
+            localStorage.setItem('token', token);
+
+            // Decode token để lấy payload
+            const decodedToken = jwtDecode(token);
+            const roleID = decodedToken.roleID; // Lấy roleID từ payload
+
+            if (roleID === 3) {
+                router.push('/employee/overview');
+            }else if(roleID === 2||roleID ===1) {
+                router.push('/hr/overview');
+            }
             console.log('Login success!');
         } catch (err) {
             console.log('Login failed:');
