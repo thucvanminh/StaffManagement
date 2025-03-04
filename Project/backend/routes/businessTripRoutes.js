@@ -13,7 +13,7 @@ router.use(authMiddleware);
 router.post('/create', authorizeRoles([3]), BusinessTripController.createTripRequest);
 
 // Xem tất cả request (Director, HR)
-router.get('/', authorizeRoles([1, 2]), BusinessTripController.getAllBusinessTripRequest);
+router.get('/', authorizeRoles([1, 2,3]), BusinessTripController.getAllBusinessTripRequest);
 
 // Head of Dept duyệt
 router.put('/approve-dept/:id', authorizeDeptHead, BusinessTripController.approveByDept);

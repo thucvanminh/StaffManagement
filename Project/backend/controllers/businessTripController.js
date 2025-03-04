@@ -49,9 +49,10 @@ class  businessTripController {
                 // Director hoặc HR: Xem tất cả request
                 trips = await BusinessTripRequest.findAll({
                     include: [
-                        { model: Employee, as: 'employee' },
+                        { model: Employee, as: 'employee', attributes: ['employeeID', 'fullName'] },
                         { model: Status, as: 'status' },
-                    ],
+
+                    ]
                 });
             } else {
                 // Head of Department: Chỉ xem request của nhân viên trong phòng ban

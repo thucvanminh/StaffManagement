@@ -16,7 +16,7 @@ function generateToken(user) {
         employeeID: user.employeeID, // Sử dụng employeeID thay vì userId
         roleID: user.roleID         // Giữ tên roleID để khớp với model
     };
-    return jwt.sign(payload, SECRET_KEY, { expiresIn: '24h' });
+    return jwt.sign(payload, SECRET_KEY, {  });
 }
 
 /**
