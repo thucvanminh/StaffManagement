@@ -1,11 +1,13 @@
 'use client'
-/* frontend/src/app/componeents/assets/LoginSection.js */
+/* frontend/src/app/login/LoginSection.js */
 
 import Link from 'next/link';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import {useState} from 'react';
+import {useRouter} from 'next/navigation';
 import styles from './LoginSection.css';
+
+const loginAPI = require('../services/api');
 export default function LoginSection() {
 
     const [username, setUsername] = useState('');
@@ -17,9 +19,9 @@ export default function LoginSection() {
         e.preventDefault();
 
         try {
-            const data = await login(username, password); // Gọi API bằng service
+            const data = await loginAPI.login(username, password); // Gọi API bằng service
             localStorage.setItem('token', data.token); // Lưu token sau khi login thành công
-            router.push('/EmployeePanel'); // Chuyển hướng đến EmployeePanel
+            router.push('/employee/overview'); // Chuyển hướng đến EmployeePanel
             console.log('Login success!');
         } catch (err) {
             console.log('Login failed:');
@@ -34,23 +36,23 @@ export default function LoginSection() {
                 <h1>TH</h1>
                 <form onSubmit={handleLogin}>
                     <label>
-                        <input  type="text"
-                                placeholder="Username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                required
+                        <input type="text"
+                               placeholder="Username"
+                               value={username}
+                               onChange={(e) => setUsername(e.target.value)}
+                               required
                         />
                     </label>
                     <label>
-                        <input  type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
+                        <input type="password"
+                               placeholder="Password"
+                               value={password}
+                               onChange={(e) => setPassword(e.target.value)}
+                               required
                         />
                     </label>
                     <div className="form-options">
-                        <input type="checkbox" id="keepSignedIn" style={{ width: '10%' }} />
+                        <input type="checkbox" id="keepSignedIn" style={{width: '10%'}}/>
                         <label htmlFor="keepSignedIn">Keep me signed in</label>
                     </div>
                     <button type="submit" className="login-button">Login</button>
