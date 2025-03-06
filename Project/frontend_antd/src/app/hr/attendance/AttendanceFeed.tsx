@@ -1,23 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import type { TableColumnsType } from 'antd';
-import { Badge, Dropdown, Space, Table } from 'antd';
-
-interface ExpandedDataType {
-    key: React.Key;
-    date: string;
-    name: string;
-    upgradeNum: string;
-}
+import { Dropdown, Input, Pagination, Space, Table } from 'antd';
 
 interface DataType {
     key: React.Key;
     name: string;
-    platform: string;
-    version: string;
-    upgradeNum: number;
-    creator: string;
     createdAt: string;
+    position: string;
 }
 
 const items = [
@@ -25,87 +15,87 @@ const items = [
     { key: '2', label: 'Action 2' },
 ];
 
-const expandDataSource = Array.from({ length: 3 }).map<ExpandedDataType>((_, i) => ({
-    key: i.toString(),
-    date: '2014-12-24 23:12:00',
-    name: 'This is production name',
-    upgradeNum: 'Upgraded: 56',
-}));
+const originalDataSource = Array.from({ length: 100 }) // Tổng số mục là 85
+    .map<DataType>((_, i) => ({
+        key: i.toString(),
+        name: 'Tran Van A',
+        createdAt: '23:12:00 1/1/2025',
+        position: 'Group A',
+    }));
 
-const dataSource = Array.from({ length: 3 }).map<DataType>((_, i) => ({
-    key: i.toString(),
-    name: 'Screen',
-    platform: 'iOS',
-    version: '10.3.4.5654',
-    upgradeNum: 500,
-    creator: 'Jack',
-    createdAt: '2014-12-24 23:12:00',
-}));
+const App: React.FC = () => {
+    const [dataSource, setDataSource] = useState(originalDataSource);
+    const [searchText, setSearchText] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10; // Số mục trên mỗi trang
 
-const expandColumns: TableColumnsType<ExpandedDataType> = [
-    { title: 'Date', dataIndex: 'date', key: 'date' },
-    { title: 'Name', dataIndex: 'name', key: 'name' },
-    {
-        title: 'Status',
-        key: 'state',
-        render: () => <Badge status="success" text="Finished" />,
-    },
-    { title: 'Upgrade Status', dataIndex: 'upgradeNum', key: 'upgradeNum' },
-    {
-        title: 'Action',
-        key: 'operation',
-        render: () => (
-            <Space size="middle">
-                <a>Pause</a>
-                <a>Stop</a>
-                <Dropdown menu={{ items }}>
-                    <a>
-                        More <DownOutlined />
-                    </a>
-                </Dropdown>
-            </Space>
-        ),
-    },
-];
+    // Xử lý tìm kiếm theo Name
+    const handleSearch = (value: string) => {
+        setSearchText(value);
+        setCurrentPage(1); // Reset về trang 1 khi tìm kiếm
+        const filteredData = originalDataSource.filter((item) =>
+            item.name.toLowerCase().includes(value.toLowerCase())
+        );
+        setDataSource(filteredData);
+    };
 
-const columns: TableColumnsType<DataType> = [
-    { title: 'Name', dataIndex: 'name', key: 'name' },
-    { title: 'Platform', dataIndex: 'platform', key: 'platform' },
-    { title: 'Version', dataIndex: 'version', key: 'version' },
-    { title: 'Upgraded', dataIndex: 'upgradeNum', key: 'upgradeNum' },
-    { title: 'Creator', dataIndex: 'creator', key: 'creator' },
-    { title: 'Date', dataIndex: 'createdAt', key: 'createdAt' },
-    { title: 'Action', key: 'operation', render: () => <a>Publish</a> },
-];
+    // Xử lý thay đổi trang
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
 
-const expandedRowRender = () => (
-    <Table<ExpandedDataType>
-        columns={expandColumns}
-        dataSource={expandDataSource}
-        pagination={false}
-    />
-);
+    // Tính dữ liệu cho trang hiện tại
+    const paginatedData = dataSource.slice(
+        (currentPage - 1) * pageSize,
+        currentPage * pageSize
+    );
 
-const App: React.FC = () => (
-    <>
-        <Table<DataType>
-            columns={columns}
-            expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }}
-            dataSource={dataSource}
-        />
-        <Table<DataType>
-            columns={columns}
-            expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }}
-            dataSource={dataSource}
-            size="middle"
-        />
-        <Table<DataType>
-            columns={columns}
-            expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }}
-            dataSource={dataSource}
-            size="small"
-        />
-    </>
-);
+    const columns: TableColumnsType<DataType> = [
+        { title: 'Date', dataIndex: 'createdAt', key: 'createdAt' },
+        { title: 'Name', dataIndex: 'name', key: 'name' },
+        { title: 'Position', dataIndex: 'position', key: 'position' },
+
+        {
+            title: 'Action',
+            key: 'operation',
+            render: () => (
+                <Space size="middle">
+                    <Dropdown menu={{ items }}>
+                        <a>
+                            More <DownOutlined />
+                        </a>
+                    </Dropdown>
+                </Space>
+            ),
+        },
+    ];
+
+    return (
+        <>
+            <Input.Search
+                placeholder="Search by Name"
+                allowClear
+                enterButton="Search"
+                size="large"
+                onSearch={handleSearch}
+                style={{ width: 400, marginBottom: 16 }}
+            />
+            <Table<DataType>
+                columns={columns}
+                dataSource={paginatedData}
+                pagination={false} // Tắt phân trang mặc định của Table
+            />
+            <Pagination
+                align="center"
+                total={dataSource.length}
+                showTotal={(total) => `Total ${total} items`}
+                defaultPageSize={pageSize}
+                current={currentPage}
+                onChange={handlePageChange}
+                style={{ marginTop: 16 }}
+            />
+        </>
+    );
+};
 
 export default App;
