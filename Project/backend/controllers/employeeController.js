@@ -87,6 +87,21 @@ class EmployeeController {
             res.status(500).json({ error: error.message });
         }
     }
+
+    async isHeadDepartment(req, res) {
+        try {
+            const employeeID = req.params.employeeID;
+
+            // Kiểm tra xem employeeID có phải là headOfDepartmentID của bất kỳ phòng ban nào
+            const isHead = await Employee.findOne({
+                where: { headOfDepartmentID: employeeID }
+            });
+
+            res.json({ isHeadOfDepartment: !!isHead }); // Trả về true nếu là trưởng phòng, false nếu không
+        } catch (error) {
+            res.status(500).json({ message: 'Error checking department head status', error });
+        }
+    }
 }
 
 module.exports = new EmployeeController();

@@ -1,69 +1,85 @@
-// frontend/services/api.js
+// frontend_antd/src/app/service/api.js
 
-const BASE_URL = 'http://localhost:5000'; // URL backend (server-side API)
+const BASE_URL = 'http://localhost:5000';
 
-class api {
-    async login(username, password) {
+class API {
+    async fetchAPI(endpoint, options = {}) {
+        const controller = new AbortController();
+        const timeoutID = setTimeout(() => controller.abort(), 5000);
+
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
+        const headers = {
+            ...(token && { 'Authorization': `Bearer ${token}` }),
+            ...options.headers,
+        };
+
         try {
-          const response = await fetch(`${BASE_URL}/auth/login`, {
-            method: 'POST', // Phương thức POST để gửi dữ liệu
-            headers: { 'Content-Type': 'application/json' }, // Header định dạng JSON
-            body: JSON.stringify({ username, password }), // Dữ liệu username và password
-          });
+            const response = await fetch(`${BASE_URL}${endpoint}`, {
+                ...options,
+                headers,
+                signal: controller.signal, // Thêm signal để hỗ trợ timeout
+            });
 
-          // Xử lý lỗi nếu phản hồi không thành công (status !== 200)
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Login failed'); // Phản hồi lỗi từ backend
-          }
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
 
-          // Trả về JSON chứa dữ liệu phản hồi thành công (ví dụ: token)
-          return await response.json();
-        }catch (error) {
-          console.error(error);
+            return response.json();
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                throw new Error('Request timed out');
+            }
+            console.error('API request failed:', error);
+            throw error;
+        } finally {
+            clearTimeout(timeoutID); // Đảm bảo timeout được dọn dẹp
         }
     }
 
-    // async getEmployees  ()  {
-    //   try {
-    //     const response = await axios.get('http://localhost:5000/api/employees'); // Kiểm tra URL
-    //     return response.data;
-    //   } catch (error) {
-    //     console.error('Lỗi khi lấy dữ liệu:', error); // Hiển thị lỗi trong console
-    //     throw error; // Ném lỗi để nó có thể được xử lý ở frontend
-    //   }
-    // };
+    async getAPI(endpoint, queryParams = {}, options = {}) {
+        const queryString = Object.entries(queryParams)
+            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+            .join('&');
+        const url = queryString ? `${endpoint}?${queryString}` : endpoint;
 
+        return this.fetchAPI(url, {
+            method: 'GET',
+            ...options,
+        });
+    }
 
-    // /**
-    //  * Lấy thông tin Employee dựa trên token
-    //  * @returns {Promise<object>} - Dữ liệu thông tin Employee từ backend
-    //  */
-    //  async  fetchEmployeeInfo() {
-    //   const token = localStorage.getItem('token'); // Lấy token từ localStorage
-    //
-    //   if (!token) {
-    //     throw new Error('No token found. Please login first.');
-    //   }
-    //
-    //   const response = await fetch(`${BASE_URL}/employee/info`, {
-    //     method: 'GET', // Kiểu request GET
-    //     headers: {
-    //       'Authorization': `Bearer ${token}`, // Gửi token trong header Authorization
-    //       'Content-Type': 'application/json',
-    //     },
-    //   });
-    //
-    //   if (!response.ok) {
-    //     const errorData = await response.json();
-    //     throw new Error(errorData.message || 'Failed to fetch employee info.');
-    //   }
-    //
-    //   return await response.json();
-    // }
+    async postAPI(endpoint, body = {}, options = {}) { // Sửa tham số để nhận body
+        return this.fetchAPI(endpoint, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            ...options,
+        });
+    }
+    async putAPI(endpoint, body = {}, options = {}) {
+        return this.fetchAPI(endpoint, {
+            method: 'PUT',
+            body: JSON.stringify(body),
+            ...options,
+        });
+    }
+
+    async deleteAPI(endpoint, options = {}) {
+        return this.fetchAPI(endpoint, {
+            method: 'DELETE',
+            ...options,
+        });
+    }
+
+    async checkAPIConnection() {
+        try {
+            const response = await this.fetchAPI('/');
+            return response;
+        } catch (error) {
+            throw new Error('Cannot connect to API: ' + error.message);
+        }
+    }
 }
 
-module.exports = new api();
-
-
-
+module.exports = new API();

@@ -6,6 +6,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const authorizeRole = require('../middlewares/authorizeRole');
 const { validateEmployee, updateEmployee, validateQueryEmployee } = require('../controllers/validations/employeeValidation');
 
+router.get('/is-head-of-department/:employeeID', authMiddleware,employeeController.isHeadDepartment);
 router.get('/', authMiddleware, authorizeRole([1,2]), employeeController.getAllEmployees);
 router.get('/query', authMiddleware, authorizeRole([1,2]), validateQueryEmployee, employeeController.queryEmployee);
 router.get('/:id', authMiddleware, authorizeRole([1,2]), employeeController.getEmployeeById);
