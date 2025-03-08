@@ -1,4 +1,4 @@
-// services/employeeAPI.js
+// frontend_antd/src/app/services/employeesAPI.js
 import API from './api';
 
 class employeesAPI {
@@ -16,26 +16,5 @@ class employeesAPI {
     }
 }
 
-module.exports = new employeesAPI();
+export default new employeesAPI();
 
-// export async function isHeadOfDepartment(employeeID) {
-//     try {
-//         const response = await fetch(`${BASE_URL}/employees/is-head-of-department/${employeeID}`, {
-//             method: 'GET',
-//             headers: {
-//                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
-//                 'Content-Type': 'application/json',
-//             },
-//         });
-//
-//         if (!response.ok) {
-//             throw new Error('Failed to check department head status');
-//         }
-//
-//         const data = await response.json();
-//         return data.isHeadOfDepartment;
-//     } catch (error) {
-//         console.error('Error checking department head:', error);
-//         return false;
-//     }
-// }

@@ -10,7 +10,8 @@ class API {
         const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
         const headers = {
-            ...(token && { 'Authorization': `Bearer ${token}` }),
+            'Content-Type': 'application/json',
+            ...(token && {'Authorization': `Bearer ${token}`}),
             ...options.headers,
         };
 
@@ -57,6 +58,7 @@ class API {
             ...options,
         });
     }
+
     async putAPI(endpoint, body = {}, options = {}) {
         return this.fetchAPI(endpoint, {
             method: 'PUT',
@@ -82,4 +84,4 @@ class API {
     }
 }
 
-module.exports = new API();
+export default new API();

@@ -1,17 +1,19 @@
 'use client'
-/* frontend_antd/src/app/login/LoginSection.js */
+/* frontend/src/app/login/LoginSection.js */
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import {useState} from 'react';
+import {useRouter} from 'next/navigation';
 import styles from './LoginSection.css';
-import { jwtDecode } from 'jwt-decode';
-import loginAPI from '../services/authentication'; // Thay cho require
-import employeesAPI from '../services/employeesAPI'; // Thay cho require
 
+import {jwtDecode} from 'jwt-decode';
+import Authentication from '../services/authentication';
+import employeesAPI from '../services/employeesAPI';
 export default function LoginSection() {
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    // const [error, setError] = useState('');
     const router = useRouter();
 
     const handleLogin = async (e) => {
@@ -19,7 +21,7 @@ export default function LoginSection() {
 
         try {
             // Bước 1: Gọi API login
-            const data = await loginAPI.login(username, password);
+            const data = await Authentication.login(username, password);
             const token = data.token;
             localStorage.setItem('token', token);
 
@@ -50,9 +52,10 @@ export default function LoginSection() {
             console.log('Login success!');
         } catch (err) {
             console.error('Login failed:', err);
-            router.push('/employee/overview'); // Điều hướng nếu login thất bại
+            // router.push('/employee/overview'); // Điều hướng nếu login thất bại
         }
     };
+
 
     return (
         <div className="login-container">
@@ -60,25 +63,23 @@ export default function LoginSection() {
                 <h1>TH</h1>
                 <form onSubmit={handleLogin}>
                     <label>
-                        <input
-                            type="text"
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
+                        <input type="text"
+                               placeholder="Username"
+                               value={username}
+                               onChange={(e) => setUsername(e.target.value)}
+                               required
                         />
                     </label>
                     <label>
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
+                        <input type="password"
+                               placeholder="Password"
+                               value={password}
+                               onChange={(e) => setPassword(e.target.value)}
+                               required
                         />
                     </label>
                     <div className="form-options">
-                        <input type="checkbox" id="keepSignedIn" style={{ widt  h: '10%' }} />
+                        <input type="checkbox" id="keepSignedIn" style={{width: '10%'}}/>
                         <label htmlFor="keepSignedIn">Keep me signed in</label>
                     </div>
                     <button type="submit" className="login-button">Login</button>

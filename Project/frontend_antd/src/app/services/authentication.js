@@ -4,8 +4,8 @@ import  API from './api';
 
 class Authentication {
     async login(username, password) {
-        return API.postAPI('auth/login',{username, password});
+        return API.postAPI('/auth/login',{username, password});
     }
 }
 
-module.exports = new Authentication();
+export default new Authentication();
