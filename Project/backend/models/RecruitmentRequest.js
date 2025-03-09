@@ -1,48 +1,62 @@
-// src/models/RecruitmentRequest.js
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+// backend/models/RecruitmentRequest.js
 
-class RecruitmentRequest extends Model {}
+const TABLE_NAME = 'recruitment_requests';
 
-RecruitmentRequest.init({
-    recruitmentRequestID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    applicantName: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    applicantEmail: { // Thêm trường mới
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    position: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    description: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    statusID: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'statuses',
-            key: 'statusID'
-        }
-    },
-    approvedBy: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-    }
-}, {
-    sequelize,
-    modelName: 'RecruitmentRequest',
-    tableName: 'recruitment_requests',
-    timestamps: true
-});
+const COLUMNS = {
+    recruitmentRequestID: 'recruitmentRequestID',
+    applicantName: 'applicantName',
+    applicantEmail: 'applicantEmail',
+    position: 'position',
+    description: 'description',
+    statusID: 'statusID',
+    approvedBy: 'approvedBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
 
-module.exports = RecruitmentRequest;
+const DEFAULT_SELECT = `
+    SELECT 
+        rr.*,
+        s.statusName,
+        a.fullName as approverName
+    FROM ${TABLE_NAME} rr
+    LEFT JOIN status s ON rr.statusID = s.statusID
+    LEFT JOIN employees a ON rr.approvedBy = a.employeeID
+`;
+
+const INSERT_COLUMNS = [
+    COLUMNS.applicantName,
+    COLUMNS.applicantEmail,
+    COLUMNS.position,
+    COLUMNS.description,
+    COLUMNS.statusID,
+    COLUMNS.approvedBy,
+    COLUMNS.createdAt,
+    COLUMNS.updatedAt
+].join(', ');
+
+const UPDATE_SET = [
+    `${COLUMNS.applicantName} = ?`,
+    `${COLUMNS.applicantEmail} = ?`,
+    `${COLUMNS.position} = ?`,
+    `${COLUMNS.description} = ?`,
+    `${COLUMNS.statusID} = ?`,
+    `${COLUMNS.approvedBy} = ?`,
+    `${COLUMNS.updatedAt} = ?`
+].join(', ');
+
+const SPECIAL_QUERIES = {
+    GET_BY_STATUS: `${DEFAULT_SELECT} WHERE rr.statusID = ?`,
+    GET_BY_POSITION: `${DEFAULT_SELECT} WHERE rr.position LIKE ?`,
+    GET_PENDING: `${DEFAULT_SELECT} WHERE rr.statusID = 1`,
+    GET_BY_APPROVER: `${DEFAULT_SELECT} WHERE rr.approvedBy = ?`
+};
+
+module.exports = {
+    TABLE_NAME,
+    COLUMNS,
+    DEFAULT_SELECT,
+    INSERT_COLUMNS,
+    UPDATE_SET,
+    SPECIAL_QUERIES
+};

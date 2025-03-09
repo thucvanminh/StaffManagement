@@ -1,28 +1,36 @@
 // backend/models/Department.js
 
+const TABLE_NAME = 'departments';
 
-const { DataTypes, Model } = require('sequelize');
-const sequelize = require('../config/database');
+const COLUMNS = {
+    departmentID: 'departmentID',
+    departmentName: 'departmentName',
+    HeadOfDepartmentID: 'HeadOfDepartmentID'
+};
 
+const DEFAULT_SELECT = `
+    SELECT 
+        d.*,
+        e.employeeID as headID,
+        e.fullName as headName
+    FROM ${TABLE_NAME} d
+    LEFT JOIN employees e ON d.HeadOfDepartmentID = e.employeeID
+`;
 
-const Department = sequelize.define('Department', {
-  departmentID: {
-    type: DataTypes.INTEGER,
-    primaryKey: true
-  },
-  departmentName: DataTypes.STRING,
-  HeadOfDepartmentID: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: 'Employees', //sequelize trỏ thẳng đến dữ liệu trong db
-      key: 'employeeID',  // Khóa chính của Employee
-    },
-    allowNull: true
+const INSERT_COLUMNS = [
+    COLUMNS.departmentName,
+    COLUMNS.HeadOfDepartmentID
+].join(', ');
 
-  }
-}, {
-  tableName: 'departments',
-  timestamps: false
-});
+const UPDATE_SET = [
+    `${COLUMNS.departmentName} = ?`,
+    `${COLUMNS.HeadOfDepartmentID} = ?`
+].join(', ');
 
-module.exports = Department;
+module.exports = {
+    TABLE_NAME,
+    COLUMNS,
+    DEFAULT_SELECT,
+    INSERT_COLUMNS,
+    UPDATE_SET
+};

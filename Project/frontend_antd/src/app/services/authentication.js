@@ -4,7 +4,45 @@ import  API from './api';
 
 class Authentication {
     async login(username, password) {
-        return API.postAPI('/auth/login',{username, password});
+        try {
+            const response = await API.postAPI('/auth/login', { username, password });
+            if (response.token) {
+                localStorage.setItem('token', response.token);
+            }
+            return response;
+        } catch (error) {
+            throw new Error('Đăng nhập thất bại: ' + error.message);
+        }
+    }
+
+    async logout() {
+        try {
+            await API.postAPI('/auth/logout');
+            localStorage.removeItem('token');
+        } catch (error) {
+            console.error('Đăng xuất thất bại:', error);
+        }
+    }
+
+    async refreshToken() {
+        try {
+            const response = await API.postAPI('/auth/refresh-token');
+            if (response.token) {
+                localStorage.setItem('token', response.token);
+            }
+            return response;
+        } catch (error) {
+            throw new Error('Làm mới token thất bại: ' + error.message);
+        }
+    }
+
+    isAuthenticated() {
+        const token = localStorage.getItem('token');
+        return !!token;
+    }
+
+    getToken() {
+        return localStorage.getItem('token');
     }
 }
 

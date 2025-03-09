@@ -1,47 +1,48 @@
 // backend/controllers/authController.js
-const {generateToken} = require('../config/jwt');
-const bcrypt = require('bcrypt');  // Sử dụng để so sánh mật khẩu đã được hash
-const Account = require('../models/Account');
-const Employee = require('../models/Employee'); // Import để dùng cho include
-
-
-
+const { generateToken } = require('../config/jwt');
+const bcrypt = require('bcrypt');
+const pool = require('../config/database');
+const { AUTH_QUERIES } = require('../models/Account');
+const { DEFAULT_SELECT } = require('../models/Employee');
 
 exports.login = async (req, res) => {
     try {
-        const {username, password} = req.body;
-        // Tìm tài khoản theo username và include thông tin Employee qua alias 'employee'
-        const account = await Account.findOne({
-            where: {username},
-            include: [
-                {
-                    model: Employee,
-                    as: 'employee'
-                }
-            ]
-        });
-
-        // Nếu không tìm thấy account hoặc không có thông tin employee, trả về lỗi
-        if (!account || !account.employee) {
-            return res.status(401).json({message: 'User name or password is not correct'});
+        const { username, password } = req.body;
+        
+        // Tìm tài khoản theo username với thông tin employee và role
+        const [accounts] = await pool.execute(AUTH_QUERIES.LOGIN, [username]);
+        
+        if (accounts.length === 0) {
+            return res.status(401).json({ message: 'User name or password is not correct' });
         }
 
-        // So sánh mật khẩu nhập vào với mật khẩu đã hash trong DB
+        const account = accounts[0];
+
+        // So sánh mật khẩu
         const isValid = await bcrypt.compare(password, account.password);
         if (!isValid) {
-            return res.status(401).json({message: 'User name or password is not correct'});
+            return res.status(401).json({ message: 'User name or password is not correct' });
         }
 
         // Tạo token với thông tin của employee
         const token = generateToken({
-            employeeID: account.employee.employeeID,
-            roleID: account.employee.roleID
+            employeeID: account.employeeID,
+            roleID: account.roleID
         });
 
-        // Trả về token cho client
-        return res.json({token});
+        // Trả về token và thông tin cơ bản
+        return res.json({
+            token,
+            user: {
+                employeeID: account.employeeID,
+                fullName: account.fullName,
+                email: account.email,
+                roleID: account.roleID,
+                roleName: account.roleName
+            }
+        });
     } catch (error) {
-        return res.status(500).json({error: error.message});
+        return res.status(500).json({ error: error.message });
     }
 };
 
@@ -51,21 +52,18 @@ exports.getInfor = async (req, res) => {
             return res.status(401).json({ message: 'User not authenticated or invalid token' });
         }
 
-        const employee = await Employee.findOne({
-            where: { employeeID: req.user.employeeID }, // Truy cập trực tiếp employeeID từ req.user
-            include: [{
-                model: Account,
-                as: 'account',
-                attributes: {exclude: "password"}
-            }]
-        });
+        const [employees] = await pool.execute(`${DEFAULT_SELECT} WHERE e.employeeID = ?`, [req.user.employeeID]);
 
-        if (!employee) {
+        if (employees.length === 0) {
             return res.status(404).json({ message: 'Employee not found' });
         }
+
+        // Loại bỏ thông tin nhạy cảm
+        const employee = employees[0];
+        delete employee.password;
 
         res.json(employee);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}
+};

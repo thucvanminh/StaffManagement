@@ -1,23 +1,14 @@
 require('dotenv').config();
-const { Sequelize } = require('sequelize');
+const mysql = require('mysql2/promise');
 
-class Database {
-  constructor() {
-    if (!Database.instance) {
-      this.sequelize = new Sequelize(
-          process.env.DB_NAME || 'staffmanagement',
-          process.env.DB_USER || 'root',
-          process.env.DB_PASSWORD,
-          {
-            host: process.env.DB_HOST || 'localhost',
-            dialect: 'mysql',
-            logging: false,
-          }
-      );
-      Database.instance = this;
-    }
-    return Database.instance;
-  }
-}
+const pool = mysql.createPool({
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'staff_management',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
 
-module.exports = new Database().sequelize;
+module.exports = pool;

@@ -1,19 +1,12 @@
 // src/controllers/EmployeeController.js
-const Employee = require('../models/Employee');
-const Department = require('../models/Department');
-const Roles = require('../models/Roles');
+const pool = require('../config/database');
 const { validationResult } = require('express-validator');
+const { TABLE_NAME, COLUMNS, DEFAULT_SELECT, INSERT_COLUMNS, UPDATE_SET } = require('../models/Employee');
 
 class EmployeeController {
     async getAllEmployees(req, res) {
         try {
-            const employees = await Employee.findAll({
-                include: [
-                    { model: Department, as: 'department', attributes: ['departmentID', 'departmentName'] },
-                    { model: Roles, as: 'role', attributes: ['roleID', 'roleName'] },
-                    { model: Employee, as: 'headOfDepartment', attributes: ['employeeID', 'fullName'] }
-                ]
-            });
+            const [employees] = await pool.execute(DEFAULT_SELECT);
             res.status(200).json(employees);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -22,16 +15,10 @@ class EmployeeController {
 
     async getEmployeeById(req, res) {
         try {
-            const employee = await Employee.findOne({
-                where: { employeeID: req.params.id },
-                include: [
-                    { model: Department, as: 'department', attributes: ['departmentID', 'departmentName'] },
-                    { model: Roles, as: 'role', attributes: ['roleID', 'roleName'] },
-                    { model: Employee, as: 'headOfDepartment', attributes: ['employeeID', 'fullName'] }
-                ]
-            });
-            if (!employee) throw new Error('Employee not found');
-            res.status(200).json(employee);
+            const [employees] = await pool.execute(`${DEFAULT_SELECT} WHERE e.${COLUMNS.employeeID} = ?`, [req.params.id]);
+
+            if (employees.length === 0) throw new Error('Employee not found');
+            res.status(200).json(employees[0]);
         } catch (error) {
             res.status(404).json({ message: error.message });
         }
@@ -43,8 +30,18 @@ class EmployeeController {
             return res.status(400).json({ errors: errors.array() });
 
         try {
-            const newEmployee = await Employee.create(req.body);
-            res.status(201).json(newEmployee);
+            const { 
+                fullName, dateOfBirth, hireDay, email, phone, 
+                address, city, gender, departmentID, roleID, headOfDepartmentID 
+            } = req.body;
+
+            const [result] = await pool.execute(`
+                INSERT INTO ${TABLE_NAME} (${INSERT_COLUMNS})
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `, [fullName, dateOfBirth, hireDay, email, phone, address, city, gender, departmentID, roleID, headOfDepartmentID]);
+
+            const [newEmployee] = await pool.execute(`${DEFAULT_SELECT} WHERE e.${COLUMNS.employeeID} = ?`, [result.insertId]);
+            res.status(201).json(newEmployee[0]);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -56,10 +53,21 @@ class EmployeeController {
             return res.status(400).json({ errors: errors.array() });
 
         try {
-            const [updated] = await Employee.update(req.body, { where: { employeeID: req.params.id } });
-            if (updated === 0) throw new Error('Employee not found');
-            const updatedEmployee = await Employee.findOne({ where: { employeeID: req.params.id } });
-            res.status(200).json(updatedEmployee);
+            const { 
+                fullName, dateOfBirth, hireDay, email, phone, 
+                address, city, gender, departmentID, roleID, headOfDepartmentID 
+            } = req.body;
+
+            const [result] = await pool.execute(`
+                UPDATE ${TABLE_NAME} 
+                SET ${UPDATE_SET}
+                WHERE ${COLUMNS.employeeID} = ?
+            `, [fullName, dateOfBirth, hireDay, email, phone, address, city, gender, departmentID, roleID, headOfDepartmentID, req.params.id]);
+
+            if (result.affectedRows === 0) throw new Error('Employee not found');
+
+            const [updatedEmployee] = await pool.execute(`${DEFAULT_SELECT} WHERE e.${COLUMNS.employeeID} = ?`, [req.params.id]);
+            res.status(200).json(updatedEmployee[0]);
         } catch (error) {
             res.status(404).json({ message: error.message });
         }
@@ -67,9 +75,8 @@ class EmployeeController {
 
     async deleteEmployee(req, res) {
         try {
-            const employee = await Employee.findOne({ where: { employeeID: req.params.id } });
-            if (!employee) throw new Error('Employee not found');
-            await employee.destroy();
+            const [result] = await pool.execute(`DELETE FROM ${TABLE_NAME} WHERE ${COLUMNS.employeeID} = ?`, [req.params.id]);
+            if (result.affectedRows === 0) throw new Error('Employee not found');
             res.status(204).send();
         } catch (error) {
             res.status(404).json({ message: error.message });
@@ -80,8 +87,25 @@ class EmployeeController {
         const errors = validationResult(req);
         if (!errors.isEmpty())
             return res.status(400).json({ errors: errors.array() });
+
         try {
-            const employees = await Employee.findAll({ where: req.query });
+            let query = `SELECT * FROM ${TABLE_NAME} WHERE 1=1`;
+            const params = [];
+
+            if (req.query.departmentID) {
+                query += ` AND ${COLUMNS.departmentID} = ?`;
+                params.push(req.query.departmentID);
+            }
+            if (req.query.roleID) {
+                query += ` AND ${COLUMNS.roleID} = ?`;
+                params.push(req.query.roleID);
+            }
+            if (req.query.fullName) {
+                query += ` AND ${COLUMNS.fullName} LIKE ?`;
+                params.push(`%${req.query.fullName}%`);
+            }
+
+            const [employees] = await pool.execute(query, params);
             res.status(200).json(employees);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -90,14 +114,13 @@ class EmployeeController {
 
     async isHeadDepartment(req, res) {
         try {
-            const employeeID = req.params.employeeID;
+            const [result] = await pool.execute(`
+                SELECT COUNT(*) as count 
+                FROM departments 
+                WHERE headOfDepartmentID = ?
+            `, [req.params.employeeID]);
 
-            // Kiểm tra xem employeeID có phải là headOfDepartmentID của bất kỳ phòng ban nào
-            const isHead = await Employee.findOne({
-                where: { headOfDepartmentID: employeeID }
-            });
-
-            res.json({ isHeadOfDepartment: !!isHead }); // Trả về true nếu là trưởng phòng, false nếu không
+            res.json({ isHeadOfDepartment: result[0].count > 0 });
         } catch (error) {
             res.status(500).json({ message: 'Error checking department head status', error });
         }

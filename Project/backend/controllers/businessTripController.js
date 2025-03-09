@@ -1,174 +1,208 @@
-// backend/controllers/BusinessTripController.js
-const BusinessTripRequest = require('../models/BusinessTripRequest');
-const Employee = require('../models/Employee');
-const Department = require('../models/Department');
-const Notification = require('../models/Notification');
-const Status = require('../models/Status');
+// backend/controllers/businessTripController.js
+const pool = require('../config/database');
+const { validationResult } = require('express-validator');
+const { 
+    TABLE_NAME, 
+    COLUMNS, 
+    DEFAULT_SELECT, 
+    INSERT_COLUMNS, 
+    UPDATE_SET,
+    SPECIAL_QUERIES 
+} = require('../models/BusinessTripRequest');
 
-class  businessTripController {
-    async createTripRequest  (req, res)  {
+class BusinessTripController {
+    async getAllRequests(req, res) {
         try {
-            const { destination, startDate, endDate, reason } = req.body;
-            const employeeID = req.user.employeeID; // Lấy từ token
+            const [requests] = await pool.execute(DEFAULT_SELECT);
+            res.status(200).json(requests);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 
-            const tripRequest = await BusinessTripRequest.create({
+    async getRequestById(req, res) {
+        try {
+            const [requests] = await pool.execute(`${DEFAULT_SELECT} WHERE btr.${COLUMNS.requestID} = ?`, [req.params.id]);
+            
+            if (requests.length === 0) {
+                throw new Error('Business trip request not found');
+            }
+            
+            res.status(200).json(requests[0]);
+        } catch (error) {
+            res.status(404).json({ message: error.message });
+        }
+    }
+
+    async createRequest(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        try {
+            const {
                 employeeID,
-                destination,
                 startDate,
                 endDate,
-                reason,
-                statusID: 1, // Pending
-            });
+                destination,
+                purpose
+            } = req.body;
 
-            // Tạo thông báo cho Head of Department
-            const employee = await Employee.findByPk(employeeID, {
-                include: [{ model: Department, as: 'department' }],
-            });
-            const headOfDeptID = employee.department.HeadOfDepartmentID;
+            const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            
+            const [result] = await pool.execute(`
+                INSERT INTO ${TABLE_NAME} (${INSERT_COLUMNS})
+                VALUES (?, ?, ?, ?, ?, 1, NULL, ?, ?)
+            `, [employeeID, startDate, endDate, destination, purpose, now, now]);
 
-            await Notification.create({
-                requestID: tripRequest.businessTripID,
-                requestType: 'BusinessTrip',
-                recipientID: headOfDeptID,
-                message: `New business trip request from ${employee.fullName} needs your approval.`,
-                sentAt: new Date(),
-            });
+            const [newRequest] = await pool.execute(
+                `${DEFAULT_SELECT} WHERE btr.${COLUMNS.requestID} = ?`, 
+                [result.insertId]
+            );
 
-            res.status(201).json({ message: 'Trip request created', data: tripRequest });
+            res.status(201).json(newRequest[0]);
         } catch (error) {
-            res.status(500).json({ message: 'Error creating request', error: error.message });
+            res.status(500).json({ error: error.message });
         }
-    };
+    }
 
-    async getAllBusinessTripRequest  (req, res)  {
+    async updateRequest(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
         try {
-            const user = req.user;
-            let trips;
+            const {
+                startDate,
+                endDate,
+                destination,
+                purpose,
+                statusID,
+                approverID
+            } = req.body;
 
-            if (user.roleID === 1 || user.roleID === 2) {
-                // Director hoặc HR: Xem tất cả request
-                trips = await BusinessTripRequest.findAll({
-                    include: [
-                        { model: Employee, as: 'employee', attributes: ['employeeID', 'fullName'] },
-                        { model: Status, as: 'status' },
+            const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-                    ]
-                });
-            } else {
-                // Head of Department: Chỉ xem request của nhân viên trong phòng ban
-                const dept = await Department.findOne({ where: { HeadOfDepartmentID: user.employeeID } });
-                if (!dept) return res.status(403).json({ message: 'Not a department head' });
+            const [result] = await pool.execute(`
+                UPDATE ${TABLE_NAME} 
+                SET ${UPDATE_SET}
+                WHERE ${COLUMNS.requestID} = ?
+            `, [startDate, endDate, destination, purpose, statusID, approverID, now, req.params.id]);
 
-                trips = await BusinessTripRequest.findAll({
-                    include: [
-                        {
-                            model: Employee,
-                            as: 'employee',
-                            where: { departmentID: dept.departmentID },
-                        },
-                        { model: Status, as: 'status' },
-                    ],
-                });
+            if (result.affectedRows === 0) {
+                throw new Error('Business trip request not found');
             }
 
-            res.status(200).json(trips);
+            const [updatedRequest] = await pool.execute(
+                `${DEFAULT_SELECT} WHERE btr.${COLUMNS.requestID} = ?`, 
+                [req.params.id]
+            );
+
+            res.status(200).json(updatedRequest[0]);
         } catch (error) {
-            res.status(500).json({ message: 'Error fetching requests', error: error.message });
+            res.status(404).json({ message: error.message });
         }
-    };
+    }
 
-    async approveByDept  (req, res) {
+    async deleteRequest(req, res) {
         try {
-            const { id } = req.params;
-            const trip = await BusinessTripRequest.findByPk(id);
-            if (!trip) return res.status(404).json({ message: 'Request not found' });
+            const [result] = await pool.execute(
+                `DELETE FROM ${TABLE_NAME} WHERE ${COLUMNS.requestID} = ?`, 
+                [req.params.id]
+            );
 
-            // Cập nhật trạng thái sang "Dept Approved"
-            trip.statusID = 2;
-            trip.approvedByDept = req.user.employeeID;
-            await trip.save();
-
-            // Gửi thông báo cho HR (roleID = 2, có thể gửi cho một HR cụ thể)
-            const hr = await Employee.findOne({ where: { roleID: 2 } });
-            await Notification.create({
-                requestID: trip.businessTripID,
-                requestType: 'BusinessTrip',
-                recipientID: hr.employeeID,
-                message: `Business trip request #${id} approved by dept, awaiting your approval.`,
-                sentAt: new Date(),
-            });
-
-            res.status(200).json({ message: 'Approved by department', data: trip });
-        } catch (error) {
-            res.status(500).json({ message: 'Error approving request', error: error.message });
-        }
-    };
-
-    async approveByHR  (req, res) {
-        try {
-            const { id } = req.params;
-            const trip = await BusinessTripRequest.findByPk(id);
-            if (!trip) return res.status(404).json({ message: 'Request not found' });
-
-            // Cập nhật trạng thái sang "Approved"
-            trip.statusID = 3;
-            trip.approvedBy = req.user.employeeID;
-            await trip.save();
-
-            // Gửi thông báo cho nhân viên
-            await Notification.create({
-                requestID: trip.businessTripID,
-                requestType: 'BusinessTrip',
-                recipientID: trip.employeeID,
-                message: `Your business trip request #${id} has been approved by HR.`,
-                sentAt: new Date(),
-            });
-
-            res.status(200).json({ message: 'Approved by HR', data: trip });
-        } catch (error) {
-            res.status(500).json({ message: 'Error approving request', error: error.message });
-        }
-    };
-
-    async rejectRequest  (req, res)  {
-        try {
-            const { id } = req.params;
-            const trip = await BusinessTripRequest.findByPk(id);
-            if (!trip) return res.status(404).json({ message: 'Request not found' });
-
-            // Chỉ Head of Dept hoặc HR mới được reject
-            const user = req.user;
-            const dept = await Department.findOne({
-                where: { HeadOfDepartmentID: user.employeeID },
-            });
-            const isHeadOfDept = dept && trip.employee.departmentID === dept.departmentID;
-            const isHR = user.roleID === 2;
-
-            if (!isHeadOfDept && !isHR) {
-                return res.status(403).json({ message: 'Unauthorized to reject this request' });
+            if (result.affectedRows === 0) {
+                throw new Error('Business trip request not found');
             }
 
-            // Cập nhật trạng thái sang "Rejected"
-            trip.statusID = 4;
-            if (isHeadOfDept) trip.approvedByDept = user.employeeID; // Ghi nhận người reject
-            if (isHR) trip.approvedBy = user.employeeID;
-            await trip.save();
-
-            // Gửi thông báo cho nhân viên
-            await Notification.create({
-                requestID: trip.businessTripID,
-                requestType: 'BusinessTrip',
-                recipientID: trip.employeeID,
-                message: `Your business trip request #${id} has been rejected by ${isHeadOfDept ? 'Dept Head' : 'HR'}.`,
-                sentAt: new Date(),
-            });
-
-            res.status(200).json({ message: 'Request rejected', data: trip });
+            res.status(204).send();
         } catch (error) {
-            res.status(500).json({ message: 'Error rejecting request', error: error.message });
+            res.status(404).json({ message: error.message });
         }
-    };
+    }
 
+    async getRequestsByEmployee(req, res) {
+        try {
+            const [requests] = await pool.execute(SPECIAL_QUERIES.GET_BY_EMPLOYEE, [req.params.employeeId]);
+            res.status(200).json(requests);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    async getRequestsByApprover(req, res) {
+        try {
+            const [requests] = await pool.execute(SPECIAL_QUERIES.GET_BY_APPROVER, [req.params.approverId]);
+            res.status(200).json(requests);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    async getPendingRequests(req, res) {
+        try {
+            const [requests] = await pool.execute(SPECIAL_QUERIES.GET_PENDING);
+            res.status(200).json(requests);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    async approveRequest(req, res) {
+        try {
+            const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            
+            const [result] = await pool.execute(`
+                UPDATE ${TABLE_NAME}
+                SET ${COLUMNS.statusID} = 2,
+                    ${COLUMNS.approverID} = ?,
+                    ${COLUMNS.updatedAt} = ?
+                WHERE ${COLUMNS.requestID} = ?
+            `, [req.user.employeeID, now, req.params.id]);
+
+            if (result.affectedRows === 0) {
+                throw new Error('Business trip request not found');
+            }
+
+            const [updatedRequest] = await pool.execute(
+                `${DEFAULT_SELECT} WHERE btr.${COLUMNS.requestID} = ?`, 
+                [req.params.id]
+            );
+
+            res.status(200).json(updatedRequest[0]);
+        } catch (error) {
+            res.status(404).json({ message: error.message });
+        }
+    }
+
+    async rejectRequest(req, res) {
+        try {
+            const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            
+            const [result] = await pool.execute(`
+                UPDATE ${TABLE_NAME}
+                SET ${COLUMNS.statusID} = 3,
+                    ${COLUMNS.approverID} = ?,
+                    ${COLUMNS.updatedAt} = ?
+                WHERE ${COLUMNS.requestID} = ?
+            `, [req.user.employeeID, now, req.params.id]);
+
+            if (result.affectedRows === 0) {
+                throw new Error('Business trip request not found');
+            }
+
+            const [updatedRequest] = await pool.execute(
+                `${DEFAULT_SELECT} WHERE btr.${COLUMNS.requestID} = ?`, 
+                [req.params.id]
+            );
+
+            res.status(200).json(updatedRequest[0]);
+        } catch (error) {
+            res.status(404).json({ message: error.message });
+        }
+    }
 }
 
-module.exports = new businessTripController();
+module.exports = new BusinessTripController();

@@ -1,35 +1,61 @@
 // backend/models/Account.js
 
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-const Employee = require('./Employee'); // Import model Employee để thiết lập quan hệ
+const TABLE_NAME = 'accounts';
 
-const Account = sequelize.define('Account', {
-  accountID: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true  // Đảm bảo username không trùng lặp
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false  // Lưu ý: bạn nên hash password trước khi lưu
-  },
-  employeeID: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Employees',
-      key: 'employeeID'
-    }
-  }
-}, {
-  tableName: 'accounts',
-  timestamps: false  // Có thể bật timestamps nếu cần
-});
+const COLUMNS = {
+    accountID: 'accountID',
+    username: 'username',
+    password: 'password',
+    employeeID: 'employeeID'
+};
 
-module.exports = Account;
+const DEFAULT_SELECT = `
+    SELECT 
+        a.*,
+        e.fullName,
+        e.email,
+        r.roleID,
+        r.roleName
+    FROM ${TABLE_NAME} a
+    LEFT JOIN employees e ON a.employeeID = e.employeeID
+    LEFT JOIN roles r ON e.roleID = r.roleID
+`;
+
+const INSERT_COLUMNS = [
+    COLUMNS.username,
+    COLUMNS.password,
+    COLUMNS.employeeID
+].join(', ');
+
+const UPDATE_SET = [
+    `${COLUMNS.username} = ?`,
+    `${COLUMNS.password} = ?`,
+    `${COLUMNS.employeeID} = ?`
+].join(', ');
+
+// Các truy vấn đặc biệt cho authentication
+const AUTH_QUERIES = {
+    LOGIN: `
+        SELECT 
+            a.*,
+            e.fullName,
+            e.email,
+            r.roleID,
+            r.roleName
+        FROM ${TABLE_NAME} a
+        LEFT JOIN employees e ON a.employeeID = e.employeeID
+        LEFT JOIN roles r ON e.roleID = r.roleID
+        WHERE a.username = ?
+    `,
+    CHECK_USERNAME: `SELECT COUNT(*) as count FROM ${TABLE_NAME} WHERE ${COLUMNS.username} = ?`,
+    CHECK_EMPLOYEE: `SELECT COUNT(*) as count FROM ${TABLE_NAME} WHERE ${COLUMNS.employeeID} = ?`
+};
+
+module.exports = {
+    TABLE_NAME,
+    COLUMNS,
+    DEFAULT_SELECT,
+    INSERT_COLUMNS,
+    UPDATE_SET,
+    AUTH_QUERIES
+};

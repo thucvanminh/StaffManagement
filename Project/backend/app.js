@@ -2,16 +2,13 @@
 const express = require('express');
 const cors = require('cors');
 
-
-const employeeRoutes = require('./routes/employeeRoutes'); // Import routes
+const employeeRoutes = require('./routes/employeeRoutes');
 const departmentRoutes = require('./routes/departmentRoutes');
 const authRoutes = require('./routes/authRoutes');
 const testFunction = require('./routes/testFunction');
-const accountRoutes = require('./routes/accountRoutes'); // Import route account
+const accountRoutes = require('./routes/accountRoutes');
 const businessTripRoutes = require('./routes/businessTripRoutes');
 const statusRoutes = require('./routes/statusRoutes');
-
-
 
 const app = express();
 
@@ -32,7 +29,4 @@ app.use('/status', statusRoutes);
 app.use('/business-trips', businessTripRoutes);
 app.use('/test', testFunction);
 
-
-
-
-module.exports = app; // Xuất đối tượng app để server.js sử dụng
+module.exports = app;

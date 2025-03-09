@@ -2,26 +2,41 @@
 const express = require('express');
 const router = express.Router();
 
-const BusinessTripController = require('../controllers/BusinessTripController'); // Sửa typo
+const businessTripController = require('../controllers/businessTripController');
 const authMiddleware = require('../middlewares/authMiddleware');
-const authorizeRoles = require('../middlewares/authorizeRole'); // Sửa typo
+const authorizeRoles = require('../middlewares/authorizeRole');
 const authorizeDeptHead = require('../middlewares/authorizeDeptHead');
 
 router.use(authMiddleware);
 
-// Nhân viên tạo request
-router.post('/create', authorizeRoles([3]), BusinessTripController.createTripRequest);
+// Lấy tất cả yêu cầu
+router.get('/', authorizeRoles([1, 2, 3]), businessTripController.getAllRequests);
 
-// Xem tất cả request (Director, HR)
-router.get('/', authorizeRoles([1, 2,3]), BusinessTripController.getAllBusinessTripRequest);
+// Lấy yêu cầu theo ID
+router.get('/:id', authorizeRoles([1, 2, 3]), businessTripController.getRequestById);
 
-// Head of Dept duyệt
-router.put('/approve-dept/:id', authorizeDeptHead, BusinessTripController.approveByDept);
+// Lấy yêu cầu theo nhân viên
+router.get('/employee/:employeeId', authorizeRoles([1, 2, 3]), businessTripController.getRequestsByEmployee);
 
-// HR duyệt
-router.put('/approve-hr/:id', authorizeRoles([2]), BusinessTripController.approveByHR);
+// Lấy yêu cầu theo người duyệt
+router.get('/approver/:approverId', authorizeRoles([1, 2]), businessTripController.getRequestsByApprover);
 
-// Reject (Head of Dept hoặc HR)
-router.put('/reject/:id', BusinessTripController.rejectRequest);
+// Lấy các yêu cầu đang chờ duyệt
+router.get('/status/pending', authorizeRoles([1, 2]), businessTripController.getPendingRequests);
+
+// Tạo yêu cầu mới
+router.post('/', authorizeRoles([3]), businessTripController.createRequest);
+
+// Cập nhật yêu cầu
+router.put('/:id', authorizeRoles([1, 2, 3]), businessTripController.updateRequest);
+
+// Xóa yêu cầu
+router.delete('/:id', authorizeRoles([1, 2]), businessTripController.deleteRequest);
+
+// Duyệt yêu cầu
+router.put('/:id/approve', authorizeRoles([1, 2]), businessTripController.approveRequest);
+
+// Từ chối yêu cầu
+router.put('/:id/reject', authorizeRoles([1, 2]), businessTripController.rejectRequest);
 
 module.exports = router;

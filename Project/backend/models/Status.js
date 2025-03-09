@@ -1,32 +1,29 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const TABLE_NAME = 'status';
 
-class Status extends Model {
-    getDisplayName() {
-        return this.statusName; // Sửa để dùng statusName thay vì fullName
-    }
-}
+const COLUMNS = {
+    statusID: 'statusID',
+    statusName: 'statusName',
+    description: 'description'
+};
 
-Status.init({
-    statusID: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-        autoIncrement: true // Thêm để ID tự tăng
-    },
-    statusName: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    description: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-}, {
-    sequelize,
-    modelName: 'Status',
-    tableName: 'statuses',
-    timestamps: false
-});
+const DEFAULT_SELECT = `
+    SELECT * FROM ${TABLE_NAME}
+`;
 
-module.exports = Status;
+const INSERT_COLUMNS = [
+    COLUMNS.statusName,
+    COLUMNS.description
+].join(', ');
+
+const UPDATE_SET = [
+    `${COLUMNS.statusName} = ?`,
+    `${COLUMNS.description} = ?`
+].join(', ');
+
+module.exports = {
+    TABLE_NAME,
+    COLUMNS,
+    DEFAULT_SELECT,
+    INSERT_COLUMNS,
+    UPDATE_SET
+};

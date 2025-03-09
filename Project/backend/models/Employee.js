@@ -1,65 +1,66 @@
-// backend/models/Employee
+// backend/models/Employee.js
 
-const {Model, DataTypes} = require('sequelize');
-const sequelize = require('../config/database'); // Import kết nối
+const TABLE_NAME = 'employees';
 
-class Employee extends Model {
-    getDisplayName() {
-        return this.fullName;
-    }
-}
+const COLUMNS = {
+    employeeID: 'employeeID',
+    fullName: 'fullName',
+    dateOfBirth: 'dateOfBirth',
+    hireDay: 'hireDay',
+    email: 'email',
+    phone: 'phone',
+    address: 'address',
+    city: 'city',
+    gender: 'gender',
+    departmentID: 'departmentID',
+    roleID: 'roleID',
+    headOfDepartmentID: 'headOfDepartmentID'
+};
 
-Employee.init(
-    {
-        employeeID: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        fullName: DataTypes.STRING,
-        dateOfBirth: DataTypes.DATEONLY,
-        hireDay: DataTypes.DATEONLY,
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
-            validate: {
-                isEmail: true,
-            }
-        },
-        phone: DataTypes.STRING,
-        address: DataTypes.STRING,
-        city: DataTypes.STRING,
-        gender: DataTypes.STRING,
-        departmentID: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'departments',   //sequelize trỏ thẳng đến dữ liệu trong db
-                key: 'departmentID'
-            }
-        },
-        headOfDepartmentID: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'departments',   //sequelize trỏ thẳng đến dữ liệu trong db
-                key: 'HeadOfDepartmentID'
-            }
-        },
-        roleID: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'roles',
-                key: 'roleID'
-            }
-        }
+const DEFAULT_SELECT = `
+    SELECT 
+        e.*,
+        d.departmentID, d.departmentName,
+        r.roleID, r.roleName,
+        hod.employeeID as hodID, hod.fullName as hodName
+    FROM ${TABLE_NAME} e
+    LEFT JOIN departments d ON e.departmentID = d.departmentID
+    LEFT JOIN roles r ON e.roleID = r.roleID
+    LEFT JOIN employees hod ON e.headOfDepartmentID = hod.employeeID
+`;
 
-    },
-    {
-        sequelize,
-        modelName: 'Employee',
-        tableName: 'employees',
-        timestamps: false,
-    }
-);
+const INSERT_COLUMNS = [
+    COLUMNS.fullName,
+    COLUMNS.dateOfBirth,
+    COLUMNS.hireDay,
+    COLUMNS.email,
+    COLUMNS.phone,
+    COLUMNS.address,
+    COLUMNS.city,
+    COLUMNS.gender,
+    COLUMNS.departmentID,
+    COLUMNS.roleID,
+    COLUMNS.headOfDepartmentID
+].join(', ');
 
-module.exports = Employee;
+const UPDATE_SET = [
+    `${COLUMNS.fullName} = ?`,
+    `${COLUMNS.dateOfBirth} = ?`,
+    `${COLUMNS.hireDay} = ?`,
+    `${COLUMNS.email} = ?`,
+    `${COLUMNS.phone} = ?`,
+    `${COLUMNS.address} = ?`,
+    `${COLUMNS.city} = ?`,
+    `${COLUMNS.gender} = ?`,
+    `${COLUMNS.departmentID} = ?`,
+    `${COLUMNS.roleID} = ?`,
+    `${COLUMNS.headOfDepartmentID} = ?`
+].join(', ');
+
+module.exports = {
+    TABLE_NAME,
+    COLUMNS,
+    DEFAULT_SELECT,
+    INSERT_COLUMNS,
+    UPDATE_SET
+};

@@ -1,68 +1,70 @@
-// src/models/BusinessTripRequest.js
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+// backend/models/BusinessTripRequest.js
 
-class BusinessTripRequest extends Model {}
+const TABLE_NAME = 'business_trip_requests';
 
-BusinessTripRequest.init({
-    businessTripID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    employeeID: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'employees',
-            key: 'employeeID'
-        }
-    },
-    destination: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    startDate: {
-        type: DataTypes.DATEONLY,
-        allowNull: false
-    },
-    endDate: {
-        type: DataTypes.DATEONLY,
-        allowNull: false
-    },
-    reason: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    statusID: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'statuses',
-            key: 'statusID'
-        }
-    },
-    approvedByDept: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-            model: 'employees',
-            key: 'employeeID'
-        }
-    },
-    approvedBy: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-            model: 'employees',
-            key: 'employeeID'
-        }
-    }
-}, {
-    sequelize,
-    modelName: 'BusinessTripRequest',
-    tableName: 'business_trip_requests',
-    timestamps: true
-});
+const COLUMNS = {
+    requestID: 'requestID',
+    employeeID: 'employeeID',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    destination: 'destination',
+    purpose: 'purpose',
+    statusID: 'statusID',
+    approverID: 'approverID',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
 
-module.exports = BusinessTripRequest;
+const DEFAULT_SELECT = `
+    SELECT 
+        btr.*,
+        e.fullName as employeeName,
+        e.email as employeeEmail,
+        s.statusName,
+        s.description as statusDescription,
+        a.fullName as approverName
+    FROM ${TABLE_NAME} btr
+    LEFT JOIN employees e ON btr.employeeID = e.employeeID
+    LEFT JOIN status s ON btr.statusID = s.statusID
+    LEFT JOIN employees a ON btr.approverID = a.employeeID
+`;
+
+const INSERT_COLUMNS = [
+    COLUMNS.employeeID,
+    COLUMNS.startDate,
+    COLUMNS.endDate,
+    COLUMNS.destination,
+    COLUMNS.purpose,
+    COLUMNS.statusID,
+    COLUMNS.approverID,
+    COLUMNS.createdAt,
+    COLUMNS.updatedAt
+].join(', ');
+
+const UPDATE_SET = [
+    `${COLUMNS.startDate} = ?`,
+    `${COLUMNS.endDate} = ?`,
+    `${COLUMNS.destination} = ?`,
+    `${COLUMNS.purpose} = ?`,
+    `${COLUMNS.statusID} = ?`,
+    `${COLUMNS.approverID} = ?`,
+    `${COLUMNS.updatedAt} = ?`
+].join(', ');
+
+// Các truy vấn đặc biệt
+const SPECIAL_QUERIES = {
+    GET_BY_EMPLOYEE: `${DEFAULT_SELECT} WHERE btr.employeeID = ?`,
+    GET_BY_APPROVER: `${DEFAULT_SELECT} WHERE btr.approverID = ?`,
+    GET_BY_STATUS: `${DEFAULT_SELECT} WHERE btr.statusID = ?`,
+    GET_PENDING: `${DEFAULT_SELECT} WHERE btr.statusID = 1`, // Giả sử 1 là status "Pending"
+    GET_BY_DATE_RANGE: `${DEFAULT_SELECT} WHERE btr.startDate BETWEEN ? AND ?`
+};
+
+module.exports = {
+    TABLE_NAME,
+    COLUMNS,
+    DEFAULT_SELECT,
+    INSERT_COLUMNS,
+    UPDATE_SET,
+    SPECIAL_QUERIES
+};
