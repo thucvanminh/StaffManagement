@@ -1,15 +1,13 @@
-'use client'; // Thêm dòng này
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
 import {
-  AppstoreOutlined,
   CalendarOutlined,
   UsergroupAddOutlined,
   ClockCircleOutlined,
   CarOutlined,
   SettingOutlined,
-  CloseCircleOutlined,
   FormOutlined,
   UserSwitchOutlined,
   UserOutlined,
@@ -31,18 +29,16 @@ const siderStyle = {
 };
 
 const items = [
-  { key: '1', icon: <AppstoreOutlined />, label: <Link href="/hr/overview">Overview</Link> },
-  { key: '2', icon: <CalendarOutlined />, label: <Link href="/hr/attendance">Attendance</Link> },
-  { key: '3', icon: <ClockCircleOutlined />, label: <Link href="/hr/overtime">Overtime</Link> },
-  { key: '4', icon: <CarOutlined />, label: <Link href="/hr/business-trip">Business Trip</Link> },
-  { key: '5', icon: <AuditOutlined />, label: <Link href="/hr/probationary">Probationary</Link> },
-  { key: '6', icon: <RedoOutlined />, label: <Link href="/hr/leave">Leave</Link> },
-  { key: '7', icon: <CloseCircleOutlined />, label: <Link href="/hr/resign">Resign</Link> },
-  { key: '8', icon: <UserSwitchOutlined />, label: <Link href="/hr/transfer">Transfer</Link> },
-  { key: '9', icon: <UserOutlined />, label: <Link href="/hr/employee">Employee</Link> },
-  { key: '10', icon: <UsergroupAddOutlined />, label: <Link href="/hr/recruit">Recruit</Link> },
-  { key: '11', icon: <FormOutlined />, label: <Link href="/hr/report">Report</Link> },
-  { key: '12', icon: <SettingOutlined />, label: <Link href="/hr/setting">Setting</Link> },
+  { key: '1', icon: <CalendarOutlined />, label: <Link href="/hr/attendance">Attendance</Link> },
+  { key: '2', icon: <ClockCircleOutlined />, label: <Link href="/hr/overtime">Overtime</Link> },
+  { key: '3', icon: <CarOutlined />, label: <Link href="/hr/business-trip">Business Trip</Link> },
+  { key: '4', icon: <AuditOutlined />, label: <Link href="/hr/probationary">Probationary</Link> },
+  { key: '5', icon: <RedoOutlined />, label: <Link href="/hr/absence-management">Absence Management</Link> },
+  { key: '6', icon: <UserSwitchOutlined />, label: <Link href="/hr/transfer">Transfer</Link> },
+  { key: '7', icon: <UserOutlined />, label: <Link href="/hr/employee">Employee</Link> },
+  { key: '8', icon: <UsergroupAddOutlined />, label: <Link href="/hr/recruit">Recruit</Link> },
+  { key: '9', icon: <FormOutlined />, label: <Link href="/hr/report">Report</Link> },
+  { key: '10', icon: <SettingOutlined />, label: <Link href="/hr/setting">Setting</Link> },
 ];
 
 const HRLayout = ({ children }) => {
@@ -50,7 +46,7 @@ const HRLayout = ({ children }) => {
 
   return (
     <Layout hasSider>
-      <Sider style={siderStyle}>
+      <Sider style={siderStyle} width={230}>
         <div className="demo-logo-vertical" />
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} items={items} />
       </Sider>

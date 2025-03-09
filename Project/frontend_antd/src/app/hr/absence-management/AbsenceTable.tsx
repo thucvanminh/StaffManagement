@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { DownOutlined } from '@ant-design/icons';
-import type { GetProp, RadioChangeEvent, TableProps } from 'antd';
-import { Form, Radio, Space, Switch, Table } from 'antd';
-import TimePicker from './TimePicker';
-import './OvertimeTable.css';
+import type { GetProp, TableProps } from 'antd';
+import { Form, Radio, Space, Table } from 'antd';
+import './Table.css';
 type SizeType = TableProps['size'];
 type ColumnsType<T extends object> = GetProp<TableProps<T>, 'columns'>;
 type TablePagination<T extends object> = NonNullable<Exclude<TableProps<T>['pagination'], boolean>>;
@@ -12,15 +10,20 @@ type TablePaginationPosition = NonNullable<TablePagination<any>['position']>[num
 interface DataType {
   key: number;
   name: string;
+  email: string;
   position: string;
   department: string;
-  description: string;
+  absenceType: string;
 }
 
 const columns: ColumnsType<DataType> = [
   {
     title: 'Name',
     dataIndex: 'name',
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email',
   },
   {
     title: 'Position',
@@ -44,7 +47,6 @@ const columns: ColumnsType<DataType> = [
       },
     ],
     onFilter: (value, record) => record.position.indexOf(value as string) === 0,
-
   },
   {
     title: 'Department',
@@ -70,13 +72,8 @@ const columns: ColumnsType<DataType> = [
     onFilter: (value, record) => record.department.indexOf(value as string) === 0,
   },
   {
-    title: 'Time',
-    dataIndex: 'Time',
-    render: () => (
-      <Form.Item className="RangePicker">
-        <TimePicker />
-      </Form.Item>
-    ),
+    title: 'Reason',
+    dataIndex: 'absenceType',
   },
   {
     title: 'Action',
@@ -84,6 +81,7 @@ const columns: ColumnsType<DataType> = [
     render: () => (
       <Space size="middle">
         <a>Approve</a>
+        <a>Deny</a>
       </Space>
     ),
   },
@@ -92,20 +90,22 @@ const columns: ColumnsType<DataType> = [
 const data = Array.from({ length: 10 }).map<DataType>((_, i) => ({
   key: i,
   name: 'John Brown',
+  email: 'abc@gmail.com',
   position: 'Developer',
   department: 'Department A',
-  description: `My name is John Brown, I am ${i}2 years old, living in New York No. ${i} Lake Park.`,
+  absenceType: 'Sick Leave',
 }));
 
 
-const defaultTitle = () => '';
-const defaultFooter = () => '';
+const defaultTitle = () => (
+  <div style={{ fontSize: '24px', textAlign: 'Center', fontWeight: 'bold' }}>Absence Table</div>
+); const defaultFooter = () => '';
 
 const App: React.FC = () => {
   const [bordered, setBordered] = useState(false);
   const [loading] = useState(false);
   const [size, setSize] = useState<SizeType>('large');
-  const [showTitle, setShowTitle] = useState(false);
+  const [showTitle, setShowTitle] = useState(true);
   const [showHeader, setShowHeader] = useState(true);
   const [showFooter, setShowFooter] = useState(true);
   const [hasData, setHasData] = useState(true);

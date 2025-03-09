@@ -7,6 +7,13 @@ import OvertimeTable from '../../components/OvertimeTable';
 import AttendanceFeed from './AttendanceFeed';
 const App = () => (
     <>
+        
+        <Divider orientation="left"></Divider>
+        <Row>
+            <Col span={24} order={1}>
+                <AttendanceFeed />
+            </Col>
+        </Row>
         <Divider orientation="left"></Divider>
         <Row>
             <Col span={7} order={3}>
@@ -14,17 +21,9 @@ const App = () => (
             </Col>
             <Col span={3} order={2}>
             </Col>
-            <Col span={14} order={1}>
+            <Col span={10} order={1}>
                 <ActivityFeed />
             </Col>
-
-        </Row>
-        <Divider orientation="left"></Divider>
-        <Row>
-            <Col span={24} order={1}>
-                <AttendanceFeed />
-            </Col>
-
 
         </Row>
     </>

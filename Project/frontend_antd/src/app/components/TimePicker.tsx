@@ -14,7 +14,7 @@ const App: React.FC = () => (
   <Space direction="vertical" size={12}>
     <RangePicker
       showTime={{ format: 'HH:mm' }}
-      format="YYYY-MM-DD HH:mm"
+      format="DD-MM-YYYY HH:mm"
       onChange={(value, dateString) => {
         console.log('Selected Time: ', value);
         console.log('Formatted Selected Time: ', dateString);

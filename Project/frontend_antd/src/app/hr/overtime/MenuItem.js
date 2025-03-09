@@ -8,19 +8,6 @@ const App = () => (
     <>
         <Divider orientation="left"></Divider>
         <Row>
-            <Col span={7} order={3}>
-                <CalendarMenu />
-            </Col>
-            <Col span={3} order={2}>
-            </Col>
-            <Col span={14} order={1}>
-                <ActivityFeed />
-            </Col>
-
-        </Row>
-        <Divider orientation="left"></Divider>
-        <Row>
-           
             <Col span={24} order={1}>
                 <OvertimeTable />
             </Col>

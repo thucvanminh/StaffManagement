@@ -1,8 +1,7 @@
-// src/app/components/sections/employee/overview/page.tsx
 'use client';
 import MenuItem from './MenuItem';
 
-export default function LeavePage() {
+export default function AbsenceManagementPage() {
   return (
     <div>
       <div className="contentWrapper">

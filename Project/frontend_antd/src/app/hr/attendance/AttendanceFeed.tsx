@@ -8,19 +8,18 @@ interface DataType {
     name: string;
     createdAt: string;
     position: string;
+    department: string;
+
 }
 
-const items = [
-    { key: '1', label: 'Action 1' },
-    { key: '2', label: 'Action 2' },
-];
 
 const originalDataSource = Array.from({ length: 100 }) // Tổng số mục là 85
     .map<DataType>((_, i) => ({
         key: i.toString(),
         name: 'Tran Van A',
-        createdAt: '23:12:00 1/1/2025',
+        createdAt: '1/1/2025 23:12:00',
         position: 'Group A',
+        department: 'Department A',
     }));
 
 const App: React.FC = () => {
@@ -54,17 +53,14 @@ const App: React.FC = () => {
         { title: 'Date', dataIndex: 'createdAt', key: 'createdAt' },
         { title: 'Name', dataIndex: 'name', key: 'name' },
         { title: 'Position', dataIndex: 'position', key: 'position' },
+        { title: 'Department', dataIndex: 'department', key: 'department' },
 
         {
             title: 'Action',
             key: 'operation',
             render: () => (
                 <Space size="middle">
-                    <Dropdown menu={{ items }}>
-                        <a>
-                            More <DownOutlined />
-                        </a>
-                    </Dropdown>
+                    <a>Deny</a>
                 </Space>
             ),
         },
