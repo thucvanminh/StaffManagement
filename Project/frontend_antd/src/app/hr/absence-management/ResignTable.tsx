@@ -98,7 +98,7 @@ const data = Array.from({ length: 10 }).map<DataType>((_, i) => ({
 
 
 const defaultTitle = () => (
-  <div style={{ fontSize: '24px', textAlign: 'Center', fontWeight: 'bold' }}>Resign Table</div>
+  <div style={{ fontSize: '24px', textAlign: 'Center', fontWeight: 'bold' }}></div>
 ); const defaultFooter = () => '';
 
 const App: React.FC = () => {
@@ -107,7 +107,7 @@ const App: React.FC = () => {
   const [size, setSize] = useState<SizeType>('large');
   const [showTitle, setShowTitle] = useState(true);
   const [showHeader, setShowHeader] = useState(true);
-  const [showFooter, setShowFooter] = useState(true);
+  const [showFooter, setShowFooter] = useState(false);
   const [hasData, setHasData] = useState(true);
   const [tableLayout, setTableLayout] = useState<string>('unset');
   const [top, setTop] = useState<TablePaginationPosition>('none');

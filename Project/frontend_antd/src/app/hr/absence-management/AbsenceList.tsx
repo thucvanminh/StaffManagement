@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import type { GetProp, TableProps } from 'antd';
-import { Form, Input, Radio, Space, Table } from 'antd';
-import { AudioOutlined } from '@ant-design/icons';
+import { Form, Radio, Space, Table, Tabs } from 'antd';
 import './Table.css';
-
 type SizeType = TableProps['size'];
 type ColumnsType<T extends object> = GetProp<TableProps<T>, 'columns'>;
 type TablePagination<T extends object> = NonNullable<Exclude<TableProps<T>['pagination'], boolean>>;
@@ -77,19 +75,9 @@ const columns: ColumnsType<DataType> = [
     title: 'Reason',
     dataIndex: 'absenceType',
   },
-  {
-    title: 'Action',
-    key: 'action',
-    render: () => (
-      <Space size="middle">
-        <a>Approve</a>
-        <a>Deny</a>
-      </Space>
-    ),
-  },
 ];
 
-const originalData = Array.from({ length: 10 }).map<DataType>((_, i) => ({
+const data = Array.from({ length: 10 }).map<DataType>((_, i) => ({
   key: i,
   name: 'John Brown',
   email: 'abc@gmail.com',
@@ -98,18 +86,18 @@ const originalData = Array.from({ length: 10 }).map<DataType>((_, i) => ({
   absenceType: 'Sick Leave',
 }));
 
+
 const defaultTitle = () => (
-  <div style={{ fontSize: '24px', textAlign: 'center', fontWeight: 'bold' }}></div>
-);
-const defaultFooter = () => '';
+  <div style={{ fontSize: '24px', textAlign: 'Center', fontWeight: 'bold' }}></div>
+); const defaultFooter = () => '';
 
 const App: React.FC = () => {
   const [bordered, setBordered] = useState(false);
   const [loading] = useState(false);
   const [size, setSize] = useState<SizeType>('large');
-  const [showTitle, setShowTitle] = useState(false);
+  const [showTitle, setShowTitle] = useState(true);
   const [showHeader, setShowHeader] = useState(true);
-  const [showFooter, setShowFooter] = useState(true);
+  const [showFooter, setShowFooter] = useState(false);
   const [hasData, setHasData] = useState(true);
   const [tableLayout, setTableLayout] = useState<string>('unset');
   const [top, setTop] = useState<TablePaginationPosition>('none');
@@ -117,24 +105,18 @@ const App: React.FC = () => {
   const [ellipsis, setEllipsis] = useState(false);
   const [yScroll, setYScroll] = useState(false);
   const [xScroll, setXScroll] = useState<string>('unset');
-  const [dataSource, setDataSource] = useState(originalData);
 
   const handleBorderChange = (enable: boolean) => {
     setBordered(enable);
   };
 
+
   const handleHeaderChange = (enable: boolean) => {
     setShowHeader(enable);
   };
 
-  // Xử lý tìm kiếm theo Name
-  const handleSearch = (value: string) => {
-    const filteredData = originalData.filter((item) =>
-      item.name.toLowerCase().includes(value.toLowerCase()) || 
-      item.email.toLowerCase().includes(value.toLowerCase())
-    );
-    setDataSource(filteredData);
-  };
+
+
 
   const scroll: { x?: number | string; y?: number | string } = {};
   if (yScroll) {
@@ -161,17 +143,8 @@ const App: React.FC = () => {
     tableLayout: tableLayout === 'unset' ? undefined : (tableLayout as TableProps['tableLayout']),
   };
 
-
   return (
     <>
-      <Input.Search
-        placeholder="Search by Name"
-        allowClear
-        enterButton="Search"
-        size="large"
-        onSearch={handleSearch}
-        style={{ width: 500, marginBottom: 16 }}
-      />
       <Form
         layout="inline"
         className="table-demo-control-bar"
@@ -185,27 +158,37 @@ const App: React.FC = () => {
         <Form.Item className="Column Header">
           <Radio.Group value={showHeader} onChange={(e) => handleHeaderChange(e.target.checked)} />
         </Form.Item>
+
+        {/* <Form.Item label="Fixed Header">
+                    <Switch checked={!!yScroll} onChange={handleYScrollChange} />
+                </Form.Item> */}
         <Form.Item className="Has Data">
           <Radio.Group value={hasData} />
         </Form.Item>
         <Form.Item className="Size">
-          <Radio.Group value={size} onChange={(e) => setSize(e.target.value)} />
+          <Radio.Group value={size} onChange={(e) => setSize(e.target.value)}>
+          </Radio.Group>
         </Form.Item>
         <Form.Item className="Table Scroll">
-          <Radio.Group value={xScroll} onChange={(e) => setXScroll(e.target.value)} />
+          <Radio.Group value={xScroll} onChange={(e) => setXScroll(e.target.value)}>
+          </Radio.Group>
         </Form.Item>
         <Form.Item className="Table Layout">
-          <Radio.Group value={tableLayout} onChange={(e) => setTableLayout(e.target.value)} />
+          <Radio.Group value={tableLayout} onChange={(e) => setTableLayout(e.target.value)}>
+          </Radio.Group>
         </Form.Item>
         <Form.Item className="Pagination Bottom">
-          <Radio.Group value={bottom} onChange={(e) => setBottom(e.target.value)} />
+          <Radio.Group value={bottom} onChange={(e) => setBottom(e.target.value)}>
+          </Radio.Group>
         </Form.Item>
       </Form>
+      <>
+      </>
       <Table<DataType>
         {...tableProps}
         pagination={{ position: [top, bottom] }}
         columns={tableColumns}
-        dataSource={hasData ? dataSource : []}
+        dataSource={hasData ? data : []}
         scroll={scroll}
       />
     </>
