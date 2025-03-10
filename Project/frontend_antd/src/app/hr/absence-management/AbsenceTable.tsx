@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import type { GetProp, TableProps } from 'antd';
 import { Form, Input, Radio, Space, Table } from 'antd';
-import { AudioOutlined } from '@ant-design/icons';
 import './Table.css';
 
 type SizeType = TableProps['size'];
@@ -127,10 +126,10 @@ const App: React.FC = () => {
     setShowHeader(enable);
   };
 
-  // Xử lý tìm kiếm theo Name
+  // Xử lý tìm kiếm theo Name và Email
   const handleSearch = (value: string) => {
     const filteredData = originalData.filter((item) =>
-      item.name.toLowerCase().includes(value.toLowerCase()) || 
+      item.name.toLowerCase().includes(value.toLowerCase()) ||
       item.email.toLowerCase().includes(value.toLowerCase())
     );
     setDataSource(filteredData);

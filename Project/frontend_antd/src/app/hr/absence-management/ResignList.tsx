@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { GetProp, TableProps } from 'antd';
-import { Form, Radio, Space, Table } from 'antd';
+import { Form, Input, Radio, Table } from 'antd';
 import './Table.css';
 type SizeType = TableProps['size'];
 type ColumnsType<T extends object> = GetProp<TableProps<T>, 'columns'>;
@@ -77,7 +77,7 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const data = Array.from({ length: 10 }).map<DataType>((_, i) => ({
+const originalData = Array.from({ length: 10 }).map<DataType>((_, i) => ({
   key: i,
   name: 'John Brown',
   email: 'abc@gmail.com',
@@ -95,7 +95,7 @@ const App: React.FC = () => {
   const [bordered, setBordered] = useState(false);
   const [loading] = useState(false);
   const [size, setSize] = useState<SizeType>('large');
-  const [showTitle, setShowTitle] = useState(true);
+  const [showTitle, setShowTitle] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
   const [showFooter, setShowFooter] = useState(false);
   const [hasData, setHasData] = useState(true);
@@ -105,6 +105,9 @@ const App: React.FC = () => {
   const [ellipsis, setEllipsis] = useState(false);
   const [yScroll, setYScroll] = useState(false);
   const [xScroll, setXScroll] = useState<string>('unset');
+  const [dataSource, setDataSource] = useState(originalData);
+
+
 
   const handleBorderChange = (enable: boolean) => {
     setBordered(enable);
@@ -116,7 +119,13 @@ const App: React.FC = () => {
   };
 
 
-
+  const handleSearch = (value: string) => {
+    const filteredData = originalData.filter((item) =>
+      item.name.toLowerCase().includes(value.toLowerCase()) ||
+      item.email.toLowerCase().includes(value.toLowerCase())
+    );
+    setDataSource(filteredData);
+  };
 
   const scroll: { x?: number | string; y?: number | string } = {};
   if (yScroll) {
@@ -145,6 +154,14 @@ const App: React.FC = () => {
 
   return (
     <>
+      <Input.Search
+        placeholder="Search by Name"
+        allowClear
+        enterButton="Search"
+        size="large"
+        onSearch={handleSearch}
+        style={{ width: 500, marginBottom: 16 }}
+      />
       <Form
         layout="inline"
         className="table-demo-control-bar"
@@ -158,10 +175,6 @@ const App: React.FC = () => {
         <Form.Item className="Column Header">
           <Radio.Group value={showHeader} onChange={(e) => handleHeaderChange(e.target.checked)} />
         </Form.Item>
-
-        {/* <Form.Item label="Fixed Header">
-                    <Switch checked={!!yScroll} onChange={handleYScrollChange} />
-                </Form.Item> */}
         <Form.Item className="Has Data">
           <Radio.Group value={hasData} />
         </Form.Item>
@@ -188,7 +201,7 @@ const App: React.FC = () => {
         {...tableProps}
         pagination={{ position: [top, bottom] }}
         columns={tableColumns}
-        dataSource={hasData ? data : []}
+        dataSource={hasData ? dataSource : []}
         scroll={scroll}
       />
     </>

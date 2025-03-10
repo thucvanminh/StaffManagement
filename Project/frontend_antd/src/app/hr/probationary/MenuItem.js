@@ -3,7 +3,7 @@ import { Col, Divider, Row } from 'antd';
 import CalendarMenu from '../../components/CalendarMenu';
 import ActivityFeed from '../../components/ActivityFeed';
 import TaskTimeline from '../../components/TaskTimeline';
-import OvertimeTable from '../../components/OvertimeTable';
+import OvertimeTable from '../overtime/OvertimeTable';
 const App = () => (
     <>
         <Divider orientation="left"></Divider>

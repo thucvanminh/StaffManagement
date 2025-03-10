@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import type { TableColumnsType } from 'antd';
-import {Input, Pagination, Space, Table } from 'antd';
+import { Input, Pagination, Table } from 'antd';
 
 interface DataType {
     key: React.Key;
     name: string;
-    createdAt: string;
+    age: number;
+    email: string;
+    address: string;
     position: string;
     department: string;
 
@@ -16,8 +18,10 @@ const originalDataSource = Array.from({ length: 50 })
     .map<DataType>((_, i) => ({
         key: i.toString(),
         name: 'Tran Van A',
-        createdAt: '1/1/2025 23:12:00',
-        position: 'Group A',
+        age: 32,
+        email: 'abc@gmail.com',
+        address: 'Hanoi',
+        position: 'Developer',
         department: 'Department A',
     }));
 
@@ -49,20 +53,12 @@ const App: React.FC = () => {
     );
 
     const columns: TableColumnsType<DataType> = [
-        { title: 'Date', dataIndex: 'createdAt', key: 'createdAt' },
         { title: 'Name', dataIndex: 'name', key: 'name' },
+        { title: 'Age', dataIndex: 'age', key: 'age' },
+        { title: 'Email', dataIndex: 'email', key: 'email' },
+        { title: 'Address', dataIndex: 'address', key: 'address' },
         { title: 'Position', dataIndex: 'position', key: 'position' },
         { title: 'Department', dataIndex: 'department', key: 'department' },
-
-        {
-            title: 'Action',
-            key: 'operation',
-            render: () => (
-                <Space size="middle">
-                    <a>Deny</a>
-                </Space>
-            ),
-        },
     ];
 
     return (

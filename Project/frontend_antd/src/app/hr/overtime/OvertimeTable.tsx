@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import type { GetProp, TableProps } from 'antd';
-import { Form, Input, Radio, Table } from 'antd';
-import './Table.css';
-
+import { DownOutlined } from '@ant-design/icons';
+import type { GetProp, RadioChangeEvent, TableProps } from 'antd';
+import { Form, Input, Radio, Space, Switch, Table } from 'antd';
+import TimePicker from '../../components/TimePicker';
+import './OvertimeTable.css';
 type SizeType = TableProps['size'];
 type ColumnsType<T extends object> = GetProp<TableProps<T>, 'columns'>;
 type TablePagination<T extends object> = NonNullable<Exclude<TableProps<T>['pagination'], boolean>>;
@@ -11,20 +12,15 @@ type TablePaginationPosition = NonNullable<TablePagination<any>['position']>[num
 interface DataType {
   key: number;
   name: string;
-  email: string;
   position: string;
   department: string;
-  absenceType: string;
+  description: string;
 }
 
 const columns: ColumnsType<DataType> = [
   {
     title: 'Name',
     dataIndex: 'name',
-  },
-  {
-    title: 'Email',
-    dataIndex: 'email',
   },
   {
     title: 'Position',
@@ -48,6 +44,7 @@ const columns: ColumnsType<DataType> = [
       },
     ],
     onFilter: (value, record) => record.position.indexOf(value as string) === 0,
+
   },
   {
     title: 'Department',
@@ -73,24 +70,36 @@ const columns: ColumnsType<DataType> = [
     onFilter: (value, record) => record.department.indexOf(value as string) === 0,
   },
   {
-    title: 'Reason',
-    dataIndex: 'absenceType',
+    title: 'Time',
+    dataIndex: 'Time',
+    render: () => (
+      <Form.Item className="RangePicker">
+        <TimePicker />
+      </Form.Item>
+    ),
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: () => (
+      <Space size="middle">
+        <a>Approve</a>
+      </Space>
+    ),
   },
 ];
 
 const originalData = Array.from({ length: 10 }).map<DataType>((_, i) => ({
   key: i,
   name: 'John Brown',
-  email: 'abc@gmail.com',
   position: 'Developer',
   department: 'Department A',
-  absenceType: 'Sick Leave',
+  description: `My name is John Brown, I am ${i}2 years old, living in New York No. ${i} Lake Park.`,
 }));
 
 
-const defaultTitle = () => (
-  <div style={{ fontSize: '24px', textAlign: 'Center', fontWeight: 'bold' }}></div>
-); const defaultFooter = () => '';
+const defaultTitle = () => '';
+const defaultFooter = () => '';
 
 const App: React.FC = () => {
   const [bordered, setBordered] = useState(false);
@@ -108,7 +117,6 @@ const App: React.FC = () => {
   const [xScroll, setXScroll] = useState<string>('unset');
   const [dataSource, setDataSource] = useState(originalData);
 
-
   const handleBorderChange = (enable: boolean) => {
     setBordered(enable);
   };
@@ -121,8 +129,7 @@ const App: React.FC = () => {
 
   const handleSearch = (value: string) => {
     const filteredData = originalData.filter((item) =>
-      item.name.toLowerCase().includes(value.toLowerCase()) ||
-      item.email.toLowerCase().includes(value.toLowerCase())
+      item.name.toLowerCase().includes(value.toLowerCase())
     );
     setDataSource(filteredData);
   };

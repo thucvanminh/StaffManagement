@@ -2,7 +2,7 @@
 'use client';
 import MenuItem from './MenuItem';
 
-export default function OverviewPage() {
+export default function OvertimePage() {
   return (
     <div>
       <div className="contentWrapper">
