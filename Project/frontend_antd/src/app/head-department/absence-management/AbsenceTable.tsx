@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import type { GetProp, TableProps } from 'antd';
 import { Form, Input, Radio, Space, Table } from 'antd';
-import TimePicker from '../../components/TimePicker';
-import './OvertimeTable.css';
+import './Table.css';
+
 type SizeType = TableProps['size'];
 type ColumnsType<T extends object> = GetProp<TableProps<T>, 'columns'>;
 type TablePagination<T extends object> = NonNullable<Exclude<TableProps<T>['pagination'], boolean>>;
@@ -11,15 +11,20 @@ type TablePaginationPosition = NonNullable<TablePagination<any>['position']>[num
 interface DataType {
   key: number;
   name: string;
+  email: string;
   position: string;
   department: string;
-  description: string;
+  absenceType: string;
 }
 
 const columns: ColumnsType<DataType> = [
   {
     title: 'Name',
     dataIndex: 'name',
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email',
   },
   {
     title: 'Position',
@@ -43,7 +48,6 @@ const columns: ColumnsType<DataType> = [
       },
     ],
     onFilter: (value, record) => record.position.indexOf(value as string) === 0,
-
   },
   {
     title: 'Department',
@@ -69,13 +73,8 @@ const columns: ColumnsType<DataType> = [
     onFilter: (value, record) => record.department.indexOf(value as string) === 0,
   },
   {
-    title: 'Time',
-    dataIndex: 'Time',
-    render: () => (
-      <Form.Item className="RangePicker">
-        <TimePicker />
-      </Form.Item>
-    ),
+    title: 'Reason',
+    dataIndex: 'absenceType',
   },
   {
     title: 'Action',
@@ -83,6 +82,7 @@ const columns: ColumnsType<DataType> = [
     render: () => (
       <Space size="middle">
         <a>Approve</a>
+        <a>Deny</a>
       </Space>
     ),
   },
@@ -91,13 +91,15 @@ const columns: ColumnsType<DataType> = [
 const originalData = Array.from({ length: 10 }).map<DataType>((_, i) => ({
   key: i,
   name: 'John Brown',
+  email: 'abc@gmail.com',
   position: 'Developer',
   department: 'Department A',
-  description: `My name is John Brown, I am ${i}2 years old, living in New York No. ${i} Lake Park.`,
+  absenceType: 'Sick Leave',
 }));
 
-
-const defaultTitle = () => '';
+const defaultTitle = () => (
+  <div style={{ fontSize: '24px', textAlign: 'center', fontWeight: 'bold' }}></div>
+);
 const defaultFooter = () => '';
 
 const App: React.FC = () => {
@@ -106,7 +108,7 @@ const App: React.FC = () => {
   const [size, setSize] = useState<SizeType>('large');
   const [showTitle, setShowTitle] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
-  const [showFooter, setShowFooter] = useState(false);
+  const [showFooter, setShowFooter] = useState(true);
   const [hasData, setHasData] = useState(true);
   const [tableLayout, setTableLayout] = useState<string>('unset');
   const [top, setTop] = useState<TablePaginationPosition>('none');
@@ -120,15 +122,15 @@ const App: React.FC = () => {
     setBordered(enable);
   };
 
-
   const handleHeaderChange = (enable: boolean) => {
     setShowHeader(enable);
   };
 
-
+  // Xử lý tìm kiếm theo Name và Email
   const handleSearch = (value: string) => {
     const filteredData = originalData.filter((item) =>
-      item.name.toLowerCase().includes(value.toLowerCase())
+      item.name.toLowerCase().includes(value.toLowerCase()) ||
+      item.email.toLowerCase().includes(value.toLowerCase())
     );
     setDataSource(filteredData);
   };
@@ -158,6 +160,7 @@ const App: React.FC = () => {
     tableLayout: tableLayout === 'unset' ? undefined : (tableLayout as TableProps['tableLayout']),
   };
 
+
   return (
     <>
       <Input.Search
@@ -185,24 +188,18 @@ const App: React.FC = () => {
           <Radio.Group value={hasData} />
         </Form.Item>
         <Form.Item className="Size">
-          <Radio.Group value={size} onChange={(e) => setSize(e.target.value)}>
-          </Radio.Group>
+          <Radio.Group value={size} onChange={(e) => setSize(e.target.value)} />
         </Form.Item>
         <Form.Item className="Table Scroll">
-          <Radio.Group value={xScroll} onChange={(e) => setXScroll(e.target.value)}>
-          </Radio.Group>
+          <Radio.Group value={xScroll} onChange={(e) => setXScroll(e.target.value)} />
         </Form.Item>
         <Form.Item className="Table Layout">
-          <Radio.Group value={tableLayout} onChange={(e) => setTableLayout(e.target.value)}>
-          </Radio.Group>
+          <Radio.Group value={tableLayout} onChange={(e) => setTableLayout(e.target.value)} />
         </Form.Item>
         <Form.Item className="Pagination Bottom">
-          <Radio.Group value={bottom} onChange={(e) => setBottom(e.target.value)}>
-          </Radio.Group>
+          <Radio.Group value={bottom} onChange={(e) => setBottom(e.target.value)} />
         </Form.Item>
       </Form>
-      <>
-      </>
       <Table<DataType>
         {...tableProps}
         pagination={{ position: [top, bottom] }}
