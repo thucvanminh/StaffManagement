@@ -1,15 +1,16 @@
 // backend/server.js
 const app = require('./app'); // Import cấu hình từ app.js
-const pool = require('./config/database'); // Kết nối database
+const prisma = require('./prisma');
 
 const port = 5000;
 
 // Kiểm tra kết nối database và khởi động server
 async function startServer() {
     try {
-        // Kiểm tra kết nối
-        await pool.getConnection();
-        console.log('Database connection successful!');
+      
+        // Kiểm tra kết nối Prisma
+        await prisma.$connect();
+        console.log('Prisma Database connection successful!');
         
         // Khởi động server
         app.listen(port, () => {

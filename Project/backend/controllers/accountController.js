@@ -1,56 +1,78 @@
 // src/controllers/AccountController.js
-const Account = require('../models/Account');
-const {validationResult} = require('express-validator');
+const prisma = require('../prisma');
+const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
+const { where } = require('sequelize');
 const SALT_ROUNDS = 10;
 
 class AccountController {
     async getAllAccounts(req, res) {
         try {
-            const accounts = await Account.findAll({attributes: {exclude: ['password']}});
-            res.status(200).json(accounts);
+            const accounts = await prisma.accounts.findMany({
+                select: { accountID: true, username: true, employeeID: true }, // Loại bỏ password
+            });
+            const employees = await prisma.employees.findMany({});
+            const result = accounts.map(account => {
+                const employee = employees.find(emp => emp.employeeID === account.employeeID);
+                return {
+                    ...account,
+                    employee: employee || null
+                };
+            });
+            res.status(200).json(result);
         } catch (error) {
-            res.status(500).json({error: error.message});
+            res.status(500).json({ error: error.message });
         }
     }
 
     async getAccountById(req, res) {
         try {
-            const account = await Account.findOne({
-                where: {employeeID: req.params.id},
-                attributes: {exclude: ['password']}
+            const account = await prisma.accounts.findUnique({
+                where: { accountID: parseInt(req.params.id) },
+                select: { accountID: true, username: true, employeeID: true },
             });
             if (!account) throw new Error('Account not found');
-            res.status(200).json(account);
+            const employee = await prisma.employees.findUnique({
+                where: { employeeID: parseInt(account.employeeID) },
+            });
+            const result = {
+                ...account,
+                employee: employee || null
+            };
+            res.status(200).json(result);
         } catch (error) {
-            res.status(404).json({message: error.message});
+            res.status(404).json({ message: error.message });
         }
     }
 
     async getAccountByUsername(req, res) {
         try {
-            const account = await Account.findOne({where: {username: req.params.username}});
+            const account = await prisma.accounts.findUnique({
+                where: { username: req.params.username },
+            });
             if (!account) throw new Error('Account not found');
             res.status(200).json(account);
         } catch (error) {
-            res.status(404).json({message: error.message});
+            res.status(404).json({ message: error.message });
         }
     }
 
     async addAccount(req, res) {
         const errors = validationResult(req);
-        if (!errors.isEmpty())
-            return res.status(400).json({ errors: errors.array() });
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
         try {
-            let data = req.body;
-            if (data.password) {
-                data.password = await bcrypt.hash(data.password, SALT_ROUNDS);
-            }
-            const newAccount = await Account.create(data);
-            // Loại bỏ password trước khi trả về
-            const responseData = { ...newAccount.get(), password: undefined };
-            res.status(201).json(responseData);
+            const { username, password, employeeID } = req.body;
+            const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+            const newAccount = await prisma.accounts.create({
+                data: {
+                    username,
+                    password: hashedPassword,
+                    employeeID: parseInt(employeeID),
+                },
+                select: { accountID: true, username: true, employeeID: true },
+            });
+            res.status(201).json(newAccount);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -58,37 +80,32 @@ class AccountController {
 
     async updateAccount(req, res) {
         const errors = validationResult(req);
-        if (!errors.isEmpty())
-            return res.status(400).json({errors: errors.array()});
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
         try {
-            const account = await Account.findOne({where: {accountID: req.params.id}});
-            if (!account) throw new Error('Account not found');
+            const { username, password, employeeID } = req.body;
+            const data = { username, employeeID: parseInt(employeeID) };
+            if (password) data.password = await bcrypt.hash(password, SALT_ROUNDS);
 
-            let data = req.body;
-            if (data.password) {
-                // Hash mật khẩu mới nếu có thay đổi
-                data.password = await bcrypt.hash(data.password, SALT_ROUNDS);
-            }
-
-            const [updated] = await Account.update(data, {where: {accountID: req.params.id}});
-            if (updated === 0) throw new Error('Account not found');
-
-            const updatedAccount = await Account.findOne({where: {accountID: req.params.id}});
+            const updatedAccount = await prisma.accounts.update({
+                where: { accountID: parseInt(req.params.id) },
+                data,
+                select: { accountID: true, username: true, employeeID: true },
+            });
             res.status(200).json(updatedAccount);
         } catch (error) {
-            res.status(404).json({message: error.message});
+            res.status(404).json({ message: error.message });
         }
     }
 
     async deleteAccount(req, res) {
         try {
-            const account = await Account.findOne({where: {accountID: req.params.id}});
-            if (!account) throw new Error('Account not found');
-            await account.destroy();
+            await prisma.accounts.delete({
+                where: { accountID: parseInt(req.params.id) },
+            });
             res.status(204).send();
         } catch (error) {
-            res.status(404).json({message: error.message});
+            res.status(404).json({ message: error.message });
         }
     }
 }

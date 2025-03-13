@@ -1,13 +1,30 @@
 // src/controllers/EmployeeController.js
-const pool = require('../config/database');
+const prisma = require('../prisma');
 const { validationResult } = require('express-validator');
-const { TABLE_NAME, COLUMNS, DEFAULT_SELECT, INSERT_COLUMNS, UPDATE_SET } = require('../models/Employee');
 
 class EmployeeController {
     async getAllEmployees(req, res) {
         try {
-            const [employees] = await pool.execute(DEFAULT_SELECT);
-            res.status(200).json(employees);
+            // const employees = await prisma.employees.findMany({
+            // });
+
+            // const departments = await prisma.departments.findMany();
+            // const roles = await prisma.roles.findMany();
+            // const employee = employees.map(employee => ({
+            //     ...employee,
+            //     department: departments.find(d => d.departmentID === employee.departmentID),
+            //     role: roles.find(r => r.roleID === employee.roleID)
+            // }));
+            const employees = await prisma.employees.findMany({
+            });
+            const departments = await prisma.departments.findMany();
+            const roles = await prisma.roles.findMany();
+            const employee = employees.map(employee => ({
+                ...employee,
+                department: departments.find(d => d.departmentID === employee.departmentID),
+                role: roles.find(r => r.roleID === employee.roleID)
+            }));
+            res.status(200).json(employee);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -15,10 +32,31 @@ class EmployeeController {
 
     async getEmployeeById(req, res) {
         try {
-            const [employees] = await pool.execute(`${DEFAULT_SELECT} WHERE e.${COLUMNS.employeeID} = ?`, [req.params.id]);
+            const employeeQuery = await prisma.employees.findUnique({
+                where: { employeeID: parseInt(req.params.id) },
+            });
 
-            if (employees.length === 0) throw new Error('Employee not found');
-            res.status(200).json(employees[0]);
+
+            if (!employeeQuery) {
+                res.status(404).json({ message: 'Employee not found' });
+            } else {
+                const department = await prisma.departments.findUnique({
+                    where: {
+                        departmentID: employeeQuery.departmentID
+                    }
+                });
+                const role = await prisma.roles.findUnique({
+                    where: {
+                        roleID: employeeQuery.roleID
+                    }
+                });
+                const employee = {
+                    ...employeeQuery,
+                    department,
+                    role
+                };
+                res.status(200).json(employee);
+            }
         } catch (error) {
             res.status(404).json({ message: error.message });
         }
@@ -26,22 +64,40 @@ class EmployeeController {
 
     async addEmployee(req, res) {
         const errors = validationResult(req);
-        if (!errors.isEmpty())
-            return res.status(400).json({ errors: errors.array() });
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
+        // {
+        //     "employeeID": 400,
+        //     "fullName": "Văn Minh Hieu",
+        //     "dateOfBirth": "1997-03-03T00:00:00.000Z",
+        //     "hireDay": "2009-03-03T00:00:00.000Z",
+        //     "email": "vanminhthuccccc@gmail.com",
+        //     "phone": "0777999888",
+        //     "address": "333 Đường Tôn Đức Thắng",
+        //     "city": "Bình Dương",
+        //     "gender": "Male",
+        //     "departmentID": 3,
+        //     "headOfDepartmentID": 103,
+        //     "roleID": 3,
+        // }
         try {
-            const { 
-                fullName, dateOfBirth, hireDay, email, phone, 
-                address, city, gender, departmentID, roleID, headOfDepartmentID 
-            } = req.body;
-
-            const [result] = await pool.execute(`
-                INSERT INTO ${TABLE_NAME} (${INSERT_COLUMNS})
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `, [fullName, dateOfBirth, hireDay, email, phone, address, city, gender, departmentID, roleID, headOfDepartmentID]);
-
-            const [newEmployee] = await pool.execute(`${DEFAULT_SELECT} WHERE e.${COLUMNS.employeeID} = ?`, [result.insertId]);
-            res.status(201).json(newEmployee[0]);
+            const { fullName, dateOfBirth, hireDay, email, phone, address, city, gender, departmentID, roleID, headOfDepartmentID } = req.body;
+            const newEmployee = await prisma.employees.create({
+                data: {
+                    fullName,
+                    dateOfBirth: new Date(dateOfBirth),
+                    hireDay: new Date(hireDay),
+                    email,
+                    phone,
+                    address,
+                    city,
+                    gender,
+                    departmentID: parseInt(departmentID),
+                    roleID: parseInt(roleID),
+                    headOfDepartmentID: headOfDepartmentID ? parseInt(headOfDepartmentID) : null,
+                },
+            });
+            res.status(201).json(newEmployee);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -49,25 +105,29 @@ class EmployeeController {
 
     async updateEmployee(req, res) {
         const errors = validationResult(req);
-        if (!errors.isEmpty())
-            return res.status(400).json({ errors: errors.array() });
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
         try {
-            const { 
-                fullName, dateOfBirth, hireDay, email, phone, 
-                address, city, gender, departmentID, roleID, headOfDepartmentID 
-            } = req.body;
-
-            const [result] = await pool.execute(`
-                UPDATE ${TABLE_NAME} 
-                SET ${UPDATE_SET}
-                WHERE ${COLUMNS.employeeID} = ?
-            `, [fullName, dateOfBirth, hireDay, email, phone, address, city, gender, departmentID, roleID, headOfDepartmentID, req.params.id]);
-
-            if (result.affectedRows === 0) throw new Error('Employee not found');
-
-            const [updatedEmployee] = await pool.execute(`${DEFAULT_SELECT} WHERE e.${COLUMNS.employeeID} = ?`, [req.params.id]);
-            res.status(200).json(updatedEmployee[0]);
+            const {fullName, dateOfBirth, hireDay, email, phone, address, city, gender, departmentID, roleID, headOfDepartmentID } = req.body;
+            const updatedEmployee = await prisma.employees.update({
+                where: { employeeID: parseInt(req.params.id) },
+                data: {
+                    employeeID: parseInt(req.params.id),
+                    fullName,
+                    dateOfBirth: new Date(dateOfBirth),
+                    hireDay: new Date(hireDay),
+                    email,
+                    phone,
+                    address,
+                    city,
+                    gender,
+                    departmentID: parseInt(departmentID),
+                    roleID: parseInt(roleID),
+                    headOfDepartmentID: headOfDepartmentID ? parseInt(headOfDepartmentID) : null,
+                },
+            // include: { departments: true, roles: true },
+            });
+            res.status(200).json(updatedEmployee);
         } catch (error) {
             res.status(404).json({ message: error.message });
         }
@@ -75,8 +135,9 @@ class EmployeeController {
 
     async deleteEmployee(req, res) {
         try {
-            const [result] = await pool.execute(`DELETE FROM ${TABLE_NAME} WHERE ${COLUMNS.employeeID} = ?`, [req.params.id]);
-            if (result.affectedRows === 0) throw new Error('Employee not found');
+            await prisma.employees.delete({
+                where: { employeeID: parseInt(req.params.id) },
+            });
             res.status(204).send();
         } catch (error) {
             res.status(404).json({ message: error.message });
@@ -85,27 +146,45 @@ class EmployeeController {
 
     async queryEmployee(req, res) {
         const errors = validationResult(req);
-        if (!errors.isEmpty())
-            return res.status(400).json({ errors: errors.array() });
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
         try {
-            let query = `SELECT * FROM ${TABLE_NAME} WHERE 1=1`;
-            const params = [];
+            const { departmentID, roleID, fullName, city, birthYear, gender, phone, email, hireYear } = req.body;
 
-            if (req.query.departmentID) {
-                query += ` AND ${COLUMNS.departmentID} = ?`;
-                params.push(req.query.departmentID);
+            // Kiểm tra kiểu dữ liệu
+            if (roleID && isNaN(parseInt(roleID))) {
+                return res.status(400).json({ error: "roleID must be a number" });
             }
-            if (req.query.roleID) {
-                query += ` AND ${COLUMNS.roleID} = ?`;
-                params.push(req.query.roleID);
+            if (birthYear && isNaN(parseInt(birthYear))) {
+                return res.status(400).json({ error: "birthYear must be a number" });
             }
-            if (req.query.fullName) {
-                query += ` AND ${COLUMNS.fullName} LIKE ?`;
-                params.push(`%${req.query.fullName}%`);
+            if (hireYear && isNaN(parseInt(hireYear))) {
+                return res.status(400).json({ error: "hireYear must be a number" });
             }
 
-            const [employees] = await pool.execute(query, params);
+            const employees = await prisma.employees.findMany({
+                where: {
+                    ...(departmentID && { departmentID: parseInt(departmentID) }),
+                    ...(roleID && { roleID: parseInt(roleID) }),
+                    ...(fullName && { fullName: { contains: fullName } }),
+                    ...(city && { city: city }),
+                    ...(birthYear && {
+                        dateOfBirth: {
+                            gte: new Date(`${parseInt(birthYear)}-01-01`),
+                            lte: new Date(`${parseInt(birthYear)}-12-31`),
+                        },
+                    }),
+                    ...(gender && { gender: gender }), // Lọc theo giới tính
+                    ...(phone && { phone: phone }),   // Lọc theo số điện thoại
+                    ...(email && { email: email }),   // Lọc theo email
+                    ...(hireYear && {
+                        hireDay: {
+                            gte: new Date(`${parseInt(hireYear)}-01-01`),
+                            lte: new Date(`${parseInt(hireYear)}-12-31`),
+                        },
+                    }), // Lọc theo năm thuê
+                },
+            });
             res.status(200).json(employees);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -114,13 +193,10 @@ class EmployeeController {
 
     async isHeadDepartment(req, res) {
         try {
-            const [result] = await pool.execute(`
-                SELECT COUNT(*) as count 
-                FROM departments 
-                WHERE headOfDepartmentID = ?
-            `, [req.params.employeeID]);
-
-            res.json({ isHeadOfDepartment: result[0].count > 0 });
+            const count = await prisma.departments.count({
+                where: { HeadOfDepartmentID: parseInt(req.params.employeeID) },
+            });
+            res.json({ isHeadOfDepartment: count > 0 });
         } catch (error) {
             res.status(500).json({ message: 'Error checking department head status', error });
         }

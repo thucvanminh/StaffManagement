@@ -1,12 +1,12 @@
 // src/controllers/DepartmentController.js
-const pool = require('../config/database');
+const prisma = require('../prisma');
 const { validationResult } = require('express-validator');
-const { TABLE_NAME, COLUMNS, DEFAULT_SELECT, INSERT_COLUMNS, UPDATE_SET } = require('../models/Department');
 
 class DepartmentController {
     async getAllDepartments(req, res) {
         try {
-            const [departments] = await pool.execute(DEFAULT_SELECT);
+            const departments = await prisma.departments.findMany({
+            });
             res.status(200).json(departments);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -15,9 +15,11 @@ class DepartmentController {
 
     async getDepartmentById(req, res) {
         try {
-            const [departments] = await pool.execute(`${DEFAULT_SELECT} WHERE d.${COLUMNS.departmentID} = ?`, [req.params.id]);
-            if (departments.length === 0) throw new Error('Department not found');
-            res.status(200).json(departments[0]);
+            const department = await prisma.departments.findUnique({
+                where: { departmentID: parseInt(req.params.id) },
+            });
+            if (!department) throw new Error('Department not found');
+            res.status(200).json(department);
         } catch (error) {
             res.status(404).json({ message: error.message });
         }
@@ -25,18 +27,18 @@ class DepartmentController {
 
     async addDepartment(req, res) {
         const errors = validationResult(req);
-        if (!errors.isEmpty())
-            return res.status(400).json({ errors: errors.array() });
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
         try {
-            const { departmentName, HeadOfDepartmentID } = req.body;
-            const [result] = await pool.execute(`
-                INSERT INTO ${TABLE_NAME} (${INSERT_COLUMNS})
-                VALUES (?, ?)
-            `, [departmentName, HeadOfDepartmentID]);
-
-            const [newDepartment] = await pool.execute(`${DEFAULT_SELECT} WHERE d.${COLUMNS.departmentID} = ?`, [result.insertId]);
-            res.status(201).json(newDepartment[0]);
+            const { departmentID,departmentName, HeadOfDepartmentID } = req.body;
+            const newDepartment = await prisma.departments.create({
+                data: {
+                    departmentID,
+                    departmentName,
+                    HeadOfDepartmentID: HeadOfDepartmentID ? parseInt(HeadOfDepartmentID) : null,
+                },
+            });
+            res.status(201).json(newDepartment);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -44,21 +46,18 @@ class DepartmentController {
 
     async updateDepartment(req, res) {
         const errors = validationResult(req);
-        if (!errors.isEmpty())
-            return res.status(400).json({ errors: errors.array() });
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
         try {
             const { departmentName, HeadOfDepartmentID } = req.body;
-            const [result] = await pool.execute(`
-                UPDATE ${TABLE_NAME} 
-                SET ${UPDATE_SET}
-                WHERE ${COLUMNS.departmentID} = ?
-            `, [departmentName, HeadOfDepartmentID, req.params.id]);
-
-            if (result.affectedRows === 0) throw new Error('Department not found');
-
-            const [updatedDepartment] = await pool.execute(`${DEFAULT_SELECT} WHERE d.${COLUMNS.departmentID} = ?`, [req.params.id]);
-            res.status(200).json(updatedDepartment[0]);
+            const updatedDepartment = await prisma.departments.update({
+                where: { departmentID: parseInt(req.params.id) },
+                data: {
+                    departmentName,
+                    HeadOfDepartmentID: HeadOfDepartmentID ? parseInt(HeadOfDepartmentID) : null,
+                },
+            });
+            res.status(200).json(updatedDepartment);
         } catch (error) {
             res.status(404).json({ message: error.message });
         }
@@ -66,9 +65,30 @@ class DepartmentController {
 
     async deleteDepartment(req, res) {
         try {
-            const [result] = await pool.execute(`DELETE FROM ${TABLE_NAME} WHERE ${COLUMNS.departmentID} = ?`, [req.params.id]);
-            if (result.affectedRows === 0) throw new Error('Department not found');
+            await prisma.departments.delete({
+                where: { departmentID: parseInt(req.params.id) },
+            });
             res.status(204).send();
+        } catch (error) {
+            res.status(404).json({ message: error.message });
+        }
+    }
+    async queryDepartment(req, res) {
+        try {
+            const { departmentID, HeadOfDepartmentID, departmentName } = req.body;
+            const headDepartmentName = await prisma.employees.findUnique({
+                where: { employeeID: parseInt(HeadOfDepartmentID) },
+                select: { fullName: true }
+            });
+            const department = await prisma.departments.findUnique({
+                where: {
+                    ...(departmentID && { departmentID: parseInt(departmentID) }),
+                    ...(HeadOfDepartmentID && { HeadOfDepartmentID: parseInt(HeadOfDepartmentID) }),
+                    ...(departmentName && { departmentName: departmentName }),
+                    ...(headDepartmentName && { headDepartmentName: headDepartmentName })
+                }
+            });
+            res.status(200).json(department);
         } catch (error) {
             res.status(404).json({ message: error.message });
         }

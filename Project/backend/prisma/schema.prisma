@@ -1,0 +1,170 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model accounts {
+  accountID  Int    @id @default(autoincrement())
+  username   String @unique(map: "username_UNIQUE") @db.VarChar(70)
+  password   String @db.VarChar(100)
+  employeeID Int
+}
+
+model business_trip_requests {
+  businessTripID Int       @id @default(autoincrement())
+  employeeID     Int
+  destination    String    @db.VarChar(255)
+  startDate      DateTime  @db.Date
+  endDate        DateTime  @db.Date
+  reason         String    @db.VarChar(255)
+  statusID       Int
+  approvedByDept Int?
+  approvedBy     Int?
+  createdAt      DateTime? @default(now()) @db.DateTime(0)
+  updatedAt      DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([approvedBy], map: "approvedBy")
+  @@index([employeeID], map: "employeeID")
+  @@index([statusID], map: "statusID")
+  @@index([approvedByDept], map: "business_trip_requests_ibfk_4")
+}
+
+model departments {
+  departmentID       Int     @id @unique(map: "departmentID_UNIQUE")
+  departmentName     String? @db.VarChar(255)
+  HeadOfDepartmentID Int?    @unique(map: "HeadOfDepartmentID_UNIQUE")
+}
+
+model employees {
+  employeeID         Int       @id @unique(map: "employeeID_UNIQUE")
+  fullName           String?   @db.VarChar(255)
+  dateOfBirth        DateTime? @db.Date
+  hireDay            DateTime? @db.Date
+  email              String    @unique(map: "email") @db.VarChar(255)
+  phone              String?   @db.VarChar(255)
+  address            String?   @db.VarChar(255)
+  city               String?   @db.VarChar(255)
+  gender             String?   @db.VarChar(255)
+  departmentID       Int?
+  headOfDepartmentID Int?
+  roleID             Int
+
+  @@index([departmentID], map: "departmentID")
+  @@index([headOfDepartmentID], map: "fk_headID")
+  @@index([roleID], map: "fk_roleID")
+}
+
+model leave_requests {
+  leaveRequestID Int       @id @default(autoincrement())
+  employeeID     Int
+  startDate      DateTime  @db.Date
+  endDate        DateTime  @db.Date
+  reason         String    @db.VarChar(255)
+  statusID       Int
+  approvedByDept Int?
+  approvedBy     Int?
+  createdAt      DateTime? @default(now()) @db.DateTime(0)
+  updatedAt      DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([approvedBy], map: "approvedBy")
+  @@index([employeeID], map: "employeeID")
+  @@index([statusID], map: "statusID")
+  @@index([approvedByDept], map: "leave_requests_ibfk_4")
+}
+
+model notifications {
+  notificationID Int      @id @default(autoincrement())
+  requestID      Int
+  requestType    String   @db.VarChar(255)
+  recipientID    Int
+  message        String   @db.VarChar(255)
+  sentAt         DateTime @db.DateTime(0)
+}
+
+model overtime_requests {
+  overtimeRequestID Int       @id @default(autoincrement())
+  date              DateTime  @db.Date
+  hours             Float     @db.Float
+  reason            String    @db.VarChar(255)
+  statusID          Int
+  approvedBy        Int?
+  createdAt         DateTime? @default(now()) @db.DateTime(0)
+  updatedAt         DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([approvedBy], map: "approvedBy")
+  @@index([statusID], map: "statusID")
+}
+
+model overtime_employees {
+  overtimeRequestID Int @map("overtimeRequestID")
+  employeeID        Int
+
+  @@id([overtimeRequestID, employeeID]) // Khóa chính composite
+  @@index([employeeID], map: "employeeID")
+}
+
+model recruitment_requests {
+  recruitmentRequestID Int       @id @default(autoincrement())
+  applicantName        String    @db.VarChar(255)
+  applicantEmail       String    @db.VarChar(255)
+  position             String    @db.VarChar(255)
+  description          String    @db.VarChar(255)
+  statusID             Int
+  approvedBy           Int?
+  createdAt            DateTime? @default(now()) @db.DateTime(0)
+  updatedAt            DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([approvedBy], map: "approvedBy")
+  @@index([statusID], map: "statusID")
+}
+
+model resign_requests {
+  resignRequestID Int       @id @default(autoincrement())
+  employeeID      Int
+  resignDate      DateTime  @db.Date
+  reason          String    @db.VarChar(255)
+  statusID        Int
+  approvedByDept  Int?
+  approvedBy      Int?
+  createdAt       DateTime? @default(now()) @db.DateTime(0)
+  updatedAt       DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([approvedBy], map: "approvedBy")
+  @@index([employeeID], map: "employeeID")
+  @@index([statusID], map: "statusID")
+  @@index([approvedByDept], map: "resign_requests_ibfk_4")
+}
+
+model roles {
+  roleID   Int     @id @unique(map: "roleID_UNIQUE")
+  roleName String? @db.VarChar(255)
+}
+
+model statuses {
+  statusID    Int    @id @unique(map: "statusID_UNIQUE")
+  statusName  String @db.VarChar(95)
+  description String @db.VarChar(45)
+}
+
+model transfer_requests {
+  transferRequestID      Int       @id @default(autoincrement())
+  departmentHeadID       Int
+  employeeID             Int
+  targetDepartmentHeadID Int
+  requestType            String    @db.VarChar(255)
+  description            String    @db.VarChar(255)
+  statusID               Int
+  approvedBy             Int?
+  createdAt              DateTime? @default(now()) @db.DateTime(0)
+  updatedAt              DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([approvedBy], map: "approvedBy")
+  @@index([departmentHeadID], map: "departmentHeadID")
+  @@index([statusID], map: "statusID")
+  @@index([employeeID], map: "transfer_requests_ibfk_4")
+  @@index([targetDepartmentHeadID], map: "transfer_requests_ibfk_5")
+}

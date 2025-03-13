@@ -1,7 +1,7 @@
 // backend/routes/departmentRoutes.js
 const express = require('express');
 const router = express.Router();
-const departmentController = require('../controllers/DepartmentController');
+const departmentController = require('../controllers/departmentController');
 const { validateDepartment } = require('../controllers/validations/departmentValidation');
 const authMiddleware = require("../middlewares/authMiddleware");
 const authorizeRole = require("../middlewares/authorizeRole");

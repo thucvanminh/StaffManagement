@@ -1,23 +1,54 @@
 // backend/middlewares/authorizeDeptHead.js
-const BusinessTripRequest = require('../models/BusinessTripRequest');
-const Employee = require('../models/Employee');
-const Department = require('../models/Department');
+const prisma = require('../prisma');
 
 async function authorizeDeptHead(req, res, next) {
     if (!req.user) {
         return res.status(401).json({ message: 'User not authenticated' });
     }
-    const { id } = req.params; // ID của BusinessTripRequest
-    const trip = await BusinessTripRequest.findByPk(id, {
-        include: [{ model: Employee, as: 'employee' }]
+
+    const requestId = parseInt(req.params.id);
+    let requestType;
+
+    if (req.baseUrl.includes('leave')) {
+        requestType = 'leaveRequest';
+    } else if (req.baseUrl.includes('resign')) {
+        requestType = 'resignRequest';
+    } else {
+        requestType = 'businessTripRequest';
+    }
+
+    let model;
+    if (requestType === 'leaveRequest') {
+        model = prisma.leave_requests;
+    } else if (requestType === 'resignRequest') {
+        model = prisma.resign_requests;
+    } else {
+        model = prisma.business_trip_requests;
+    }
+
+    let request = await model.findUnique({
+        where: { [`${requestType}ID`]: requestId },
     });
-    if (!trip) {
+    const employee = await prisma.employees.findUnique({
+        where: { employeeID: request.employeeID },
+    });
+    request = {
+        ...request,
+        employee: employee
+    };
+
+    if (!request) {
         return res.status(404).json({ message: 'Request not found' });
     }
-    const dept = await Department.findOne({ where: { departmentID: trip.employee.departmentID } });
+
+    const dept = await prisma.departments.findUnique({
+        where: { departmentID: request.employee.departmentID },
+    });
+
     if (dept.HeadOfDepartmentID !== req.user.employeeID) {
         return res.status(403).json({ message: 'Only head of department can approve' });
     }
+
     next();
 }
 

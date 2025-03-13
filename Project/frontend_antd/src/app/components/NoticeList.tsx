@@ -53,7 +53,7 @@ const App: React.FC = () => {
         itemHeight={47}
         itemKey="email"
         onScroll={onScroll}
-        align="left"
+        // align="left"
       >
         {(item: UserItem) => (
           <List.Item key={item.email}>
