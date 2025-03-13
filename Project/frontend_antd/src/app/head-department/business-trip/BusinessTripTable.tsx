@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import '@ant-design/v5-patch-for-react-19';
 import type { GetProp, TableProps } from 'antd';
-import { Form, Input, Radio, Space, Table } from 'antd';
+import { Form, Input, Radio, Select, Space, Table } from 'antd';
 import TimePicker from '../../components/TimePicker';
-import './OvertimeTable.css';
+import './BusinessTripTable.css';
+import { provinces } from './ProvincesList';
 type SizeType = TableProps['size'];
 type ColumnsType<T extends object> = GetProp<TableProps<T>, 'columns'>;
 type TablePagination<T extends object> = NonNullable<Exclude<TableProps<T>['pagination'], boolean>>;
@@ -13,7 +15,7 @@ interface DataType {
   name: string;
   position: string;
   department: string;
-  description: string;
+  destination: string;
 }
 
 const columns: ColumnsType<DataType> = [
@@ -43,7 +45,6 @@ const columns: ColumnsType<DataType> = [
       },
     ],
     onFilter: (value, record) => record.position.indexOf(value as string) === 0,
-
   },
   {
     title: 'Department',
@@ -77,6 +78,17 @@ const columns: ColumnsType<DataType> = [
       </Form.Item>
     ),
   },
+  
+  {
+    title: 'Destination',
+    dataIndex: 'destination',
+    render: () => (
+      <Space.Compact>
+        <Select defaultValue="Province" options={provinces} style={{ width: 160 }} />
+        <Input defaultValue="" />
+      </Space.Compact>
+    ),
+  },
   {
     title: 'Action',
     key: 'action',
@@ -93,7 +105,6 @@ const originalData = Array.from({ length: 10 }).map<DataType>((_, i) => ({
   name: 'John Brown',
   position: 'Developer',
   department: 'Department A',
-  description: `My name is John Brown, I am ${i}2 years old, living in New York No. ${i} Lake Park.`,
 }));
 
 
@@ -125,14 +136,12 @@ const App: React.FC = () => {
     setShowHeader(enable);
   };
 
-
   const handleSearch = (value: string) => {
     const filteredData = originalData.filter((item) =>
       item.name.toLowerCase().includes(value.toLowerCase())
     );
     setDataSource(filteredData);
   };
-
   const scroll: { x?: number | string; y?: number | string } = {};
   if (yScroll) {
     scroll.y = 240;
@@ -160,14 +169,14 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Input.Search
-        placeholder="Search by Name"
-        allowClear
-        enterButton="Search"
-        size="large"
-        onSearch={handleSearch}
-        style={{ width: 500, marginBottom: 16 }}
-      />
+    <Input.Search
+                    placeholder="Search by Name"
+                    allowClear
+                    enterButton="Search"
+                    size="large"
+                    onSearch={handleSearch}
+                    style={{ width: 500, marginBottom: 16 }}
+                />
       <Form
         layout="inline"
         className="table-demo-control-bar"
