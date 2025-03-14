@@ -15,5 +15,9 @@ router.get('/', authenticateToken, authorizeRole([HR_ROLE_ID]), resignController
 router.get('/:id', authenticateToken, authorizeRole([HR_ROLE_ID]), resignController.getResignRequestById);
 router.put('/:id', authenticateToken, authorizeRole([HR_ROLE_ID]), resignController.updateResignRequest);
 router.delete('/:id', authenticateToken, authorizeRole([HR_ROLE_ID]), resignController.deleteResignRequest);
+router.get('/pending', authenticateToken, authorizeRole([HR_ROLE_ID]), resignController.getAllPendingResignRequests);
+router.get('/rejected', authenticateToken, authorizeRole([HR_ROLE_ID]), resignController.getAllRejectedResignRequests);
+router.get('/accepted', authenticateToken, authorizeRole([HR_ROLE_ID]), resignController.getAllAcceptedResignRequests);
+router.get('/accepted-by-dept', authenticateToken, authorizeRole([HR_ROLE_ID]), resignController.getAllAcceptedRequestsByDept);
 
 module.exports = router;

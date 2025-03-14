@@ -2,16 +2,20 @@
 
 const express = require('express');
 const router = express.Router();
-const { createTransferRequest } = require('../controllers/transferRequestController');
+const { createTransferRequest, getAllTransferRequests } = require('../controllers/transferRequestController');
 const authenticateToken = require('../middlewares/authMiddleware');
 const authorizeRole = require('../middlewares/authorizeRole');
 
-const HR_ROLE_ID = 2; // Thay bằng ID thực tế của HR trong bảng roles
+const HR_ROLE_ID = 2;
+
+router.use(authenticateToken);
 
 router.post('/',
-    authenticateToken,
     authorizeRole([HR_ROLE_ID]),
     createTransferRequest
 );
+
+router.get('/', authorizeRole([HR_ROLE_ID]), getAllTransferRequests);
+
 
 module.exports = router;

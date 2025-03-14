@@ -17,8 +17,6 @@ router.get('/:id', authorizeRole([1, 2, 3]), businessTripController.getRequestBy
 // Lấy yêu cầu theo nhân viên
 router.get('/employee/:employeeId', authorizeRole([1, 2, 3]), businessTripController.getRequestsByEmployee);
 
-// Lấy yêu cầu theo người duyệt
-router.get('/approver/:approverId', authorizeRole([1, 2]), businessTripController.getRequestsByApprover);
 
 // Lấy các yêu cầu đang chờ duyệt
 router.get('/status/pending', authorizeRole([1, 2]), businessTripController.getPendingRequests);
