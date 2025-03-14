@@ -1,6 +1,7 @@
 // backend/controllers/businessTripController.js
 const prisma = require('../prisma');
 const { validationResult } = require('express-validator');
+const StatusEnum = require('../enum/StatusEnum');
 
 class BusinessTripController {
     async getAllRequests(req, res) {
@@ -71,7 +72,7 @@ class BusinessTripController {
                     endDate: new Date(endDate),
                     destination,
                     reason: purpose,
-                    statusID: 1, // Mặc định là "Pending"
+                    statusID: StatusEnum.PENDING, // Mặc định là "Pending"
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 },
@@ -139,11 +140,10 @@ class BusinessTripController {
         }
     }
 
-    async getRequestsByApprover(req, res) {
+    async getPendingRequests(req, res) {
         try {
             const requests = await prisma.business_trip_requests.findMany({
-                where: { approvedBy: parseInt(req.params.approverId) },
-
+                where: { statusID: StatusEnum.PENDING }, // Giả sử 1 là "Pending"
             });
             const status = await prisma.statuses.findMany();
             const employee = await prisma.employees.findMany();
@@ -152,17 +152,16 @@ class BusinessTripController {
                 status: status.find(s => s.statusID === request.statusID),
                 employee: employee.find(e => e.employeeID === request.employeeID)
             }));
-                res.status(200).json(businessTrip);
+            res.status(200).json(businessTrip);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
     }
-
-    async getPendingRequests(req, res) {
+    async getRequestApprovedByDept(req, res) {
         try {
             const requests = await prisma.business_trip_requests.findMany({
-                where: { statusID: 1 }, // Giả sử 1 là "Pending"
-                });
+                where: { statusID: StatusEnum.ACCEPTED_BY_DEPT },
+            });
             const status = await prisma.statuses.findMany();
             const employee = await prisma.employees.findMany();
             const businessTrip = requests.map(request => ({
@@ -176,12 +175,13 @@ class BusinessTripController {
         }
     }
 
+
     async approveRequest(req, res) {
         try {
             const updatedRequest = await prisma.business_trip_requests.update({
                 where: { businessTripID: parseInt(req.params.id) },
                 data: {
-                    statusID: 2, // Giả sử 2 là "Approved"
+                    statusID: StatusEnum.ACCEPTED_BY_DEPT || StatusEnum.ACCEPTED_BY_HR, // Giả sử 2 là "Approved"
                     approvedBy: req.user.employeeID,
                     updatedAt: new Date(),
                 },
@@ -197,7 +197,7 @@ class BusinessTripController {
             const updatedRequest = await prisma.business_trip_requests.update({
                 where: { businessTripID: parseInt(req.params.id) },
                 data: {
-                    statusID: 3, // Giả sử 3 là "Rejected"
+                    statusID: StatusEnum.REJECTED_BY_DEPT || StatusEnum.REJECTED_BY_HR, // Giả sử 3 là "Rejected"
                     approvedBy: req.user.employeeID,
                     updatedAt: new Date(),
                 },

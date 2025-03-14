@@ -2,6 +2,7 @@
 
 const prisma = require('../prisma');
 const { sendNotification } = require('./notificationController');
+const StatusEnum = require('../enum/StatusEnum');
 
 const getAllTransferRequests = async (req, res) => {
     const transferRequests = await prisma.transfer_requests.findMany();
@@ -29,7 +30,7 @@ const createTransferRequest = async (req, res) => {
             targetDepartmentID,
             requestType,
             description,
-            statusID: 1, // Pending
+            statusID: StatusEnum.PENDING,
             createdBy,
         },
     });
@@ -62,5 +63,6 @@ const createTransferRequest = async (req, res) => {
 
     res.status(201).json(transferRequest);
 };
+
 
 module.exports = { createTransferRequest, getAllTransferRequests };
