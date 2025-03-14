@@ -81,27 +81,3 @@ exports.deleteNotification = async (req, res) => {
     }
 };
 
-// 📌 4. Đánh dấu thông báo là đã đọc
-exports.markNotificationAsRead = async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const notification = await prisma.notifications.findUnique({
-            where: { notificationID: parseInt(id) },
-        });
-
-        if (!notification) {
-            return res.status(404).json({ message: "Notification not found" });
-        }
-
-        await prisma.notifications.update({
-            where: { notificationID: parseInt(id) },
-            data: { message: `[READ] ${notification.message}` }, // Cách đơn giản để đánh dấu đã đọc
-        });
-
-        return res.status(200).json({ message: "Notification marked as read" });
-    } catch (error) {
-        console.error("Error updating notification:", error);
-        return res.status(500).json({ message: "Internal Server Error" });
-    }
-};

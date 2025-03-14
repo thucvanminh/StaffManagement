@@ -9,7 +9,10 @@ const testFunction = require('./routes/testFunction');
 const accountRoutes = require('./routes/accountRoutes');
 const businessTripRoutes = require('./routes/businessTripRoutes');
 const statusRoutes = require('./routes/statusRoutes');
-
+const overtimeRoutes = require('./routes/overtimeRoute');
+const leaveRoutes = require('./routes/leaveRoute');
+const resignRoutes = require('./routes/resignRoutes');
+const transferRoutes = require('./routes/transferRoutes');
 const app = express();
 
 // Middleware
@@ -28,5 +31,8 @@ app.use('/departments', departmentRoutes);
 app.use('/status', statusRoutes);
 app.use('/business-trips', businessTripRoutes);
 app.use('/test', testFunction);
-
+app.use('/overtime-requests', overtimeRoutes);
+app.use('/leave-requests', leaveRoutes);
+app.use('/resign-requests', resignRoutes);
+app.use('/transfer-requests', transferRoutes);
 module.exports = app;

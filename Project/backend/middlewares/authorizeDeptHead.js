@@ -13,8 +13,10 @@ async function authorizeDeptHead(req, res, next) {
         requestType = 'leaveRequest';
     } else if (req.baseUrl.includes('resign')) {
         requestType = 'resignRequest';
-    } else {
+    } else if (req.baseUrl.includes('business')) {
         requestType = 'businessTripRequest';
+    } else if (req.baseUrl.includes('overtime')) {
+        requestType = 'overtimeRequest';
     }
 
     let model;
@@ -22,8 +24,10 @@ async function authorizeDeptHead(req, res, next) {
         model = prisma.leave_requests;
     } else if (requestType === 'resignRequest') {
         model = prisma.resign_requests;
-    } else {
+    } else if (requestType === 'businessTripRequest') {
         model = prisma.business_trip_requests;
+    } else if (requestType === 'overtimeRequest') {
+        model = prisma.overtime_requests;
     }
 
     let request = await model.findUnique({

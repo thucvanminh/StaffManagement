@@ -6,7 +6,7 @@
  * Middleware xác thực user có thuộc các role được chỉ định.
  * @param {number[]} allowedRoles - Danh sách các roleID được phép truy cập.
  */
-function authorizeRoles(allowedRoles) {
+function authorizeRole(allowedRoles) {
     return (req, res, next) => {
         if (!req.user) {
             return res.status(401).json({ message: 'User not authenticated' });
@@ -21,4 +21,4 @@ function authorizeRoles(allowedRoles) {
     };
 }
 
-module.exports = authorizeRoles;
+module.exports = authorizeRole;

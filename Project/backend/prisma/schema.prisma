@@ -151,20 +151,22 @@ model statuses {
 }
 
 model transfer_requests {
-  transferRequestID      Int       @id @default(autoincrement())
-  departmentHeadID       Int
-  employeeID             Int
-  targetDepartmentHeadID Int
-  requestType            String    @db.VarChar(255)
-  description            String    @db.VarChar(255)
-  statusID               Int
-  approvedBy             Int?
-  createdAt              DateTime? @default(now()) @db.DateTime(0)
-  updatedAt              DateTime? @default(now()) @db.DateTime(0)
+  transferRequestID   Int       @id @default(autoincrement())
+  employeeID          Int
+  currentDepartmentID Int // Thay departmentHeadID để rõ ràng hơn
+  targetDepartmentID  Int // Thay targetDepartmentHeadID để liên kết với phòng ban
+  requestType         String    @db.VarChar(255) // Có thể thay bằng enum nếu cần
+  description         String    @db.VarChar(255)
+  statusID            Int
+  createdBy           Int // HR tạo request
+  approvedBy          Int? // Người duyệt (nếu cần thêm bước duyệt)
+  createdAt           DateTime? @default(now()) @db.DateTime(0)
+  updatedAt           DateTime? @default(now()) @db.DateTime(0)
 
   @@index([approvedBy], map: "approvedBy")
-  @@index([departmentHeadID], map: "departmentHeadID")
+  @@index([currentDepartmentID], map: "currentDepartmentID")
   @@index([statusID], map: "statusID")
-  @@index([employeeID], map: "transfer_requests_ibfk_4")
-  @@index([targetDepartmentHeadID], map: "transfer_requests_ibfk_5")
+  @@index([employeeID], map: "employeeID")
+  @@index([targetDepartmentID], map: "targetDepartmentID")
+  @@index([createdBy], map: "createdBy")
 }
