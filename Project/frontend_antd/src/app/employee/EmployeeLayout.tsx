@@ -27,14 +27,12 @@ const siderStyle = {
 };
 
 const items = [
-  { key: '1', icon: <AppstoreOutlined />, label: <Link href="/employee/overview">Overview</Link> },
-  { key: '2', icon: <ClockCircleOutlined />, label: <Link href="/employee/overtime">Overtime</Link> },
-  { key: '3', icon: <CarOutlined />, label: <Link href="/employee/business-trip">Business Trip</Link> },
-  { key: '4', icon: <CalendarOutlined />, label: <Link href="/employee/leave">Leave</Link> },
-  { key: '5', icon: <CloseCircleOutlined />, label: <Link href="/employee/resign">Resign</Link> },
-  { key: '6', icon: <UsergroupAddOutlined />, label: <Link href="/employee/recruit">Recruit</Link> },
-  { key: '7', icon: <FormOutlined />, label: <Link href="/employee/report">Report</Link> },
-  { key: '8', icon: <SettingOutlined />, label: <Link href="/employee/setting">Setting</Link> },
+  { key: '1', icon: <ClockCircleOutlined />, label: <Link href="/employee/overtime">Overtime</Link> },
+  { key: '2', icon: <CarOutlined />, label: <Link href="/employee/business-trip">Business Trip</Link> },
+  { key: '3', icon: <CalendarOutlined />, label: <Link href="/employee/leave">Leave</Link> },
+  { key: '4', icon: <CloseCircleOutlined />, label: <Link href="/employee/resign">Resign</Link> },
+  { key: '5', icon: <FormOutlined />, label: <Link href="/employee/report">Report</Link> },
+  { key: '6', icon: <SettingOutlined />, label: <Link href="/employee/setting">Setting</Link> },
 ];
 
 const EmployeeLayout = ({ children }) => {

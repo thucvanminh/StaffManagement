@@ -5,8 +5,9 @@ import { Input, Table } from 'antd';
 interface DataType {
     key: React.Key;
     name: string;
-    age: number;
+    dob: string;
     email: string;
+    phone: string;
     address: string;
     position: string;
     department: string;
@@ -17,8 +18,9 @@ const originalDataSource = Array.from({ length: 50 })
     .map<DataType>((_, i) => ({
         key: i.toString(),
         name: 'Tran Van A',
-        age: 32,
+        dob: '16/5/2000',
         email: 'abc@gmail.com',
+        phone: '0123456789',
         address: 'Hanoi',
         position: 'Developer',
         department: 'Department A',
@@ -48,8 +50,9 @@ const App: React.FC = () => {
 
     const columns: TableColumnsType<DataType> = [
         { title: 'Name', dataIndex: 'name', key: 'name' },
-        { title: 'Age', dataIndex: 'age', key: 'age' },
+        { title: 'DOB', dataIndex: 'dob', key: 'dob' },
         { title: 'Email', dataIndex: 'email', key: 'email' },
+        { title: 'Phone', dataIndex: 'phone', key: 'phone' },
         { title: 'Address', dataIndex: 'address', key: 'address' },
         { title: 'Position', dataIndex: 'position', key: 'position' },
         { title: 'Department', dataIndex: 'department', key: 'department' },

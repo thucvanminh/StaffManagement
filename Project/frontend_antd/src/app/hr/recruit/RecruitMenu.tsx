@@ -6,20 +6,24 @@ import './RecruitMenu.css';
 interface DataType {
     key: React.Key;
     name: string;
-    age: number;
+    gender: string;
+    dob: Date; //date of birth
     email: string;
+    phone: string;
     address: string;
-    showProfile: string;
+    showCV: string;
 }
 
 const originalDataSource = Array.from({ length: 50 })
     .map<DataType>((_, i) => ({
         key: i.toString(),
         name: 'Tran Van A',
-        age: 32,
+        gender: 'Male',
+        dob: '16/5/2000',
         email: 'abc@gmail.com',
+        phone: '0123456789',
         address: 'Hanoi',
-        showProfile: 'Profile',
+        showCV: 'CV',
     }));
 
 const App: React.FC = () => {
@@ -46,15 +50,17 @@ const App: React.FC = () => {
 
     const columns: TableColumnsType<DataType> = [
         { title: 'Name', dataIndex: 'name', key: 'name' },
-        { title: 'Age', dataIndex: 'age', key: 'age' },
+        { title: 'Gender', dataIndex: 'gender', key: 'gender' },
+        { title: 'DOB', dataIndex: 'dob', key: 'dob' },
         { title: 'Email', dataIndex: 'email', key: 'email' },
+        { title: 'Phone', dataIndex: 'phone', key: 'phone' },
         { title: 'Address', dataIndex: 'address', key: 'address' },
         {
             title: '',
-            dataIndex: 'showProfile',
-            key: 'showProfile',
+            dataIndex: 'showCV',
+            key: 'showCV',
             render: (_, record) => (
-                <a onClick={() => showDrawer(record)}>Profile</a>
+                <a onClick={() => showDrawer(record)}>CV</a>
             ),
         },
     ];
@@ -87,7 +93,7 @@ const App: React.FC = () => {
                 dataSource={paginatedData}
             />
             <Drawer
-                title={selectedRecord ? `${selectedRecord.name} Profile` : 'User Profile'}                width={640}
+                title={selectedRecord ? `${selectedRecord.name}'s CV` : 'User Profile'} width={830}
                 placement="left"
                 closable={false}
                 onClose={onClose}
@@ -103,45 +109,14 @@ const App: React.FC = () => {
             >
                 {selectedRecord && (
                     <>
-                        <p className="site-description-item-profile-p">Personal Informations</p>
                         <Row>
-                            <Col span={12}>
-                                <div className="site-description-item-profile-wrapper">
-                                    <span className="site-description-item-profile-p-label">Full Name:</span>
-                                    {selectedRecord.name}
-                                </div>
-                            </Col>
-                            <Col span={12}>
-                                <div className="site-description-item-profile-wrapper">
-                                    <span className="site-description-item-profile-p-label">Email:</span>
-                                    {selectedRecord.email}
-                                </div>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={12}>
-                                <div className="site-description-item-profile-wrapper">
-                                    <span className="site-description-item-profile-p-label">Age:</span>
-                                    {selectedRecord.age}
-                                </div>
-                            </Col>
-                            <Col span={12}>
-                                <div className="site-description-item-profile-wrapper">
-                                    <span className="site-description-item-profile-p-label">Address:</span>
-                                    {selectedRecord.address}
+                            <Col span={24}>
+                                <div className="site-description-item-cv-wrapper">
+                                    <img src="/images/IT_CV.jpg" alt="CV" />
                                 </div>
                             </Col>
                         </Row>
                         <Divider />
-                        <p className="site-description-item-profile-p">Contacts</p>
-                        <Row>
-                            <Col span={12}>
-                                <div className="site-description-item-profile-wrapper">
-                                    <span className="site-description-item-profile-p-label">Email:</span>
-                                    {selectedRecord.email}
-                                </div>
-                            </Col>
-                        </Row>
                     </>
                 )}
             </Drawer>

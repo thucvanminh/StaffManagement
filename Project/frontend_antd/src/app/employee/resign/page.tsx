@@ -1,4 +1,3 @@
-// src/app/components/sections/employee/overview/page.tsx
 'use client';
 import MenuItem from './MenuItem';
 
