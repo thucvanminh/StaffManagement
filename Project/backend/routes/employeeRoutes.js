@@ -12,6 +12,7 @@ router.get('/', authorizeRole([1, 2]), employeeController.getAllEmployees);
 router.get('/query', authorizeRole([1, 2]), validateQueryEmployee, employeeController.queryEmployee);
 router.get('/:id', authorizeRole([1, 2]), employeeController.getEmployeeById);
 router.post('/', authorizeRole([1, 2]), validateEmployee, employeeController.addEmployee);
-router.put('/:id', authorizeRole([1, 2]), employeeController.deleteEmployee);
+router.put('/:id', authorizeRole([1, 2]), validateEmployee, employeeController.updateEmployee);
+router.delete('/:id', authorizeRole([1, 2]), employeeController.deleteEmployee);
 
 module.exports = router;

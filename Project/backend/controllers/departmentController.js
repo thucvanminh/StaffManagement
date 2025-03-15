@@ -30,7 +30,7 @@ class DepartmentController {
         if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
         try {
-            const { departmentID,departmentName, HeadOfDepartmentID } = req.body;
+            const { departmentID, departmentName, HeadOfDepartmentID } = req.body;
             const newDepartment = await prisma.departments.create({
                 data: {
                     departmentID,
@@ -47,12 +47,12 @@ class DepartmentController {
     async updateDepartment(req, res) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-
         try {
-            const { departmentName, HeadOfDepartmentID } = req.body;
+            const { departmentID, departmentName, HeadOfDepartmentID } = req.body;
             const updatedDepartment = await prisma.departments.update({
                 where: { departmentID: parseInt(req.params.id) },
                 data: {
+                    departmentID: parseInt(departmentID),
                     departmentName,
                     HeadOfDepartmentID: HeadOfDepartmentID ? parseInt(HeadOfDepartmentID) : null,
                 },

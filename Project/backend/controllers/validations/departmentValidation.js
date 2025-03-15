@@ -5,10 +5,12 @@ const validateDepartment = [
     body('departmentID')
         .notEmpty().withMessage('Department ID cannot be null')
         .isInt({ min: 1 }).withMessage('Department ID must be a positive integer')
-        .custom(async (value) => {
+        .custom(async (value, { req }) => {
             const department = await prisma.departments.findUnique({ where: { departmentID: value } });
-            if (department) {
+            if (department && department.departmentID !== req.body.departmentID) {
                 throw new Error('Department ID already exists.');
+            } else {
+                return true;
             }
         }),
     body('departmentName')

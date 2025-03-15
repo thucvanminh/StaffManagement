@@ -81,9 +81,10 @@ class EmployeeController {
         //     "roleID": 3,
         // }
         try {
-            const { fullName, dateOfBirth, hireDay, email, phone, address, city, gender, departmentID, roleID, headOfDepartmentID } = req.body;
+            const { employeeID, fullName, dateOfBirth, hireDay, email, phone, address, city, gender, departmentID, roleID, headOfDepartmentID } = req.body;
             const newEmployee = await prisma.employees.create({
                 data: {
+                    employeeID: parseInt(employeeID),
                     fullName,
                     dateOfBirth: new Date(dateOfBirth),
                     hireDay: new Date(hireDay),
@@ -108,7 +109,7 @@ class EmployeeController {
         if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
         try {
-            const {fullName, dateOfBirth, hireDay, email, phone, address, city, gender, departmentID, roleID, headOfDepartmentID } = req.body;
+            const { fullName, dateOfBirth, hireDay, email, phone, address, city, gender, departmentID, roleID, headOfDepartmentID } = req.body;
             const updatedEmployee = await prisma.employees.update({
                 where: { employeeID: parseInt(req.params.id) },
                 data: {
@@ -125,7 +126,7 @@ class EmployeeController {
                     roleID: parseInt(roleID),
                     headOfDepartmentID: headOfDepartmentID ? parseInt(headOfDepartmentID) : null,
                 },
-            // include: { departments: true, roles: true },
+                // include: { departments: true, roles: true },
             });
             res.status(200).json(updatedEmployee);
         } catch (error) {
