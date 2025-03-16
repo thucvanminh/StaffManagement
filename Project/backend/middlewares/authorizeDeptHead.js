@@ -24,9 +24,11 @@ async function authorizeDeptHead(req, res, next) {
         model = prisma.leave_requests;
     } else if (requestType === 'resignRequest') {
         model = prisma.resign_requests;
-    } else if (requestType === 'businessTripRequest') {
-        model = prisma.business_trip_requests;
-    } else if (requestType === 'overtimeRequest') {
+    }
+    //  else if (requestType === 'businessTripRequest') {
+    //     model = prisma.business_trip_requests;
+    // } 
+    else if (requestType === 'overtimeRequest') {
         model = prisma.overtime_requests;
     }
 

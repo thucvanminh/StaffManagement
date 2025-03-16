@@ -27,12 +27,12 @@ const EmployeeTable: React.FC = () => {
 
     const columns: ColumnsType<Employee> = [
         {
-            title: 'ID',
+            title: 'EmployeeID',
             dataIndex: 'employeeID',
             key: 'employeeID',
         },
         {
-            title: 'Họ và tên',
+            title: 'Full Name',
             dataIndex: 'fullName',
             key: 'fullName',
         },
@@ -42,17 +42,17 @@ const EmployeeTable: React.FC = () => {
             key: 'email',
         },
         {
-            title: 'Số điện thoại',
+            title: 'Phone',
             dataIndex: 'phone',
             key: 'phone',
         },
         {
-            title: 'Phòng ban',
+            title: 'Department',
             dataIndex: ['department', 'departmentName'],
             key: 'department',
         },
         {
-            title: 'Chức vụ',
+            title: 'Role',
             dataIndex: ['role', 'roleName'],
             key: 'role',
         },
@@ -64,11 +64,11 @@ const EmployeeTable: React.FC = () => {
             const data = await employeeService.getAllEmployees();
             setEmployees(data);
         } catch (error: any) {
-            if (error.message.includes('đăng nhập')) {
-                message.error('Vui lòng đăng nhập để tiếp tục');
+            if (error.message.includes('login')) {
+                message.error('Please login to continue');
                 router.push('/login'); // Chuyển hướng về trang đăng nhập
             } else {
-                message.error(error.message || 'Không thể tải danh sách nhân viên');
+                message.error(error.message || 'Cannot load employee list');
             }
             console.error('Error:', error);
         } finally {
@@ -80,7 +80,7 @@ const EmployeeTable: React.FC = () => {
         // Kiểm tra token khi component mount
         const token = localStorage.getItem('token');
         if (!token) {
-            message.error('Vui lòng đăng nhập để tiếp tục');
+            message.error('Please login to continue');
             router.push('/login');
             return;
         }
@@ -88,7 +88,7 @@ const EmployeeTable: React.FC = () => {
     }, [router]);
 
     return (
-        <Table<Employee>
+            <Table
             columns={columns}
             dataSource={employees}
             rowKey={(record) => record.employeeID.toString()}

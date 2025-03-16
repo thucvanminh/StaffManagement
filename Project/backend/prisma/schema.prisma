@@ -14,25 +14,6 @@ model accounts {
   employeeID Int
 }
 
-model business_trip_requests {
-  businessTripID Int       @id @default(autoincrement())
-  employeeID     Int
-  destination    String    @db.VarChar(255)
-  startDate      DateTime  @db.Date
-  endDate        DateTime  @db.Date
-  reason         String    @db.VarChar(255)
-  statusID       Int
-  approvedByDept Int?
-  approvedBy     Int?
-  createdAt      DateTime? @default(now()) @db.DateTime(0)
-  updatedAt      DateTime? @default(now()) @db.DateTime(0)
-
-  @@index([approvedBy], map: "approvedBy")
-  @@index([employeeID], map: "employeeID")
-  @@index([statusID], map: "statusID")
-  @@index([approvedByDept], map: "business_trip_requests_ibfk_4")
-}
-
 model departments {
   departmentID       Int     @id @unique(map: "departmentID_UNIQUE")
   departmentName     String? @db.VarChar(255)
@@ -56,6 +37,23 @@ model employees {
   @@index([departmentID], map: "departmentID")
   @@index([headOfDepartmentID], map: "fk_headID")
   @@index([roleID], map: "fk_roleID")
+}
+
+model business_trip_requests {
+  businessTripID Int       @id @default(autoincrement())
+  employeeID     Int
+  destination    String    @db.VarChar(255)
+  startDate      DateTime  @db.Date
+  endDate        DateTime  @db.Date
+  reason         String    @db.VarChar(255)
+  statusID       Int
+  createdBy      Int
+  createdAt      DateTime? @default(now()) @db.DateTime(0)
+  updatedAt      DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([employeeID], map: "employeeID")
+  @@index([statusID], map: "statusID")
+  @@index([createdBy], map: "createdBy")
 }
 
 model leave_requests {

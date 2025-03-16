@@ -10,7 +10,7 @@ class API {
         const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
         if (!token) {
-            throw new Error('Vui lòng đăng nhập để tiếp tục');
+            throw new Error('Please login to continue');
         }
 
         const headers = {
