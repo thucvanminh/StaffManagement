@@ -5,13 +5,17 @@ const BASE_URL = 'http://localhost:5000';
 class API {
     async fetchAPI(endpoint, options = {}) {
         const controller = new AbortController();
-        const timeoutID = setTimeout(() => controller.abort(), 5000);
+        const timeoutID = setTimeout(() => controller.abort(), 15000);
 
         const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
+        if (!token) {
+            throw new Error('Vui lòng đăng nhập để tiếp tục');
+        }
+
         const headers = {
             'Content-Type': 'application/json',
-            ...(token && {'Authorization': `Bearer ${token}`}),
+            ...(token && { 'Authorization': `Bearer ${token}` }),
             ...options.headers,
         };
 
@@ -19,8 +23,16 @@ class API {
             const response = await fetch(`${BASE_URL}${endpoint}`, {
                 ...options,
                 headers,
-                signal: controller.signal, // Thêm signal để hỗ trợ timeout
+                signal: controller.signal, 
+                credentials: 'include',
             });
+
+            clearTimeout(timeoutID);
+
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                throw new Error('Token expired');
+            }
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -34,15 +46,15 @@ class API {
             }
             console.error('API request failed:', error);
             throw error;
-        } finally {
-            clearTimeout(timeoutID); // Đảm bảo timeout được dọn dẹp
         }
     }
 
     async getAPI(endpoint, queryParams = {}, options = {}) {
+        // Sửa: Dùng template literal để nối key và value trong query string
         const queryString = Object.entries(queryParams)
             .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
             .join('&');
+        // Sửa: Dùng template literal để nối endpoint và query string nếu có
         const url = queryString ? `${endpoint}?${queryString}` : endpoint;
 
         return this.fetchAPI(url, {

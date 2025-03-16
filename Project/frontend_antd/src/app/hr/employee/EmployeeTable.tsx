@@ -1,80 +1,101 @@
 import React, { useEffect, useState } from 'react';
-import type { TableColumnsType } from 'antd';
-import { Input, Table } from 'antd';
-import API from '../../services/api'; // Đảm bảo đường dẫn đúng
+import { Table, message } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import employeeService from '../../services/employeeService';
+import { useRouter } from 'next/navigation';
 
-interface DataType {
-    key: React.Key;
-    name: string;
-    dob: string;
-    email: string;
-    phone: string;
-    address: string;
-    position: string;
-    department: string;
-}
+// interface Employee {
+//     employeeID: number;
+//     fullName: string;
+//     email: string;
+//     phone: string;
+//     department: {
+//         departmentName: string;
+//     };
+//     role: {
+//         roleName: string;
+//     };
+// }
+// Dùng type inference để lấy kiểu dữ liệu từ hàm getAllEmployees và đặt tên là Employee
+type Employee = Awaited<ReturnType<typeof employeeService.getAllEmployees>>;
 
 
-const originalDataSource = Array.from({ length: 50 })
-    .map<DataType>((_, i) => ({
-        key: i.toString(),
-        name: 'Tran Van A',
-        dob: '16/5/2000',
-        email: 'abc@gmail.com',
-        phone: '0123456789',
-        address: 'Hanoi',
-        position: 'Developer',
-        department: 'Department A',
-    }));
+const EmployeeTable: React.FC = () => {
+    const router = useRouter();
+    const [loading, setLoading] = useState<boolean>(false);
+    const [employees, setEmployees] = useState<Employee[]>([]);
 
-const App: React.FC = () => {
-    const [dataSource, setDataSource] = useState(originalDataSource);
-    const [searchText, setSearchText] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 10; // Số mục trên mỗi trang
-
-    // Xử lý tìm kiếm theo Name
-    const handleSearch = (value: string) => {
-        setSearchText(value);
-        setCurrentPage(1); // Reset về trang 1 khi tìm kiếm
-        const filteredData = originalDataSource.filter((item) =>
-            item.name.toLowerCase().includes(value.toLowerCase())
-        );
-        setDataSource(filteredData);
-    };
-
-    // Tính dữ liệu cho trang hiện tại
-    const paginatedData = dataSource.slice(
-        (currentPage - 1) * pageSize,
-        currentPage * pageSize
-    );
-
-    const columns: TableColumnsType<DataType> = [
-        { title: 'Name', dataIndex: 'name', key: 'name' },
-        { title: 'DOB', dataIndex: 'dob', key: 'dob' },
-        { title: 'Email', dataIndex: 'email', key: 'email' },
-        { title: 'Phone', dataIndex: 'phone', key: 'phone' },
-        { title: 'Address', dataIndex: 'address', key: 'address' },
-        { title: 'Position', dataIndex: 'position', key: 'position' },
-        { title: 'Department', dataIndex: 'department', key: 'department' },
+    const columns: ColumnsType<Employee> = [
+        {
+            title: 'ID',
+            dataIndex: 'employeeID',
+            key: 'employeeID',
+        },
+        {
+            title: 'Họ và tên',
+            dataIndex: 'fullName',
+            key: 'fullName',
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+        },
+        {
+            title: 'Số điện thoại',
+            dataIndex: 'phone',
+            key: 'phone',
+        },
+        {
+            title: 'Phòng ban',
+            dataIndex: ['department', 'departmentName'],
+            key: 'department',
+        },
+        {
+            title: 'Chức vụ',
+            dataIndex: ['role', 'roleName'],
+            key: 'role',
+        },
     ];
 
+    const fetchEmployees = async () => {
+        try {
+            setLoading(true);
+            const data = await employeeService.getAllEmployees();
+            setEmployees(data);
+        } catch (error: any) {
+            if (error.message.includes('đăng nhập')) {
+                message.error('Vui lòng đăng nhập để tiếp tục');
+                router.push('/login'); // Chuyển hướng về trang đăng nhập
+            } else {
+                message.error(error.message || 'Không thể tải danh sách nhân viên');
+            }
+            console.error('Error:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        // Kiểm tra token khi component mount
+        const token = localStorage.getItem('token');
+        if (!token) {
+            message.error('Vui lòng đăng nhập để tiếp tục');
+            router.push('/login');
+            return;
+        }
+        fetchEmployees();
+    }, [router]);
+
     return (
-        <>
-            <Input.Search
-                placeholder=""
-                allowClear
-                enterButton="Search"
-                size="large"
-                onSearch={handleSearch}
-                style={{ width: 500, marginBottom: 16 }}
-            />
-            <Table<DataType>
-                columns={columns}
-                dataSource={paginatedData}
-            />
-        </>
+        <Table<Employee>
+            columns={columns}
+            dataSource={employees}
+            rowKey={(record) => record.employeeID.toString()}
+            loading={loading}
+            pagination={{ pageSize: 10 }}
+        />
     );
 };
 
-export default App;
+export default EmployeeTable;

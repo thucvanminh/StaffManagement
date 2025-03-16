@@ -8,16 +8,17 @@ import styles from './LoginSection.css';
 
 import {jwtDecode} from 'jwt-decode';
 import Authentication from '../services/authentication';
-import employeesAPI from '../services/employeesAPI';
+import employeeService from '../services/employeeService';
 export default function LoginSection() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    // const [error, setError] = useState('');
+    const [error, setError] = useState('');
     const router = useRouter();
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setError(''); // Reset error message
 
         try {
             // Bước 1: Gọi API login
@@ -32,27 +33,27 @@ export default function LoginSection() {
 
             // Bước 3: Xử lý logic điều hướng
             if (roleID === 1 || roleID === 2) {
-                router.push('/hr/overview');
+                router.push('/hr/employee');
             } else if (roleID === 3) {
                 try {
-                    const isHeadOfDepartment = await employeesAPI.isHeadOfDepartment(employeeID);
+                    const isHeadOfDepartment = await employeeService.isHeadOfDepartment(employeeID);
                     if (isHeadOfDepartment) {
-                        router.push('/headDepartment/overview');
+                        router.push('/headDepartment/employee');
                     } else {
                         router.push('/employee/overview');
                     }
                 } catch (error) {
                     console.error('Error checking department head:', error);
-                    router.push('/employee/overview'); // Điều hướng nếu lỗi
+                    router.push('/login'); // Điều hướng nếu lỗi
                 }
             } else {
-                router.push('/employee/overview'); // Mặc định
+                router.push('/login'); // Mặc định
             }
 
             console.log('Login success!');
         } catch (err) {
-            console.error('Login failed:', err);
-            // router.push('/employee/overview'); // Điều hướng nếu login thất bại
+            console.error('login failed:', err);
+            setError('username or password is incorrect');
         }
     };
 
@@ -61,21 +62,24 @@ export default function LoginSection() {
         <div className="login-container">
             <div className="login-box">
                 <h1>TH</h1>
+                {error && <div className="error-message">{error}</div>}
                 <form onSubmit={handleLogin}>
                     <label>
-                        <input type="text"
-                               placeholder="Username"
-                               value={username}
-                               onChange={(e) => setUsername(e.target.value)}
-                               required
+                        <input 
+                            type="text"
+                            placeholder="Username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
                         />
                     </label>
                     <label>
-                        <input type="password"
-                               placeholder="Password"
-                               value={password}
-                               onChange={(e) => setPassword(e.target.value)}
-                               required
+                        <input 
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
                         />
                     </label>
                     <div className="form-options">
