@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import '@ant-design/v5-patch-for-react-19';
 import type { GetProp, TableProps } from 'antd';
-import { Form, Input, Radio, Space, Table } from 'antd';
+import { Form, Input, Radio, Space, Table, Button, Drawer, Col, Row, DatePicker, Select } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import BusinessTripTable from './BusinessTripTable';
 import './BusinessTripTable.css';
+
 type SizeType = TableProps['size'];
 type ColumnsType<T extends object> = GetProp<TableProps<T>, 'columns'>;
 type TablePagination<T extends object> = NonNullable<Exclude<TableProps<T>['pagination'], boolean>>;
@@ -14,6 +17,7 @@ interface DataType {
     position: string;
     department: string;
     destination: string;
+    status: string;
 }
 
 const columns: ColumnsType<DataType> = [
@@ -71,17 +75,20 @@ const columns: ColumnsType<DataType> = [
         title: 'Time',
         dataIndex: 'time',
     },
-
     {
         title: 'Destination',
         dataIndex: 'destination',
+    },
+    {
+        title: 'Status',
+        dataIndex: 'status',
     },
     {
         title: 'Action',
         key: 'action',
         render: () => (
             <Space size="middle">
-                <a>Delete</a>
+                <a>Remove</a>
             </Space>
         ),
     },
@@ -94,8 +101,8 @@ const originalData = Array.from({ length: 10 }).map<DataType>((_, i) => ({
     department: 'Department A',
     time: '10/8/2025 12:00:00 - 15/8/2025 18:00:00',
     destination: 'TP.HCM, Quận 5',
+    status: 'Pending / In Progress / Finished',
 }));
-
 
 const defaultTitle = () => '';
 const defaultFooter = () => '';
@@ -116,10 +123,41 @@ const App: React.FC = () => {
     const [xScroll, setXScroll] = useState<string>('unset');
     const [dataSource, setDataSource] = useState(originalData);
 
+    const [open, setOpen] = useState(false);
+    const [form] = Form.useForm();
+
+    const showDrawer = () => {
+        setOpen(true);
+    };
+
+    const onClose = () => {
+        form.resetFields(); // Reset form khi đóng
+        setOpen(false);
+    };
+
+    const onSubmit = () => {
+        form.validateFields()
+            .then((values) => {
+                const newEmployee: DataType = {
+                    key: dataSource.length,
+                    name: values.name,
+                    position: values.position,
+                    department: values.department,
+                    time: `${values.dateTime[0].format('DD/MM/YYYY HH:mm:ss')} - ${values.dateTime[1].format('DD/MM/YYYY HH:mm:ss')}`,
+                    destination: values.destination,
+                    status: values.status,
+                };
+                setDataSource([...dataSource, newEmployee]);
+                onClose();
+            })
+            .catch((info) => {
+                console.log('Validate Failed:', info);
+            });
+    };
+
     const handleBorderChange = (enable: boolean) => {
         setBordered(enable);
     };
-
 
     const handleHeaderChange = (enable: boolean) => {
         setShowHeader(enable);
@@ -131,6 +169,7 @@ const App: React.FC = () => {
         );
         setDataSource(filteredData);
     };
+
     const scroll: { x?: number | string; y?: number | string } = {};
     if (yScroll) {
         scroll.y = 240;
@@ -166,6 +205,15 @@ const App: React.FC = () => {
                 onSearch={handleSearch}
                 style={{ width: 500, marginBottom: 16 }}
             />
+            <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={showDrawer}
+                size="large"
+                style={{ marginLeft: 6, marginBottom: 16 }}
+            >
+                New Employee
+            </Button>
             <Form
                 layout="inline"
                 className="table-demo-control-bar"
@@ -208,6 +256,94 @@ const App: React.FC = () => {
                 dataSource={hasData ? dataSource : []}
                 scroll={scroll}
             />
+            <Drawer
+                title="Add New Employee for Business Trip"
+                width={720}
+                onClose={onClose}
+                open={open}
+                styles={{
+                    body: {
+                        paddingBottom: 80,
+                    },
+                }}
+                extra={
+                    <Space>
+                        <Button onClick={onClose}>Cancel</Button>
+                        <Button onClick={onSubmit} type="primary">
+                            Submit
+                        </Button>
+                    </Space>
+                }
+            >
+                <Form form={form} layout="vertical" hideRequiredMark>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item
+                                name="name"
+                                label="Name"
+                                rules={[{ required: true, message: 'Please enter employee name' }]}
+                            >
+                                <Input placeholder="Please enter employee name" />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                name="position"
+                                label="Position"
+                                rules={[{ required: true, message: 'Please enter position' }]}
+                            >
+                                <Select placeholder="Please select position">
+                                    <Select.Option value="Developer">Developer</Select.Option>
+                                    <Select.Option value="Intern">Intern</Select.Option>
+                                    <Select.Option value="Freshman">Freshman</Select.Option>
+                                    <Select.Option value="Accountant">Accountant</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item
+                                name="department"
+                                label="Department"
+                                rules={[{ required: true, message: 'Please select department' }]}
+                            >
+                                <Select placeholder="Please select department">
+                                    <Select.Option value="Department A">Department A</Select.Option>
+                                    <Select.Option value="Department B">Department B</Select.Option>
+                                    <Select.Option value="Department C">Department C</Select.Option>
+                                    <Select.Option value="Department D">Department D</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                name="dateTime"
+                                label="Time"
+                                rules={[{ required: true, message: 'Please choose the time range' }]}
+                            >
+                                <DatePicker.RangePicker
+                                    showTime
+                                    style={{ width: '100%' }}
+                                    getPopupContainer={(trigger) => trigger.parentElement!}
+                                    format="DD/MM/YYYY HH:mm"
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={24}>
+                            <Form.Item
+                                name="destination"
+                                label="Destination"
+                                rules={[{ required: true, message: 'Please enter destination' }]}
+                            >
+                                <Input placeholder="Please enter destination" />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
+            </Drawer>
         </>
     );
 };
