@@ -64,8 +64,8 @@ const EmployeeTable: React.FC = () => {
             const data = await employeeService.getAllEmployees();
             setEmployees(data);
         } catch (error: any) {
-            if (error.message.includes('login')) {
-                message.error('Please login to continue');
+            if (error.message.includes('đăng nhập')) {
+                message.error('Vui lòng đăng nhập để tiếp tục');
                 router.push('/login'); // Chuyển hướng về trang đăng nhập
             } else {
                 message.error(error.message || 'Cannot load employee list');
@@ -77,7 +77,6 @@ const EmployeeTable: React.FC = () => {
     };
 
     useEffect(() => {
-        // Kiểm tra token khi component mount
         const token = localStorage.getItem('token');
         if (!token) {
             message.error('Please login to continue');

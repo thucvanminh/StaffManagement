@@ -1,29 +1,16 @@
 import React from 'react';
-import { Tabs } from 'antd';
-import OvetimeTable from './OvertimeTable';
-import OvertimeList from './OvertimeList';
+import { Col, Divider, Row } from 'antd';
+import OvertimeTable from './OvertimeTable';
 
-
-const onChange = (key: string) => {
-    console.log(`Switched to tab: ${key}`);
-};
-
-const App: React.FC = () => (
-    <Tabs
-        onChange={onChange}
-        type="card"
-        items={[
-            {
-                label: 'Request Overtime',
-                key: '1',
-                children: <OvetimeTable />,
-            },
-            {
-                label: 'Overtime List',
-                key: '2',
-                children: <OvertimeList />,
-            },
-        ]}
-    />
+const App = () => (
+    <>
+        <Divider orientation="left"></Divider>
+        <Row>
+            <Col span={24} order={1}>
+                <OvertimeTable />
+            </Col>
+        </Row>
+    </>
 );
+
 export default App;

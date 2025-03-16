@@ -1,130 +1,60 @@
 import React, { useState } from 'react';
-import type { GetProp, TableProps } from 'antd';
-import { Form, Input, Radio, Space, Table } from 'antd';
-import TimePicker from '../../components/TimePicker';
+import type { TableColumnsType } from 'antd';
+import { Input, Table, Drawer, Row, Col, Form, Space, Button, Select, DatePicker } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import './OvertimeTable.css';
-type SizeType = TableProps['size'];
-type ColumnsType<T extends object> = GetProp<TableProps<T>, 'columns'>;
-type TablePagination<T extends object> = NonNullable<Exclude<TableProps<T>['pagination'], boolean>>;
-type TablePaginationPosition = NonNullable<TablePagination<any>['position']>[number];
 
 interface DataType {
   key: number;
   name: string;
+  email: string;
   position: string;
   department: string;
+  time: string;
   description: string;
 }
 
-const columns: ColumnsType<DataType> = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-  },
-  {
-    title: 'Position',
-    dataIndex: 'position',
-    filters: [
-      {
-        text: 'Developer',
-        value: 'Developer',
-      },
-      {
-        text: 'Intern',
-        value: 'Intern',
-      },
-      {
-        text: 'Freshman',
-        value: 'Freshman',
-      },
-      {
-        text: 'Accountant',
-        value: 'Accountant',
-      },
-    ],
-    onFilter: (value, record) => record.position.indexOf(value as string) === 0,
-
-  },
-  {
-    title: 'Department',
-    dataIndex: 'department',
-    filters: [
-      {
-        text: 'Department A',
-        value: 'Department A',
-      },
-      {
-        text: 'Department B',
-        value: 'Department B',
-      },
-      {
-        text: 'Department C',
-        value: 'Department C',
-      },
-      {
-        text: 'Department D',
-        value: 'Department D',
-      },
-    ],
-    onFilter: (value, record) => record.department.indexOf(value as string) === 0,
-  },
-  {
-    title: 'Time',
-    dataIndex: 'Time',
-    render: () => (
-      <Form.Item className="RangePicker">
-        <TimePicker />
-      </Form.Item>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: () => (
-      <Space size="middle">
-        <a>Approve</a>
-      </Space>
-    ),
-  },
-];
-
-const originalData = Array.from({ length: 10 }).map<DataType>((_, i) => ({
+const originalData: DataType[] = Array.from({ length: 10 }).map((_, i) => ({
   key: i,
   name: 'John Brown',
+  email: 'abc@gmail.com',
   position: 'Developer',
   department: 'Department A',
+  time: '10/3/2025 12:00:00 - 15/3/2025 18:00:00',
   description: `My name is John Brown, I am ${i}2 years old, living in New York No. ${i} Lake Park.`,
 }));
 
-
-const defaultTitle = () => '';
-const defaultFooter = () => '';
-
 const App: React.FC = () => {
-  const [bordered, setBordered] = useState(false);
-  const [loading] = useState(false);
-  const [size, setSize] = useState<SizeType>('large');
-  const [showTitle, setShowTitle] = useState(false);
-  const [showHeader, setShowHeader] = useState(true);
-  const [showFooter, setShowFooter] = useState(false);
-  const [hasData, setHasData] = useState(true);
-  const [tableLayout, setTableLayout] = useState<string>('unset');
-  const [top, setTop] = useState<TablePaginationPosition>('none');
-  const [bottom, setBottom] = useState<TablePaginationPosition>('bottomRight');
-  const [ellipsis, setEllipsis] = useState(false);
-  const [yScroll, setYScroll] = useState(false);
-  const [xScroll, setXScroll] = useState<string>('unset');
   const [dataSource, setDataSource] = useState(originalData);
+  const [open, setOpen] = useState(false);
+  const [form] = Form.useForm();
 
-  const handleBorderChange = (enable: boolean) => {
-    setBordered(enable);
+  const showDrawer = () => {
+    setOpen(true);
   };
 
-
-  const handleHeaderChange = (enable: boolean) => {
-    setShowHeader(enable);
+  const onClose = () => {
+    form.resetFields();
+    setOpen(false);
   };
 
+  const onSubmit = () => {
+    form.validateFields()
+      .then((values) => {
+        const newEmployee: DataType = {
+          key: dataSource.length,
+          name: values.name,
+          position: values.position,
+          department: values.department,
+          time: `${values.dateTime[0].format('DD/MM/YYYY HH:mm:ss')} - ${values.dateTime[1].format('DD/MM/YYYY HH:mm:ss')}`,
+        };
+        setDataSource([...dataSource, newEmployee]);
+        onClose();
+      })
+      .catch((info) => {
+        console.log('Validate Failed:', info);
+      });
+  };
 
   const handleSearch = (value: string) => {
     const filteredData = originalData.filter((item) =>
@@ -133,30 +63,45 @@ const App: React.FC = () => {
     setDataSource(filteredData);
   };
 
-  const scroll: { x?: number | string; y?: number | string } = {};
-  if (yScroll) {
-    scroll.y = 240;
-  }
-  if (xScroll !== 'unset') {
-    scroll.x = '100vw';
-  }
-
-  const tableColumns = columns.map((item) => ({ ...item, ellipsis }));
-  if (xScroll === 'fixed') {
-    tableColumns[0].fixed = true;
-    tableColumns[tableColumns.length - 1].fixed = 'right';
-  }
-
-  const tableProps: TableProps<DataType> = {
-    bordered,
-    loading,
-    size,
-    title: showTitle ? defaultTitle : undefined,
-    showHeader,
-    footer: showFooter ? defaultFooter : undefined,
-    scroll,
-    tableLayout: tableLayout === 'unset' ? undefined : (tableLayout as TableProps['tableLayout']),
-  };
+  const columns: TableColumnsType<DataType> = [
+    { title: 'Name', dataIndex: 'name', key: 'name' },
+    { title: 'Email', dataIndex: 'email', key: 'email' },
+    {
+      title: 'Position',
+      dataIndex: 'position',
+      key: 'position',
+      filters: [
+        { text: 'Developer', value: 'Developer' },
+        { text: 'Intern', value: 'Intern' },
+        { text: 'Freshman', value: 'Freshman' },
+        { text: 'Accountant', value: 'Accountant' },
+      ],
+      onFilter: (value, record) => record.position.indexOf(value as string) === 0,
+    },
+    {
+      title: 'Department',
+      dataIndex: 'department',
+      key: 'department',
+      filters: [
+        { text: 'Department A', value: 'Department A' },
+        { text: 'Department B', value: 'Department B' },
+        { text: 'Department C', value: 'Department C' },
+        { text: 'Department D', value: 'Department D' },
+      ],
+      onFilter: (value, record) => record.department.indexOf(value as string) === 0,
+    },
+    { title: 'Time', dataIndex: 'time', key: 'time' },
+    {
+      title: 'Action',
+      key: 'action',
+      render: () => (
+        <Space size="middle">
+        <a>Update</a>
+          <a>Remove</a>
+        </Space>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -168,48 +113,94 @@ const App: React.FC = () => {
         onSearch={handleSearch}
         style={{ width: 500, marginBottom: 16 }}
       />
-      <Form
-        layout="inline"
-        className="table-demo-control-bar"
-        style={{
-          marginBottom: 16,
-        }}
+      <Button
+        type="primary"
+        icon={<PlusOutlined />}
+        onClick={showDrawer}
+        size="large"
+        style={{ marginLeft: 6, marginBottom: 16 }}
       >
-        <Form.Item className="Bordered">
-          <Radio.Group value={bordered} onChange={(e) => handleBorderChange(e.target.checked)} />
-        </Form.Item>
-        <Form.Item className="Column Header">
-          <Radio.Group value={showHeader} onChange={(e) => handleHeaderChange(e.target.checked)} />
-        </Form.Item>
-        <Form.Item className="Has Data">
-          <Radio.Group value={hasData} />
-        </Form.Item>
-        <Form.Item className="Size">
-          <Radio.Group value={size} onChange={(e) => setSize(e.target.value)}>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item className="Table Scroll">
-          <Radio.Group value={xScroll} onChange={(e) => setXScroll(e.target.value)}>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item className="Table Layout">
-          <Radio.Group value={tableLayout} onChange={(e) => setTableLayout(e.target.value)}>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item className="Pagination Bottom">
-          <Radio.Group value={bottom} onChange={(e) => setBottom(e.target.value)}>
-          </Radio.Group>
-        </Form.Item>
-      </Form>
-      <>
-      </>
+        New Employee
+      </Button>
       <Table<DataType>
-        {...tableProps}
-        pagination={{ position: [top, bottom] }}
-        columns={tableColumns}
-        dataSource={hasData ? dataSource : []}
-        scroll={scroll}
+        columns={columns}
+        dataSource={dataSource}
+        pagination={{ pageSize: 10 }}
       />
+      <Drawer
+        title=""
+        width={720}
+        placement="left"
+        onClose={onClose}
+        open={open}
+        styles={{ body: { paddingBottom: 80 } }}
+        extra={
+          <Space>
+            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onSubmit} type="primary">
+              Submit
+            </Button>
+          </Space>
+        }
+      >
+        <Form form={form} layout="vertical" hideRequiredMark>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="name"
+                label="Name"
+                rules={[{ required: true, message: 'Please enter employee name' }]}
+              >
+                <Input placeholder="Please enter employee name" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="position"
+                label="Position"
+                rules={[{ required: true, message: 'Please select position' }]}
+              >
+                <Select placeholder="Please select position">
+                  <Select.Option value="Developer">Developer</Select.Option>
+                  <Select.Option value="Intern">Intern</Select.Option>
+                  <Select.Option value="Freshman">Freshman</Select.Option>
+                  <Select.Option value="Accountant">Accountant</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="department"
+                label="Department"
+                rules={[{ required: true, message: 'Please select department' }]}
+              >
+                <Select placeholder="Please select department">
+                  <Select.Option value="Department A">Department A</Select.Option>
+                  <Select.Option value="Department B">Department B</Select.Option>
+                  <Select.Option value="Department C">Department C</Select.Option>
+                  <Select.Option value="Department D">Department D</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="dateTime"
+                label="Time"
+                rules={[{ required: true, message: 'Please choose the time range' }]}
+              >
+                <DatePicker.RangePicker
+                  showTime
+                  style={{ width: '100%' }}
+                  getPopupContainer={(trigger) => trigger.parentElement!}
+                  format="DD/MM/YYYY HH:mm"
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Drawer>
     </>
   );
 };
