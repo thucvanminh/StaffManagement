@@ -25,24 +25,21 @@ const App: React.FC = () => {
     const [dataSource, setDataSource] = useState(originalDataSource);
     const [searchText, setSearchText] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 10; // Số mục trên mỗi trang
+    const pageSize = 10;
 
-    // Xử lý tìm kiếm theo Name
     const handleSearch = (value: string) => {
         setSearchText(value);
-        setCurrentPage(1); // Reset về trang 1 khi tìm kiếm
+        setCurrentPage(1);
         const filteredData = originalDataSource.filter((item) =>
             item.name.toLowerCase().includes(value.toLowerCase())
         );
         setDataSource(filteredData);
     };
 
-    // Xử lý thay đổi trang
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
 
-    // Tính dữ liệu cho trang hiện tại
     const paginatedData = dataSource.slice(
         (currentPage - 1) * pageSize,
         currentPage * pageSize
@@ -59,7 +56,7 @@ const App: React.FC = () => {
             key: 'operation',
             render: () => (
                 <Space size="middle">
-                    <a>Deny</a>
+                    <a>Remove</a>
                 </Space>
             ),
         },

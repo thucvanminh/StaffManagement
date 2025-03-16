@@ -9,6 +9,7 @@ import {
   SettingOutlined,
   FormOutlined,
   UserOutlined,
+  UserSwitchOutlined,
   RedoOutlined,
 } from '@ant-design/icons'; import { Layout, Menu, theme } from 'antd';
 
@@ -30,9 +31,10 @@ const items = [
   { key: '2', icon: <ClockCircleOutlined />, label: <Link href="/head-department/overtime">Overtime</Link> },
   { key: '3', icon: <CarOutlined />, label: <Link href="/head-department/business-trip">Business Trip</Link> },
   { key: '4', icon: <RedoOutlined />, label: <Link href="/head-department/absence-management">Absence Management</Link> },
-  { key: '5', icon: <UserOutlined />, label: <Link href="/head-department/employee">Employee</Link> },
-  { key: '6', icon: <FormOutlined />, label: <Link href="/head-department/report">Report</Link> },
-  { key: '7', icon: <SettingOutlined />, label: <Link href="/head-department/setting">Setting</Link> },
+  { key: '5', icon: <UserSwitchOutlined />, label: <Link href="/head-department/transfer">Transfer</Link> },
+  { key: '6', icon: <UserOutlined />, label: <Link href="/head-department/employee">Employee</Link> },
+  { key: '7', icon: <FormOutlined />, label: <Link href="/head-department/report">Report</Link> },
+  { key: '8', icon: <SettingOutlined />, label: <Link href="/head-department/setting">Setting</Link> },
 ];
 
 const HeadDepartmentLayout = ({ children }) => {

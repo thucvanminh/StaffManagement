@@ -66,7 +66,7 @@ const EmployeeTable: React.FC = () => {
         } catch (error: any) {
             if (error.message.includes('đăng nhập')) {
                 message.error('Vui lòng đăng nhập để tiếp tục');
-                router.push('/login'); // Chuyển hướng về trang đăng nhập
+                router.push('/login');
             } else {
                 message.error(error.message || 'Không thể tải danh sách nhân viên');
             }
@@ -77,7 +77,6 @@ const EmployeeTable: React.FC = () => {
     };
 
     useEffect(() => {
-        // Kiểm tra token khi component mount
         const token = localStorage.getItem('token');
         if (!token) {
             message.error('Vui lòng đăng nhập để tiếp tục');

@@ -16,7 +16,6 @@ const App = () => (
             <Col span={14} order={1}>
                 <ActivityFeed />
             </Col>
-
         </Row>
         <Divider orientation="left"></Divider>
         <Row>

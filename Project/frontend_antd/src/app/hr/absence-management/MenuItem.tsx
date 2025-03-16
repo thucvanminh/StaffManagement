@@ -15,7 +15,7 @@ const App: React.FC = () => (
     type="card"
     items={[
       {
-        label: 'Request Absence',
+        label: 'Absence Request',
         key: '1',
         children: <AbsenceTable />,
       },
