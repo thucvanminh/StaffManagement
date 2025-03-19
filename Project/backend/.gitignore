@@ -5,6 +5,6 @@ node_modules/
 .env
 
 # Bỏ qua Firebase Private Key
-src/config/firebase-service-account.json
+config/firebase-service-account.json
 
 
