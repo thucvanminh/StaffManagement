@@ -27,4 +27,6 @@ router.put('/:id', authorizeRole([1]), businessTripController.updateRequest);
 // Delete request (HR only)
 router.delete('/:id', authorizeRole([1]), businessTripController.deleteRequest);
 
+router.get('/department/:departmentId', authorizeRole([1, 2, 3]), businessTripController.getRequestByDepartment);
+
 module.exports = router;

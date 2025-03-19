@@ -39,6 +39,11 @@ model employees {
   @@index([roleID], map: "fk_roleID")
 }
 
+model roles {
+  roleID   Int     @id @unique(map: "roleID_UNIQUE")
+  roleName String? @db.VarChar(255)
+}
+
 model business_trip_requests {
   businessTripID Int       @id @default(autoincrement())
   employeeID     Int
@@ -135,11 +140,6 @@ model resign_requests {
   @@index([employeeID], map: "employeeID")
   @@index([statusID], map: "statusID")
   @@index([approvedByDept], map: "resign_requests_ibfk_4")
-}
-
-model roles {
-  roleID   Int     @id @unique(map: "roleID_UNIQUE")
-  roleName String? @db.VarChar(255)
 }
 
 model statuses {

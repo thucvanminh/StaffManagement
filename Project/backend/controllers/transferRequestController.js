@@ -10,7 +10,16 @@ const getAllTransferRequests = async (req, res) => {
     const currentDepartment = await prisma.departments.findMany();
     const status = await prisma.statuses.findMany();
     const targetDepartment = await prisma.departments.findMany();
-    res.status(200).json({ transferRequests, employee, currentDepartment, status, targetDepartment });
+    const role = await prisma.roles.findMany();
+    const transferRequest = transferRequests.map(request => ({
+        ...request,
+        employee: employee.find(e => e.employeeID === request.employeeID),
+        currentDepartment: currentDepartment.find(d => d.departmentID === request.currentDepartmentID),
+        status: status.find(s => s.statusID === request.statusID),
+        targetDepartment: targetDepartment.find(d => d.departmentID === request.targetDepartmentID),
+        role: role.find(r => r.roleID === request.roleID)
+    }));    
+    res.status(200).json(transferRequest);
 };
 
 const createTransferRequest = async (req, res) => {

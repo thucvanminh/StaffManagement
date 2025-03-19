@@ -123,7 +123,18 @@ exports.approveByHR = async (req, res) => {
 exports.getAllResignRequests = async (req, res) => {
     try {
         const resignRequests = await prisma.resign_requests.findMany();
-        res.status(200).json(resignRequests);
+        const status = await prisma.statuses.findMany();
+        const employee = await prisma.employees.findMany();
+        const department = await prisma.departments.findMany();
+        const role = await prisma.roles.findMany();
+        const resignRequest = resignRequests.map(request => ({
+            ...request,
+            status: status.find(s => s.statusID === request.statusID),
+            employee: employee.find(e => e.employeeID === request.employeeID),
+            department: department.find(d => d.departmentID === request.departmentID),
+            role: role.find(r => r.roleID === request.roleID)
+        }));
+        res.status(200).json(resignRequest);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Internal Server Error" });

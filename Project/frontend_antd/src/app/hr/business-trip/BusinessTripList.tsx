@@ -73,8 +73,8 @@ const BusinessTripList: React.FC = () => {
     const [ellipsis, setEllipsis] = useState(false);
     const [yScroll, setYScroll] = useState(false);
     const [xScroll, setXScroll] = useState<string>('unset');
-    const [dataSource, setDataSource] = useState<BusinessTrip[]>([]);
-    const [originalData, setOriginalData] = useState<BusinessTrip[]>([]);
+    const [dataSource, setDataSource] = useState<BusinessTrip[]>([]);       // Lưu dữ liệu hiển thị trên bảng
+    const [originalData, setOriginalData] = useState<BusinessTrip[]>([]); // Lưu dữ liệu ban đầu
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [form] = Form.useForm();
     const [isLoading, setIsLoading] = useState<boolean>(false);

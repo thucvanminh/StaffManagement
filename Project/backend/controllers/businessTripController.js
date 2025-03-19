@@ -170,6 +170,38 @@ class BusinessTripController {
         }
     }
 
+    async getRequestByDepartment(req, res) {
+        try {
+            const departmentId = parseInt(req.params.departmentId);
+
+            // Truy vấn business_trip_requests có employee thuộc department chỉ định
+            const businessTrips = await prisma.business_trip_requests.findMany({
+                where: {
+                    employeeID: {
+                        in: (
+                            await prisma.employees.findMany({
+                                where: { departmentID: departmentId },
+                                select: { employeeID: true } // Chỉ lấy danh sách employeeID
+                            })
+                        ).map(emp => emp.employeeID)
+                    }
+                }
+            });
+            const employees = await prisma.employees.findMany();
+            const statuses = await prisma.statuses.findMany();
+            const businessTrip = businessTrips.map(request => ({
+                ...request,
+                status: statuses.find(s => s.statusID === getDynamicStatus(request)),
+                employee: employees.find(e => e.employeeID === request.employeeID)
+            }));
+            res.status(200).json(businessTrip);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+
+
     async getPendingRequests(req, res) {
         try {
             const requests = await prisma.business_trip_requests.findMany({

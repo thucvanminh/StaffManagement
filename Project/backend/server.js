@@ -7,7 +7,6 @@ const port = 5000;
 // Kiểm tra kết nối database và khởi động server
 async function startServer() {
     try {
-      
         // Kiểm tra kết nối Prisma
         await prisma.$connect();
         console.log('Prisma Database connection successful!');

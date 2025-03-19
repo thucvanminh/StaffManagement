@@ -40,7 +40,8 @@ class BusinessTripService {
 
     async deleteBusinessTrip(id) {
         try {
-            await API.deleteAPI(`/business-trips/${id}`);
+            const response = await API.deleteAPI(`/business-trips/${id}`);
+            return response;
         } catch (error) {
             throw new Error('Cannot delete business trip: ' + error.message);
         }

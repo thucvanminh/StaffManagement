@@ -39,6 +39,10 @@ class API {
                 throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             }
 
+            if (response.status === 204) {
+                return null;
+            }
+
             return response.json();
         } catch (error) {
             if (error.name === 'AbortError') {

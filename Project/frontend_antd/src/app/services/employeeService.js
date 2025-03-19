@@ -54,13 +54,14 @@ class EmployeeService {
             throw new Error('Cannot search employees: ' + error.message);
         }
     }
+
     async isHeadOfDepartment(employeeID) {
         try {
             const response = await API.getAPI(`/employees/is-head-of-department/${employeeID}`);
             return response.isHeadOfDepartment;
         } catch (error) {
             console.error('Error checking department head:', error);
-            throw error;
+            return false; // Return false by default if there's an error
         }
     }
 }

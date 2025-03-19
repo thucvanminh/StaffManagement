@@ -7,7 +7,18 @@ class DepartmentController {
         try {
             const departments = await prisma.departments.findMany({
             });
-            res.status(200).json(departments);
+            const headOfDepartment = await prisma.employees.findMany({
+                where: {
+                    departmentID: { 
+                        in: departments.map(department => department.departmentID)
+                    }
+                }
+            });
+            const department = departments.map(department => ({
+                ...department,
+                headOfDepartment: headOfDepartment.find(employee => employee.departmentID === department.departmentID)
+            }));
+            res.status(200).json(department);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

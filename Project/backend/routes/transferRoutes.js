@@ -7,6 +7,7 @@ const authenticateToken = require('../middlewares/authMiddleware');
 const authorizeRole = require('../middlewares/authorizeRole');
 
 const HR_ROLE_ID = 2;
+const DIRECTOR_ROLE_ID = 1;
 
 router.use(authenticateToken);
 
@@ -15,7 +16,7 @@ router.post('/',
     createTransferRequest
 );
 
-router.get('/', authorizeRole([HR_ROLE_ID]), getAllTransferRequests);
+router.get('/', authorizeRole([HR_ROLE_ID, DIRECTOR_ROLE_ID]), getAllTransferRequests);
 
 
 module.exports = router;
