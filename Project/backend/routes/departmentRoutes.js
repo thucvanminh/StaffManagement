@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const departmentController = require('../controllers/departmentController');
-const { validateDepartment } = require('../controllers/validations/departmentValidation');
+const { validateDepartment } = require('../validations/departmentValidation');
 const authMiddleware = require("../middlewares/authMiddleware");
 const authorizeRole = require("../middlewares/authorizeRole");
 router.use(authMiddleware);

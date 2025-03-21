@@ -1,0 +1,56 @@
+const admin = require('firebase-admin');
+const dotenv = require('dotenv');
+const path = require('path');
+const fs = require('fs');
+
+// Load biến môi trường từ .env
+dotenv.config();
+
+// Khởi tạo Firebase Admin SDK
+const serviceAccount = require(path.join(__dirname, 'config/firebase-service-account.json'));
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+});
+
+const bucket = admin.storage().bucket();
+
+// Đường dẫn file PDF cần upload (thay đổi theo file của bạn)
+const filePath = path.join(__dirname, 'HelloWorld.pdf'); // Đảm bảo có file test.pdf trong thư mục này
+const destination = `resumes/test_${Date.now()}.pdf`; // Tên file trên Firebase Storage
+
+async function uploadFile() {
+    try {
+        // Kiểm tra file có tồn tại không
+        if (!fs.existsSync(filePath)) {
+            console.error('File không tồn tại, hãy kiểm tra lại đường dẫn.');
+            return;
+        }
+
+        console.log('Đang upload file:', filePath);
+
+        // Upload file lên Firebase Storage
+        await bucket.upload(filePath, {
+            destination,
+            metadata: {
+                contentType: 'application/pdf',
+            },
+        });
+
+        console.log(`✅ File đã được upload thành công: ${destination}`);
+
+        // Lấy URL công khai (signed URL)
+        const file = bucket.file(destination);
+        const [url] = await file.getSignedUrl({
+            action: 'read',
+            expires: '03-01-2030', // Set ngày hết hạn
+        });
+
+        console.log('📌 Public URL:', url);
+    } catch (error) {
+        console.error('🚨 Lỗi khi upload file:', error);
+    }
+}
+
+uploadFile();

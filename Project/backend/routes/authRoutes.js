@@ -5,7 +5,7 @@ const rateLimit = require("express-rate-limit");
 const express = require('express');
 const router = express.Router();
 const AuthController = require('../controllers/authController');
-const accountValidation = require('../controllers/validations/accountValidation');
+const accountValidation = require('../validations/accountValidation');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 const loginLimiter = rateLimit({

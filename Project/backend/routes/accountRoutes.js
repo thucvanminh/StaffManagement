@@ -4,7 +4,7 @@ const router = express.Router();
 const accountController = require('../controllers/accountController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const authorizeRole = require('../middlewares/authorizeRole');
-const { validateAccount } = require('../controllers/validations/accountValidation');
+const { validateAccount } = require('../validations/accountValidation');
 
 router.get('/', authMiddleware, authorizeRole([1,2]), accountController.getAllAccounts);
 router.get('/:id', authMiddleware, authorizeRole([1,2]), accountController.getAccountById);

@@ -1,7 +1,7 @@
 // backend/controllers/validations/employeeValidation.js
 
 const { body, query } = require('express-validator');
-const prisma = require('../../prisma');
+const prisma = require('../prisma');
 
 const validateEmployee = [
     body('employeeID').optional().isInt({ min: 1 }).withMessage('employeeID must be positive integer')

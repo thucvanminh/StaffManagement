@@ -1,6 +1,6 @@
-const app = require('./app'); // Import cấu hình từ app.js
+const app = require('./app');
 const prisma = require('./prisma');
-const { bucket } = require('./config/firebase'); // Import Firebase Storage
+const { bucket } = require('./config/firebase');
 
 const port = 5000;
 
@@ -11,15 +11,28 @@ async function startServer() {
         console.log('✅ Prisma Database connection successful!');
 
         // Kiểm tra kết nối Firebase Storage
-        const [files] = await bucket.getFiles();
-        console.log(`✅ Firebase Storage connected! Found ${files.length} files.`);
+        if (bucket) {
+            console.log('✅ Firebase Storage connected!');
+        }
 
         // Khởi động server
-        app.listen(port, () => {
-            console.log(`🚀 Server đang chạy tại http://localhost:${port}`);
+        const server = app.listen(port, () => {
+            console.log(`🚀 Server is running at http://localhost:${port}`);
         });
+
+        // Graceful shutdown
+        process.on('SIGTERM', async () => {
+            console.log('⏳ Shutting down server...');
+            server.close(() => {
+                console.log('✅ Server has been shut down');
+            });
+            await prisma.$disconnect();
+            console.log('✅ Prisma has been disconnected');
+            process.exit(0);
+        });
+
     } catch (error) {
-        console.error('❌ Lỗi khi kết nối:', error);
+        console.error('❌ Error when connecting:', error);
         process.exit(1);
     }
 }

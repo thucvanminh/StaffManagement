@@ -13,6 +13,7 @@ const overtimeRoutes = require('./routes/overtimeRoute');
 const leaveRoutes = require('./routes/leaveRoute');
 const resignRoutes = require('./routes/resignRoutes');
 const transferRoutes = require('./routes/transferRoutes');
+const recruitmentRoutes = require('./routes/recruitmentRoutes');
 const app = express();
 
 // Middleware
@@ -42,4 +43,5 @@ app.use('/overtime-requests', overtimeRoutes);
 app.use('/leave-requests', leaveRoutes);
 app.use('/resign-requests', resignRoutes);
 app.use('/transfer-requests', transferRoutes);
+app.use('/recruitment-requests', recruitmentRoutes);
 module.exports = app;
