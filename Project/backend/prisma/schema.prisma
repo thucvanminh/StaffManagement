@@ -52,9 +52,9 @@ model business_trip_requests {
   endDate        DateTime  @db.Date
   reason         String    @db.VarChar(255)
   statusID       Int
-  createdBy      Int
   createdAt      DateTime? @default(now()) @db.DateTime(0)
   updatedAt      DateTime? @default(now()) @db.DateTime(0)
+  createdBy      Int
 
   @@index([employeeID], map: "employeeID")
   @@index([statusID], map: "statusID")
@@ -106,26 +106,8 @@ model overtime_employees {
   overtimeRequestID Int @map("overtimeRequestID")
   employeeID        Int
 
-  @@id([overtimeRequestID, employeeID]) // Khóa chính composite
+  @@id([overtimeRequestID, employeeID])
   @@index([employeeID], map: "employeeID")
-}
-
-model recruitment_requests {
-  recruitmentRequestID Int       @id @default(autoincrement())
-  applicantName        String    @db.VarChar(255)
-  applicantPhone       String?   @db.VarChar(255)
-  applicantEmail       String    @unique @db.VarChar(255) // Đảm bảo không trùng email
-  position             String    @db.VarChar(255)
-  resumeLink           String?   @db.VarChar(255) // URL tới CV trên đám mây
-  coverLetter          String?   @db.Text // Thêm để lưu thư xin việc
-  statusID             Int
-  approvedBy           Int? // Người duyệt (HR hoặc quản lý)
-  createdAt            DateTime? @default(now()) @db.DateTime(0)
-  updatedAt            DateTime? @default(now()) @db.DateTime(0)
-
-  @@index([approvedBy], map: "approvedBy")
-  @@index([statusID], map: "statusID")
-  @@index([applicantEmail], map: "applicantEmail")
 }
 
 model resign_requests {
@@ -154,15 +136,15 @@ model statuses {
 model transfer_requests {
   transferRequestID   Int       @id @default(autoincrement())
   employeeID          Int
-  currentDepartmentID Int // Thay departmentHeadID để rõ ràng hơn
-  targetDepartmentID  Int // Thay targetDepartmentHeadID để liên kết với phòng ban
-  requestType         String    @db.VarChar(255) // Có thể thay bằng enum nếu cần
+  requestType         String    @db.VarChar(255)
   description         String    @db.VarChar(255)
   statusID            Int
-  createdBy           Int // HR tạo request
-  approvedBy          Int? // Người duyệt (nếu cần thêm bước duyệt)
+  approvedBy          Int?
   createdAt           DateTime? @default(now()) @db.DateTime(0)
   updatedAt           DateTime? @default(now()) @db.DateTime(0)
+  createdBy           Int
+  currentDepartmentID Int
+  targetDepartmentID  Int
 
   @@index([approvedBy], map: "approvedBy")
   @@index([currentDepartmentID], map: "currentDepartmentID")
@@ -170,4 +152,19 @@ model transfer_requests {
   @@index([employeeID], map: "employeeID")
   @@index([targetDepartmentID], map: "targetDepartmentID")
   @@index([createdBy], map: "createdBy")
+}
+
+model recruitment_requests {
+  recruitmentRequestID Int       @id @default(autoincrement())
+  applicantName        String    @db.VarChar(255)
+  applicantEmail       String    @db.VarChar(255)
+  position             String    @db.VarChar(255)
+  gender               String    @db.VarChar(255)
+  statusID             Int
+  approvedBy           Int?
+  createdAt            DateTime? @default(now()) @db.DateTime(0)
+  updatedAt            DateTime? @default(now()) @db.DateTime(0)
+  applicantPhone       String?   @db.VarChar(255)
+  coverLetter          String?   @db.Text
+  resumeLink           String?   @db.VarChar(255)
 }
