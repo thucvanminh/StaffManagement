@@ -9,7 +9,7 @@ const {
     getAllPendingOvertimeRequests,
     getAllRejectedOvertimeRequests,
     getAllAcceptedOvertimeRequests,
-    getAllAcceptedRequestsByDept,
+    getAllOvertimeRequests,
     getRequestByEmployeeID,
     getRequestByRequestID
 } = require('../controllers/overtimeRequestController');
@@ -38,11 +38,10 @@ router.put('/:id/rejectHR',
     authorizeRole([HR_ROLE_ID]),
     rejectByHR
 );
-
+router.get('/', getAllOvertimeRequests);
 router.get('/pending', getAllPendingOvertimeRequests);
 router.get('/rejected', getAllRejectedOvertimeRequests);
 router.get('/accepted', getAllAcceptedOvertimeRequests);
-router.get('/accepted-by-dept', getAllAcceptedRequestsByDept);
 router.get('/employee/:id', getRequestByEmployeeID);
 router.get('/:id', getRequestByRequestID);
 

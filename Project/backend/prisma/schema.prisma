@@ -15,24 +15,27 @@ model accounts {
 }
 
 model departments {
-  departmentID       Int     @id @unique(map: "departmentID_UNIQUE")
-  departmentName     String? @db.VarChar(255)
-  HeadOfDepartmentID Int?    @unique(map: "HeadOfDepartmentID_UNIQUE")
+  departmentID       Int         @id @unique(map: "departmentID_UNIQUE")
+  departmentName     String?     @db.VarChar(255)
+  HeadOfDepartmentID Int?        @unique(map: "HeadOfDepartmentID_UNIQUE")
+  employees          employees[] // Quan hệ ngược lại với employees
 }
 
 model employees {
-  employeeID         Int       @id @unique(map: "employeeID_UNIQUE")
-  fullName           String?   @db.VarChar(255)
-  dateOfBirth        DateTime? @db.Date
-  hireDay            DateTime? @db.Date
-  email              String    @unique(map: "email") @db.VarChar(255)
-  phone              String?   @db.VarChar(255)
-  address            String?   @db.VarChar(255)
-  city               String?   @db.VarChar(255)
-  gender             String?   @db.VarChar(255)
+  employeeID         Int                  @id @unique(map: "employeeID_UNIQUE")
+  fullName           String?              @db.VarChar(255)
+  dateOfBirth        DateTime?            @db.Date
+  hireDay            DateTime?            @db.Date
+  email              String               @unique(map: "email") @db.VarChar(255)
+  phone              String?              @db.VarChar(255)
+  address            String?              @db.VarChar(255)
+  city               String?              @db.VarChar(255)
+  gender             String?              @db.VarChar(255)
   departmentID       Int?
   headOfDepartmentID Int?
   roleID             Int
+  overtime_employees overtime_employees[]
+  department         departments?         @relation(fields: [departmentID], references: [departmentID]) // Quan hệ với departments
 
   @@index([departmentID], map: "departmentID")
   @@index([headOfDepartmentID], map: "fk_headID")
@@ -89,22 +92,26 @@ model notifications {
 }
 
 model overtime_requests {
-  overtimeRequestID Int       @id @default(autoincrement())
-  date              DateTime  @db.Date
-  hours             Float     @db.Float
-  reason            String    @db.VarChar(255)
-  statusID          Int
-  approvedBy        Int?
-  createdAt         DateTime? @default(now()) @db.DateTime(0)
-  updatedAt         DateTime? @default(now()) @db.DateTime(0)
+  overtimeRequestID  Int                  @id @default(autoincrement())
+  date               DateTime             @db.Date
+  hours              Float                @db.Float
+  reason             String               @db.VarChar(255)
+  statusID           Int
+  approvedBy         Int?
+  createdAt          DateTime?            @default(now()) @db.DateTime(0)
+  updatedAt          DateTime?            @default(now()) @db.DateTime(0)
+  overtime_employees overtime_employees[]
+  status             statuses             @relation(fields: [statusID], references: [statusID])
 
   @@index([approvedBy], map: "approvedBy")
   @@index([statusID], map: "statusID")
 }
 
 model overtime_employees {
-  overtimeRequestID Int @map("overtimeRequestID")
+  overtimeRequestID Int               @map("overtimeRequestID")
   employeeID        Int
+  overtimeRequest   overtime_requests @relation(fields: [overtimeRequestID], references: [overtimeRequestID])
+  employee          employees         @relation(fields: [employeeID], references: [employeeID])
 
   @@id([overtimeRequestID, employeeID])
   @@index([employeeID], map: "employeeID")
@@ -128,9 +135,10 @@ model resign_requests {
 }
 
 model statuses {
-  statusID    Int    @id @unique(map: "statusID_UNIQUE")
-  statusName  String @db.VarChar(95)
-  description String @db.VarChar(45)
+  statusID          Int                 @id @unique(map: "statusID_UNIQUE")
+  statusName        String              @db.VarChar(95)
+  description       String              @db.VarChar(45)
+  overtime_requests overtime_requests[]
 }
 
 model transfer_requests {
