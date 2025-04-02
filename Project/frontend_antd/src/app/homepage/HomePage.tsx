@@ -30,152 +30,135 @@ const Homepage: React.FC = () => {
             </Header>
 
             {/* Body */}
-            <Content style={{ padding: '0 50px', marginTop: '20px' }}>
+            <Content className={styles.content}>
                 <div className={styles.banner}>
                     <Image
                         src="/banner-image.jpg"
                         alt="Banner"
+                        layout="responsive"
                         width={1200}
                         height={400}
-                        style={{ objectFit: 'cover', width: '100%', height: '400px' }}
+                        style={{ objectFit: 'cover' }}
                     />
                     <Title className={styles.bannerText}>Where Talent Meets Opportunity</Title>
                 </div>
 
-                {/* Div 2: Thông tin sơ bộ công ty */}
+                {/* About Section */}
                 <div className={styles.aboutSection}>
                     <Card styles={{ body: { padding: 0, overflow: 'hidden' } }}>
-                        <Flex justify="space-between">
-                            <img
-                                alt="about-company"
-                                src="/about-company.jpg"
-                                width={700}
-                                height={400}
-                                style={{ objectFit: 'cover' }}
-                            />
-                            <Flex vertical align="flex-center" style={{ padding: 30, textAlign: 'center' }}>
-                                <p className='Title' style={{ fontSize: '30px', fontWeight: 'bold' }}>
-                                    About Company
-                                </p>
-                                <p className='Paragraph' style={{ textAlign: 'justify', fontSize: '16px' }}>
-                                    TH Company is a leading provider of human resource management solutions, specializing in recruitment, training, and talent development. Our mission is to help businesses optimize their workforce and achieve sustainable growth through innovative HRM strategies and technologies.
-                                    We are a pioneering company in the field of human resource management, committed to delivering optimal HRM solutions to help businesses effectively manage their workforce. With cutting-edge technology and a team of experienced experts, our mission is to enhance work performance, streamline recruitment, training, and talent development processes, thereby supporting the sustainable growth of your business.
-                                </p>
-                            </Flex>
-                        </Flex>
+                        <Row gutter={[0, 16]} align="stretch">
+                            <Col xs={24} md={12} className={styles.imageCol}>
+                                <Image
+                                    src="/about-company.jpg"
+                                    alt="about-company"
+                                    layout="fill"
+                                    style={{ objectFit: 'cover' }}
+                                />
+                            </Col>
+                            <Col xs={24} md={12} className={styles.textCol}>
+                                <Flex vertical align="center" style={{ padding: 30, textAlign: 'center', height: '100%' }}>
+                                    <Title level={2}>About Company</Title>
+                                    <Paragraph style={{ textAlign: 'justify', fontSize: '16px' }}>
+                                        TH Company is a leading provider of human resource management solutions, specializing in recruitment, training, and talent development. Our mission is to help businesses optimize their workforce and achieve sustainable growth through innovative HRM strategies and technologies. We are a pioneering company in the field of human resource management, committed to delivering optimal HRM solutions to help businesses effectively manage their workforce. With cutting-edge technology and a team of experienced experts, our mission is to enhance work performance, streamline recruitment, training, and talent development processes, thereby supporting the sustainable growth of your business.
+                                    </Paragraph>
+                                </Flex>
+                            </Col>
+                        </Row>
                     </Card>
-
                 </div>
-                {/* Div 3: Thông tin sơ bộ công ty */}
+
+                {/* Recruitment Section */}
                 <div className={styles.recruitmentSection}>
                     <Card styles={{ body: { padding: 0, overflow: 'hidden' } }}>
-                        <Flex justify="gap" gap="70px"> {/* Changed from space-between to center, added gap */}
-                            <img
-                                alt="recruitment"
-                                src="/recruitment-sample.jpg"
-                                width={600}
-                                height={600}
-                                style={{ objectFit: 'cover' }}
-                            />
-                            <Flex vertical align="flex-center" style={{ padding: 20, textAlign: 'center' }}> 
-                                <p className="Title" style={{ fontSize: '30px', fontWeight: 'bold' }}>
-                                    Apply For Recruitment
-                                </p>
-                                <div className="RecruitmentForm" style={{ width: '100%', maxWidth: '600px', margin: '0 auto' }}>
-                                    <RecruitmentForm />
-                                </div>
-                            </Flex>
-                        </Flex>
+                        <Row gutter={[0, 16]} align="stretch">
+                            <Col xs={24} md={12} className={styles.imageCol}>
+                                <Image
+                                    src="/recruitment-sample.jpg"
+                                    alt="recruitment"
+                                    layout="fill"
+                                    style={{ objectFit: 'cover' }}
+                                />
+                            </Col>
+                            <Col xs={24} md={12} className={styles.textCol}>
+                                <Flex vertical align="center" style={{ padding: 20, textAlign: 'center', height: '100%' }}>
+                                    <Title level={2}>Apply For Recruitment</Title>
+                                    <div className={styles.recruitmentForm}>
+                                        <RecruitmentForm />
+                                    </div>
+                                </Flex>
+                            </Col>
+                        </Row>
                     </Card>
                 </div>
-                {/* Div 4: Tin tức */}
+
+                {/* News Section */}
                 <div className={styles.newsSection}>
                     <Title level={2}>News</Title>
-                    <Row gutter={[24, 16]}>
-                        <Col span={4}>
-                            <Card
-                                hoverable
-                                style={{ width: 240 }}
-                                cover={<img src="/news-sample.png" />}
-                            >
-                                <Meta title="Nvidia Expands Operations in Vietnam" description="Nvidia announces a new research and development center in Vietnam, aiming to tap into the country’s growing tech talent pool." />
-                            </Card>
-                        </Col>
-                        <Col span={4}>
-                            <Card
-                                hoverable
-                                style={{ width: 240 }}
-                                cover={<img src="/news-sample.png" />}
-                            >
-                                <Meta title="Tech Giant Unveils New AI Tool" description="A leading tech company launches an innovative AI tool designed to boost productivity across industries." />
-                            </Card>
-                        </Col>
-                        <Col span={4}>
-                            <Card
-                                hoverable
-                                style={{ width: 240 }}
-                                cover={<img src="/news-sample.png" />}
-                            >
-                                <Meta title="New HRM Software Hits the Market" description="A cutting-edge human resource management platform promises to streamline corporate hiring and training." />
-                            </Card>
-                        </Col>
-                        <Col span={4}>
-                            <Card
-                                hoverable
-                                style={{ width: 240 }}
-                                cover={<img src="/news-sample.png" />}
-                            >
-                                <Meta title="Global Markets Surge After Economic Report" description="Stock markets worldwide rise sharply following a positive economic growth forecast released today." />
-                            </Card>
-                        </Col>
-                        <Col span={4}>
-                            <Card
-                                hoverable
-                                style={{ width: 240 }}
-                                cover={<img src="/news-sample.png" />}
-                            >
-                                <Meta title="Breakthrough in Renewable Energy Research" description="Scientists announce a new solar panel design that doubles energy efficiency at half the cost." />
-                            </Card>
-                        </Col>
-                        <Col span={4}>
-                            <Card
-                                hoverable
-                                style={{ width: 240 }}
-                                cover={<img src="/news-sample.png" />}
-                            >
-                                <Meta title="Startup Secures $50M in Funding" description="A promising tech startup receives major investment to expand its AI-driven healthcare solutions." />
-                            </Card>
-                        </Col>
+                    <Row gutter={[24, 16]} justify="center">
+                        {[
+                            {
+                                title: 'Nvidia Expands Operations in Vietnam',
+                                description: 'Nvidia announces a new research and development center in Vietnam, aiming to tap into the country’s growing tech talent pool.',
+                            },
+                            {
+                                title: 'Tech Giant Unveils New AI Tool',
+                                description: 'A leading tech company launches an innovative AI tool designed to boost productivity across industries.',
+                            },
+                            {
+                                title: 'New HRM Software Hits the Market',
+                                description: 'A cutting-edge human resource management platform promises to streamline corporate hiring and training.',
+                            },
+                            {
+                                title: 'Global Markets Surge After Economic Report',
+                                description: 'Stock markets worldwide rise sharply following a positive economic growth forecast released today.',
+                            },
+                            {
+                                title: 'Breakthrough in Renewable Energy Research',
+                                description: 'Scientists announce a new solar panel design that doubles energy efficiency at half the cost.',
+                            },
+                            {
+                                title: 'Startup Secures $50M in Funding',
+                                description: 'A promising tech startup receives major investment to expand its AI-driven healthcare solutions.',
+                            },
+                        ].map((news, index) => (
+                            <Col xs={24} sm={12} md={8} lg={4} key={index}>
+                                <Card
+                                    hoverable
+                                    className={styles.newsCard}
+                                    cover={<img src="/news-sample.png" alt={news.title} />}
+                                >
+                                    <Meta title={news.title} description={news.description} />
+                                </Card>
+                            </Col>
+                        ))}
                     </Row>
                 </div>
             </Content>
 
             {/* Footer */}
             <Footer className={styles.footer}>
-                <Row gutter={[16, 16]}>
+                <Row gutter={[16, 16]} justify="center">
                     {/* Logo TH */}
-                    <Col span={6}>
+                    <Col xs={24} sm={12} md={6} style={{ textAlign: 'center' }}>
                         <Link href="/homepage">
                             <Image src="/logo-th.png" alt="TH Logo" width={180} height={180} />
                         </Link>
                     </Col>
 
-                    {/* Mạng xã hội */}
-                    <Col span={6}>
+                    {/* Social Media */}
+                    <Col xs={24} sm={12} md={6}>
                         <Title level={4}>Social Media</Title>
-                        <div>
-                            <ul style={{ listStyleType: 'none', padding: 0, }}>
-                                <li><a href="https://facebook.com" target="_blank">Facebook</a></li>
-                                <li><a href="https://youtube.com" target="_blank">Youtube</a></li>
-                                <li><a href="https://instagram.com" target="_blank">Instagram</a></li>
-                                <li><a href="https://tiktok.com" target="_blank">Tiktok</a></li>
-                                <li><a href="https://zalo.me" target="_blank">Zalo</a></li>
-                            </ul>
-                        </div>
+                        <ul style={{ listStyleType: 'none', padding: 0 }}>
+                            <li><a href="https://facebook.com" target="_blank">Facebook</a></li>
+                            <li><a href="https://youtube.com" target="_blank">Youtube</a></li>
+                            <li><a href="https://instagram.com" target="_blank">Instagram</a></li>
+                            <li><a href="https://tiktok.com" target="_blank">Tiktok</a></li>
+                            <li><a href="https://zalo.me" target="_blank">Zalo</a></li>
+                        </ul>
                     </Col>
 
-                    {/* Địa chỉ và liên hệ */}
-                    <Col span={6}>
+                    {/* Contact Us */}
+                    <Col xs={24} sm={12} md={6}>
                         <Title level={4}>Contact Us</Title>
                         <p>
                             Address: Đường Nam Kỳ Khởi Nghĩa, Định Hoà, Tp. Thủ Dầu Một, Bình Dương, Việt Nam
@@ -188,8 +171,8 @@ const Homepage: React.FC = () => {
                         </p>
                     </Col>
 
-                    {/* Bản đồ (OpenStreetMap) */}
-                    <Col span={6}>
+                    {/* Our Location */}
+                    <Col xs={24} sm={12} md={6}>
                         <Title level={4}>Our Location</Title>
                         <div className={styles.mapContainer}>
                             <iframe

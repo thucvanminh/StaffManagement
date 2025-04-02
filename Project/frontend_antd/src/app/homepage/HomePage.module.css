@@ -13,7 +13,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 50px;
+    padding: 0 20px;
     background: var(--white) !important;
     position: relative;
     z-index: 10;
@@ -21,11 +21,15 @@
 
 .logo img {
     transition: transform 0.3s ease;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 .logo img:hover {
     transform: scale(1.1);
+}
+
+.loginButton {
+    margin-top: 20px;
 }
 
 /* Banner */
@@ -42,12 +46,18 @@
     left: 50%;
     transform: translate(-50%, -50%);
     color: var(--white) !important;
-    /* Chữ màu trắng */
     font-size: 48px;
     font-weight: bold;
     text-shadow: 3px 3px 2px rgba(0, 0, 0, 1);
     padding: 10px 20px;
     border-radius: 5px;
+    text-align: center;
+}
+
+/* Content */
+.content {
+    padding: 0 20px;
+    margin-top: 20px;
 }
 
 /* About Section */
@@ -55,26 +65,39 @@
     background: var(--background-light);
     padding: 10px;
     border-radius: 10px;
-    text-align: center;
     margin-bottom: 40px;
-}
-
-.aboutSection img {
-    border-radius: 10px;
-
 }
 
 /* Recruitment Section */
 .recruitmentSection {
-    width: 60%;
+    width: 100%;
+    max-width: 1200px;
     padding: 10px;
     border-radius: 10px;
-    text-align: center;
     margin: 0 auto 40px auto;
 }
 
-.recruitmentSection img {
-    border-radius: 10px;
+.recruitmentForm {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Image Column */
+.imageCol {
+    position: relative;
+    padding: 0 !important;
+    height: 500px;
+    /* Set a fixed height for consistency */
+}
+
+/* Text/Form Column */
+.textCol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 500px;
+    /* Match the height of the image column */
 }
 
 /* News Section */
@@ -95,6 +118,7 @@
     border-radius: 10px !important;
     overflow: hidden;
     background: var(--white);
+    width: 100% !important;
 }
 
 .newsCard:hover {
@@ -116,7 +140,7 @@
 /* Footer */
 .footer {
     background: var(--footer-bg) !important;
-    padding: 20px 50px !important;
+    padding: 20px !important;
 }
 
 .footer h4 {
@@ -144,4 +168,90 @@
 .mapContainer {
     border-radius: 10px;
     overflow: hidden;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+
+    /* Header */
+    .header {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .logo img {
+        margin-top: 10px;
+    }
+
+    .loginButton {
+        margin-top: 10px;
+    }
+
+    /* Banner */
+    .bannerText {
+        font-size: 24px;
+        top: 70%;
+        padding: 5px 10px;
+    }
+
+    /* Content */
+    .content {
+        padding: 0 10px;
+    }
+
+    /* About Section */
+    .aboutSection {
+        padding: 5px;
+    }
+
+    /* Recruitment Section */
+    .recruitmentSection {
+        padding: 5px;
+    }
+
+    /* Image and Text Columns */
+    .imageCol,
+    .textCol {
+        height: 300px;
+        /* Adjust height for smaller screens */
+    }
+
+    /* News Section */
+    .newsSection h2 {
+        font-size: 24px;
+    }
+
+    /* Footer */
+    .footer {
+        padding: 10px !important;
+    }
+
+    .footer h4 {
+        font-size: 16px;
+    }
+
+    .footer p {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+
+    /* Banner */
+    .bannerText {
+        font-size: 18px;
+        top: 60%;
+    }
+
+    /* Image and Text Columns */
+    .imageCol,
+    .textCol {
+        height: 200px;
+        /* Adjust height for very small screens */
+    }
+
+    /* News Section */
+    .newsCard {
+        margin: 0 auto;
+    }
 }
