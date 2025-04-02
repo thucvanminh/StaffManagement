@@ -1,0 +1,147 @@
+/* Bảng màu trung tính */
+:root {
+    --background-light: #f5f7fa;
+    --text-dark: #333;
+    --text-light: #666;
+    --white: #fff;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --footer-bg: #2c3e50;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 50px;
+    background: var(--white) !important;
+    position: relative;
+    z-index: 10;
+}
+
+.logo img {
+    transition: transform 0.3s ease;
+    margin-top: 30px;
+}
+
+.logo img:hover {
+    transform: scale(1.1);
+}
+
+/* Banner */
+.banner {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.bannerText {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--white) !important;
+    /* Chữ màu trắng */
+    font-size: 48px;
+    font-weight: bold;
+    text-shadow: 3px 3px 2px rgba(0, 0, 0, 1);
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+/* About Section */
+.aboutSection {
+    background: var(--background-light);
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.aboutSection img {
+    border-radius: 10px;
+
+}
+
+/* Recruitment Section */
+.recruitmentSection {
+    width: 60%;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 0 auto 40px auto;
+}
+
+.recruitmentSection img {
+    border-radius: 10px;
+}
+
+/* News Section */
+.newsSection {
+    margin-bottom: 40px;
+}
+
+.newsSection h2 {
+    color: var(--text-dark);
+    font-size: 32px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.newsCard {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none !important;
+    border-radius: 10px !important;
+    overflow: hidden;
+    background: var(--white);
+}
+
+.newsCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.newsCard .ant-card-head {
+    background: var(--text-dark) !important;
+    color: var(--white) !important;
+}
+
+.newsCard .ant-card-body {
+    color: var(--text-light);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Footer */
+.footer {
+    background: var(--footer-bg) !important;
+    padding: 20px 50px !important;
+}
+
+.footer h4 {
+    color: var(--white) !important;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.footer a {
+    color: #bdc3c7 !important;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: var(--white) !important;
+}
+
+.footer p {
+    color: #bdc3c7 !important;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.mapContainer {
+    border-radius: 10px;
+    overflow: hidden;
+}
