@@ -1,29 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Table, message } from 'antd';
+import { Table, message, Input } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import employeeService from '../../services/employeeService';
 import { useRouter } from 'next/navigation';
 
-// interface Employee {
-//     employeeID: number;
-//     fullName: string;
-//     email: string;
-//     phone: string;
-//     department: {
-//         departmentName: string;
-//     };
-//     role: {
-//         roleName: string;
-//     };
-// }
-// Dùng type inference để lấy kiểu dữ liệu từ hàm getAllEmployees và đặt tên là Employee
 type Employee = Awaited<ReturnType<typeof employeeService.getAllEmployees>>;
-
 
 const EmployeeTable: React.FC = () => {
     const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
     const [employees, setEmployees] = useState<Employee[]>([]);
+    const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]); // State mới để lưu danh sách đã lọc
+    const [searchText, setSearchText] = useState<string>(''); // State để lưu giá trị tìm kiếm
 
     const columns: ColumnsType<Employee> = [
         {
@@ -63,10 +51,11 @@ const EmployeeTable: React.FC = () => {
             setLoading(true);
             const data = await employeeService.getAllEmployees();
             setEmployees(data);
+            setFilteredEmployees(data); // Khởi tạo danh sách đã lọc bằng danh sách gốc
         } catch (error: any) {
             if (error.message.includes('login')) {
                 message.error('Please login to continue');
-                router.push('/login'); // Chuyển hướng về trang đăng nhập
+                router.push('/login');
             } else {
                 message.error(error.message || 'Cannot load employee list');
             }
@@ -86,14 +75,42 @@ const EmployeeTable: React.FC = () => {
         fetchEmployees();
     }, [router]);
 
+    // Hàm xử lý tìm kiếm
+    const handleSearch = (value: string) => {
+        setSearchText(value);
+        if (value.trim() === '') {
+            setFilteredEmployees(employees); // Nếu ô tìm kiếm rỗng, hiển thị toàn bộ danh sách
+        } else {
+            const filtered = employees.filter((employee) =>
+                [employee.fullName, employee.email, employee.phone || '']
+                    .some((field) =>
+                        field.toLowerCase().includes(value.toLowerCase())
+                    )
+            );
+            setFilteredEmployees(filtered);
+        }
+    };
+
     return (
+        <div>
+            <Input.Search
+                placeholder="Search by name, email, or phone"
+                allowClear
+                enterButton="Search"
+                size="large"
+                value={searchText}
+                onChange={(e) => handleSearch(e.target.value)} // Cập nhật realtime khi nhập
+                onSearch={handleSearch} // Xử lý khi nhấn Enter hoặc nút Search
+                style={{ width: 400, marginBottom: 16 }}
+            />
             <Table
-            columns={columns}
-            dataSource={employees}
-            rowKey={(record) => record.employeeID.toString()}
-            loading={loading}
-            pagination={{ pageSize: 10 }}
-        />
+                columns={columns}
+                dataSource={filteredEmployees} // Sử dụng danh sách đã lọc thay vì danh sách gốc
+                rowKey={(record) => record.employeeID.toString()}
+                loading={loading}
+                pagination={{ pageSize: 10 }}
+            />
+        </div>
     );
 };
 

@@ -1,3 +1,5 @@
+// frontend_antd/src/app/hr/recruit/MenuIrem.tsx
+
 import React from 'react';
 import { Col, Divider, Row} from 'antd';
 import RecruitMenu from './RecruitMenu';

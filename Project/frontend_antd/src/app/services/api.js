@@ -23,7 +23,7 @@ class API {
             const response = await fetch(`${BASE_URL}${endpoint}`, {
                 ...options,
                 headers,
-                signal: controller.signal, 
+                signal: controller.signal, // Sử dụng signal để hủy request
                 credentials: 'include',
             });
 
