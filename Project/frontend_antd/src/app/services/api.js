@@ -9,13 +9,16 @@ class API {
 
         const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
-        if (!token) {
-            throw new Error('Please login to continue');
+        // NOTE: Không throw lỗi nếu không có token, thay vào đó redirect đến trang login
+        // Tuy nhiên, nếu endpoint là '/auth/login', không cần redirect vì đây là yêu cầu đăng nhập
+        if (!token && endpoint !== '/auth/login') {
+            window.location.href = '/login';
+            return;
         }
 
         const headers = {
             'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` }),
+            ...(token && { 'Authorization': `Bearer ${token}` }), // Chỉ thêm Authorization nếu có token
             ...options.headers,
         };
 
@@ -31,7 +34,8 @@ class API {
 
             if (response.status === 401) {
                 localStorage.removeItem('token');
-                throw new Error('Token expired');
+                window.location.href = '/login'; // Redirect nếu token hết hạn
+                return;
             }
 
             if (!response.ok) {
@@ -54,11 +58,9 @@ class API {
     }
 
     async getAPI(endpoint, queryParams = {}, options = {}) {
-        // Sửa: Dùng template literal để nối key và value trong query string
         const queryString = Object.entries(queryParams)
             .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
             .join('&');
-        // Sửa: Dùng template literal để nối endpoint và query string nếu có
         const url = queryString ? `${endpoint}?${queryString}` : endpoint;
 
         return this.fetchAPI(url, {
@@ -67,7 +69,7 @@ class API {
         });
     }
 
-    async postAPI(endpoint, body = {}, options = {}) { // Sửa tham số để nhận body
+    async postAPI(endpoint, body = {}, options = {}) {
         return this.fetchAPI(endpoint, {
             method: 'POST',
             body: JSON.stringify(body),

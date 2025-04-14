@@ -39,12 +39,12 @@ router.put('/:leaveRequestID/approve-by-dept',
 // HR duyệt hoặc từ chối leave request
 router.put('/:leaveRequestID/approve-by-hr',
     authenticateToken,
-    authorizeRole([HR_ROLE_ID], [DIRECTOR_ROLE_ID]),
+    authorizeRole([HR_ROLE_ID, DIRECTOR_ROLE_ID]),
     approveByHR
 );
 
 router.get('/',
-    authorizeRole([HR_ROLE_ID], [DIRECTOR_ROLE_ID]),
+    authorizeRole([HR_ROLE_ID,DIRECTOR_ROLE_ID]),
     getAllLeaveRequests
 );
 

@@ -35,7 +35,9 @@ model employees {
   headOfDepartmentID Int?
   roleID             Int
   overtime_employees overtime_employees[]
-  department         departments?         @relation(fields: [departmentID], references: [departmentID]) // Quan hệ với departments
+  leave_requests     leave_requests[] // Thêm quan hệ ngược lại với leave_requests
+  resign_requests    resign_requests[]
+  department         departments?         @relation(fields: [departmentID], references: [departmentID])
 
   @@index([departmentID], map: "departmentID")
   @@index([headOfDepartmentID], map: "fk_headID")
@@ -75,6 +77,8 @@ model leave_requests {
   approvedBy     Int?
   createdAt      DateTime? @default(now()) @db.DateTime(0)
   updatedAt      DateTime? @default(now()) @db.DateTime(0)
+  employee       employees @relation(fields: [employeeID], references: [employeeID]) // Thêm quan hệ với employees
+  status         statuses  @relation(fields: [statusID], references: [statusID]) // Thêm quan hệ với statuses
 
   @@index([approvedBy], map: "approvedBy")
   @@index([employeeID], map: "employeeID")
@@ -127,6 +131,8 @@ model resign_requests {
   approvedBy      Int?
   createdAt       DateTime? @default(now()) @db.DateTime(0)
   updatedAt       DateTime? @default(now()) @db.DateTime(0)
+  employee        employees @relation(fields: [employeeID], references: [employeeID])
+  status          statuses  @relation(fields: [statusID], references: [statusID])
 
   @@index([approvedBy], map: "approvedBy")
   @@index([employeeID], map: "employeeID")
@@ -139,6 +145,8 @@ model statuses {
   statusName        String              @db.VarChar(95)
   description       String              @db.VarChar(45)
   overtime_requests overtime_requests[]
+  leave_requests    leave_requests[] // Thêm quan hệ ngược lại với leave_requests
+  resign_request    resign_requests[]
 }
 
 model transfer_requests {

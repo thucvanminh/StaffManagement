@@ -118,17 +118,37 @@ exports.approveByHR = async (req, res) => {
     }
 };
 
+// exports.getAllLeaveRequests = async (req, res) => {
+//     try {
+//         const leaveRequests = await prisma.leave_requests.findMany();
+//         const status = await prisma.statuses.findMany();
+//         const employee = await prisma.employees.findMany();
+//         const leaveRequest = leaveRequests.map(request => ({
+//             ...request,
+//             status: status.find(s => s.statusID === request.statusID),
+//             employee: employee.find(e => e.employeeID === request.employeeID)
+//         }));
+//         res.status(200).json(leaveRequest);
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({ error: "Internal Server Error" });
+//     }
+// };
+
+// backend/controllers/leaveRequestController.js
 exports.getAllLeaveRequests = async (req, res) => {
     try {
-        const leaveRequests = await prisma.leave_requests.findMany();
-        const status = await prisma.statuses.findMany();
-        const employee = await prisma.employees.findMany();
-        const leaveRequest = leaveRequests.map(request => ({
-            ...request,
-            status: status.find(s => s.statusID === request.statusID),
-            employee: employee.find(e => e.employeeID === request.employeeID)
-        }));
-        res.status(200).json(leaveRequest);
+        const leaveRequests = await prisma.leave_requests.findMany({
+            include: {
+                employee: {
+                    include: {
+                        department: true // Lấy thông tin phòng ban
+                    }
+                },
+                status: true // Lấy thông tin trạng thái
+            }
+        });
+        res.status(200).json(leaveRequests);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Internal Server Error" });
@@ -170,7 +190,7 @@ exports.getAllPendingLeaveRequests = async (req, res) => {
 exports.getAllRejectedLeaveRequests = async (req, res) => {
     try {
         const rejectedLeaveRequests = await prisma.leave_requests.findMany({
-            where: { statusID: StatusEnum.REJECTED_BY_DEPT || StatusEnum.REJECTED_BY_HR }
+            where:{ statusID: { in: [StatusEnum.REJECTED_BY_DEPT, StatusEnum.REJECTED_BY_HR] } }
         });
         res.status(200).json(rejectedLeaveRequests);
     } catch (error) {

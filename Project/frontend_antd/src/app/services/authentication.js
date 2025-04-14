@@ -1,19 +1,23 @@
 // frontend_antd/src/app/services/authentication.js
 
-import  API from './api';
+import API from './api';
 
 class Authentication {
     async login(username, password) {
         try {
             const response = await API.postAPI('/auth/login', { username, password });
+            console.log('API Response:', response); // Debug API response
+
             if (response.token) {
                 localStorage.setItem('token', response.token);
             }
             return response;
         } catch (error) {
+            console.error('Login error:', error); // In lỗi ra console
             throw new Error('Đăng nhập thất bại: ' + error.message);
         }
     }
+
 
     async logout() {
         try {
